@@ -240,18 +240,44 @@ function getYelpRestaurants() {
 * @param{string} - zip code, date
 * @returns [{object}]
 */
-function getTicketMasterConcerts (obj) {
+function getTicketMasterConcerts (city, state) {
+    var ticketmasterData = {
+        city: city,
+        state: state
+    }
     var data_object = {
         api_key: '2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi',
-        // city: obj.city, state: obj.state, date: { start: st, end: obj.date.end }        } 
+        // city: obj.city, state: obj.state, date: { start: st, end: obj.date.end }  
+        city: ticketmasterData.city, state: ticketmasterData.state
     };
     $.ajax({
         data: data_object,
         dataType: 'json',
         method: 'get',
-        url: 'https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi,
+        url: 'https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi',
         success: function(response) {
-            console.log(response)
+            var data = [];
+            var allEventsObj = response._embedded.events;
+            for (var tmData_i = 0; tmData_i < allEventsObj.length; tmData_i++){
+                var eventObj = createEventObject(allEventsObj[tmData_i]);
+                data.push(eventObj);
+            }
+            console.log(data)
         }
-    })
+    });
+}
+
+function createEventObject (event){
+    var object = {};
+    object.eventName = event.name;
+    object.startDate = event.dates.start.localTime;
+    object.latitude = event._embedded.venues[0].location.latitude;
+    object.longitude = event._embedded.venues[0].location.longitude;
+    object.zipCode = event._embedded.venues[0].postalCode;
+    object.venueName = event._embedded.venues[0].name;
+    object.generalInfo = event._embedded.venues[0].generalInfo.generalRule;
+    object.ticketUrl = event._embedded.venues[0].url;
+    object.eventImage = event.images[0];
+    object.eventDate = event.dates.start.localDate; 
+    return object;
 }
