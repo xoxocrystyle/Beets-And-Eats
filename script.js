@@ -106,50 +106,63 @@ function getEventDate() {
  * @calls: none
  */
 
+var test = {
+  eventDate: "2018-01-23",
+  eventImage: { url: "https://s1.ticketm.net/dam/a/441/6c483401-d57c-41b7-aee7-bb94e5b58441_29091_ARTIST_PAGE_3_2.jpg" },
+  eventName: "Los Angeles Lakers vs. Boston Celtics",
+  generalInfo:
+    "No Bottles, Cans, Or Coolers. No Smoking In Arena. No Cameras Or Recording Devices At Concerts! Cameras w/No Flash Allowed For Sporting Events Only!",
+  latitude: "34.043003",
+  longitude: "-118.267253",
+  startDate: "19:30:00",
+  ticketUrl: "http://www.ticketmaster.com/staples-center-tickets-los-angeles/venue/360457",
+  venueName: "STAPLES Center",
+  zipCode: "90015"
+};
+
 function renderShowsOnDOM(eventDetails) {
-  var row = $("<div>").addClass("show-row media");
-  var imgSection = $("<div>").addClass("media-left");
-  var icon = $("<img>")
-    .addClass("show-icon media-object")
-    .attr("src", eventDetails.eventImg);
-  var showContent = $("<div>").addClass("media-body");
+  var row = $("<div>").addClass("show-listing row");
+  var showImg = $("<img>")
+    .addClass("col-lg-4")
+    .attr("src", eventDetails.eventImage.url);
+  var showContent = $("<div>").addClass("col-lg-8");
   var showName = $("<h4>")
-    .addClass("show-name media-heading")
+    .addClass("show-name")
     .text(eventDetails.eventName);
-  var showDate = `${eventDetails.startDate.slice(5, 10)} - ${eventDetails.startDate.slice(0, 4)}`;
-  var showTime = parseInt(eventDetails.startDate.slice(11, 13));
-  var showDetails = $("<div>").addClass("show-details");
+  var showDetails = $("<p>").addClass("show-details");
+  var showDate = `${eventDetails.eventDate.slice(5)} - ${eventDetails.eventDate.slice(0, 4)}`;
+  var showTime = parseInt(eventDetails.startTime.slice(0, 2));
+  var showVenue = eventDetails.venueName;
 
   if (showTime > 12) {
     var showHour = showtime - 12;
-    showTime = `${showHour}:${eventDetails.startDate.slice(14, 16)} PM`;
+    showTime = `${showHour}:${eventDetails.startTime.slice(3, 5)} PM`;
   } else {
-    showTime = `${eventDetails.startDate.slice(11, 16)} AM`;
+    showTime = `${eventDetails.startDate.slice(0, 5)} AM`;
   }
 
-  showDetails.text(`${showDate}, ${showTime}`);
+  showDetails.text(`${showVenue} - ${showDate}, ${showTime}`);
 
-  $(imgSection).append(icon);
   $(showContent).append(showName, showDetails);
-  $(row).append(imgSection, showContent);
-  $(".show-list").append(row);
+  $(row).append(showImg, showContent);
+  $(".show-container").append(row);
 }
 
- /***************************************************************************
-  *function renderInitialMap
-  * create map on initial page load
-  * @param {none}
-  * @return {none}
-  */
+/***************************************************************************
+ *function renderInitialMap
+ * create map on initial page load
+ * @param {none}
+ * @return {none}
+ */
 
-  function renderInitialMap(){
-    var USA = {
-      latitude: "39.011902",
-      longitude: "-98.48424649999998"
-    }
-    map = new Map(USA, 4);
-    map.renderMap();
-  }
+function renderInitialMap() {
+  var USA = {
+    latitude: "39.011902",
+    longitude: "-98.48424649999998"
+  };
+  map = new Map(USA, 4);
+  map.renderMap();
+}
 
 /***************************************************************************
  *function renderMap
@@ -174,7 +187,7 @@ function renderMap(venueObject) {
 }
 
 var exampleObject = { latitude: "33.6412", longitude: "-117.9188" };
-var santabarbara = { latitude: "34.420830", longitude: "-119.698189", venueName: 'The Observatory' };
+var santabarbara = { latitude: "34.420830", longitude: "-119.698189", venueName: "The Observatory" };
 
 /***************************************************************************
  * function Map
@@ -185,7 +198,7 @@ var santabarbara = { latitude: "34.420830", longitude: "-119.698189", venueName:
  */
 
 class Map {
-  constructor(venueObject,  zoom, restaurants, bars,) {
+  constructor(venueObject, zoom, restaurants, bars) {
     this.latitude = parseFloat(venueObject.latitude);
     this.longitude = parseFloat(venueObject.longitude);
     this.bars = bars;
@@ -200,16 +213,16 @@ class Map {
       center: { lat: this.latitude, lng: this.longitude },
       zoom: this.zoom
     });
-    this.venueInfo.latLong = {lat: this.latitude, lng: this.longitude };
+    this.venueInfo.latLong = { lat: this.latitude, lng: this.longitude };
     var marker = new Marker(this.venueInfo, map, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
     this.markers.push(marker);
     return map;
   }
   renderAllMarkers() {
     //loop through list of markers
-    this.markers.forEach(function(marker){
+    this.markers.forEach(function(marker) {
       marker.renderMarker(); //render marker to map
-    })
+    });
   }
 }
 
@@ -235,24 +248,24 @@ class Map {
  * @param {object} map
  * @return {object} marker
  */
- class Marker{
-   constructor(venueInfo, map, markerColor){
-     console.log(venueInfo)
-     this.latLong = venueInfo.latLong;
-     this.venueName = venueInfo.venueName;
-     this.markerColor = markerColor;
-     this.map = map;
-   }
-   renderMarker(){
-     let marker = new google.maps.Marker({
-        position:  this.latLong,
-        map: this.map,
-        label: this.venueName,
-        icon:  this.markerColor
-      })
-      return marker;
-    }
- }
+class Marker {
+  constructor(venueInfo, map, markerColor) {
+    console.log(venueInfo);
+    this.latLong = venueInfo.latLong;
+    this.venueName = venueInfo.venueName;
+    this.markerColor = markerColor;
+    this.map = map;
+  }
+  renderMarker() {
+    let marker = new google.maps.Marker({
+      position: this.latLong,
+      map: this.map,
+      label: this.venueName,
+      icon: this.markerColor
+    });
+    return marker;
+  }
+}
 
 /***************************************************************************
  *function getYelpRestaurants
@@ -264,13 +277,13 @@ function getYelpRestaurants() {
   let yelpArrayOfRestaurants = [];
   let ajaxConfig = {
     dataType: "text",
-    url:
-      "https://api.yelp.com/v3/businesses/search?location=92617&term='restaurants'&radius=40000",
-      crossOrigin: true,
+    url: "https://api.yelp.com/v3/businesses/search?location=92617&term='restaurants'&radius=40000",
+    crossOrigin: true,
     method: "GET",
-      headers: {
-        Authorization: "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
-      },
+    headers: {
+      Authorization:
+        "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
+    },
     data: {
       location: 90305,
       term: "food",
@@ -306,47 +319,41 @@ function getYelpRestaurants() {
  * @returns [{object}]
  */
 function getYelpBreweries() {
-    let yelpArrayOfBreweries = [];
-    let BreweryData;
-    let ajaxConfig = {
-        dataType: "json",
-        url:
-            "https://api.yelp.com/v3/businesses/search?location=90305&term=bar&radius=40000",
-        Method: "GET",
-        Authorization:
-            "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx",
-        data: {
-            location: 90305,
-            term: "bar",
-            radius: 40000
-        },
-        success: function(data) {
-            console.log(data);
-            for (
-                let arrayIndex = 0;
-                arrayIndex < data.businesses.length;
-                arrayIndex++
-            ) {
-                let newObj = {};
-                newObj.name = data.businesses[arrayIndex].name;
-                newObj.address = data.businesses[arrayIndex].location.display_address;
-                newObj.closed = data.businesses[arrayIndex].is_closed;
-                newObj.rating = data.businesses[arrayIndex].rating;
-                newObj.url = data.businesses[arrayIndex].url;
-                newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-                newObj.latitude = data.businesses[arrayIndex].latitude;
-                newObj.longittude = data.businesses[arrayIndex].longitude;
-                yelpArrayOfBreweries.push(newObj);
-            }
-            return yelpArrayOfBreweries;
-        },
-        error: function() {
-            console.error("The server returned no information.");
-        }
-    };
-    $.ajax(ajaxConfig);
+  let yelpArrayOfBreweries = [];
+  let BreweryData;
+  let ajaxConfig = {
+    dataType: "json",
+    url: "https://api.yelp.com/v3/businesses/search?location=90305&term=bar&radius=40000",
+    Method: "GET",
+    Authorization:
+      "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx",
+    data: {
+      location: 90305,
+      term: "bar",
+      radius: 40000
+    },
+    success: function(data) {
+      console.log(data);
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+        let newObj = {};
+        newObj.name = data.businesses[arrayIndex].name;
+        newObj.address = data.businesses[arrayIndex].location.display_address;
+        newObj.closed = data.businesses[arrayIndex].is_closed;
+        newObj.rating = data.businesses[arrayIndex].rating;
+        newObj.url = data.businesses[arrayIndex].url;
+        newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+        newObj.latitude = data.businesses[arrayIndex].latitude;
+        newObj.longittude = data.businesses[arrayIndex].longitude;
+        yelpArrayOfBreweries.push(newObj);
+      }
+      return yelpArrayOfBreweries;
+    },
+    error: function() {
+      console.error("The server returned no information.");
+    }
+  };
+  $.ajax(ajaxConfig);
 }
-
 
 /***************************************************************************
  * function splitYelpInfo
@@ -356,49 +363,47 @@ function getYelpBreweries() {
  */
 
 /***************************************************************************
-*function getTicketMasterConcerts
-* get concerts and venue info based on zip code
-* @param{string} - zip code, date
-* @returns [{object}]
-*/
-function getTicketMasterConcerts (city, state) {
-    var ticketmasterData = {
-        city: city,
-        state: state
+ *function getTicketMasterConcerts
+ * get concerts and venue info based on zip code
+ * @param{string} - zip code, date
+ * @returns [{object}]
+ */
+function getTicketMasterConcerts(obj) {
+  var data_object = {
+    api_key: "2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
+    city: obj.city,
+    state: obj.state,
+    date: { start: obj.date.start, end: obj.date.end }
+  };
+  $.ajax({
+    data: data_object,
+    dataType: "json",
+    method: "get",
+    url: "https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
+    success: function(response) {
+      var data = [];
+      var allEventsObj = response._embedded.events;
+      for (var tmData_i = 0; tmData_i < allEventsObj.length; tmData_i++) {
+        var eventObj = createEventObject(allEventsObj[tmData_i]);
+        renderShowsOnDOM(eventObj);
+        data.push(eventObj);
+      }
+      $(".show-listing").on("click", handleConcertClick);
     }
-    var data_object = {
-        api_key: '2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi',
-        // city: obj.city, state: obj.state, date: { start: st, end: obj.date.end }  
-        city: ticketmasterData.city, state: ticketmasterData.state
-    };
-    $.ajax({
-        data: data_object,
-        dataType: 'json',
-        method: 'get',
-        url: 'https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi',
-        success: function(response) {
-            var data = [];
-            var allEventsObj = response._embedded.events;
-            for (var tmData_i = 0; tmData_i < allEventsObj.length; tmData_i++){
-                var eventObj = createEventObject(allEventsObj[tmData_i]);
-                data.push(eventObj);
-            }
-            console.log(data)
-        }
-    });
+  });
 }
 
-function createEventObject (event){
-    var object = {};
-    object.eventName = event.name;
-    object.startDate = event.dates.start.localTime;
-    object.latitude = event._embedded.venues[0].location.latitude;
-    object.longitude = event._embedded.venues[0].location.longitude;
-    object.zipCode = event._embedded.venues[0].postalCode;
-    object.venueName = event._embedded.venues[0].name;
-    object.generalInfo = event._embedded.venues[0].generalInfo.generalRule;
-    object.ticketUrl = event._embedded.venues[0].url;
-    object.eventImage = event.images[0];
-    object.eventDate = event.dates.start.localDate; 
-    return object;
+function createEventObject(event) {
+  var object = {};
+  object.eventName = event.name;
+  object.startTime = event.dates.start.localTime;
+  object.latitude = event._embedded.venues[0].location.latitude;
+  object.longitude = event._embedded.venues[0].location.longitude;
+  object.zipCode = event._embedded.venues[0].postalCode;
+  object.venueName = event._embedded.venues[0].name;
+  object.generalInfo = event._embedded.venues[0].generalInfo.generalRule;
+  object.ticketUrl = event._embedded.venues[0].url;
+  object.eventImage = event.images[0];
+  object.eventDate = event.dates.start.localDate;
+  return object;
 }
