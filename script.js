@@ -106,8 +106,37 @@ function getEventDate() {
  * @calls: none
  */
 
+function renderShowsOnDOM(eventDetails) {
+  var row = $("<div>").addClass("show-row media");
+  var imgSection = $("<div>").addClass("media-left");
+  var icon = $("<img>")
+    .addClass("show-icon media-object")
+    .attr("src", eventDetails.eventImg);
+  var showContent = $("<div>").addClass("media-body");
+  var showName = $("<h4>")
+    .addClass("show-name media-heading")
+    .text(eventDetails.eventName);
+  var showDate = `${eventDetails.startDate.slice(5, 10)} - ${eventDetails.startDate.slice(0, 4)}`;
+  var showTime = parseInt(eventDetails.startDate.slice(11, 13));
+  var showDetails = $("<div>").addClass("show-details");
+
+  if (showTime > 12) {
+    var showHour = showtime - 12;
+    showTime = `${showHour}:${eventDetails.startDate.slice(14, 16)} PM`;
+  } else {
+    showTime = `${eventDetails.startDate.slice(11, 16)} AM`;
+  }
+
+  showDetails.text(`${showDate}, ${showTime}`);
+
+  $(imgSection).append(icon);
+  $(showContent).append(showName, showDetails);
+  $(row).append(imgSection, showContent);
+  $(".show-list").append(row);
+}
+
  /***************************************************************************
-  *function renderInitialMapa
+  *function renderInitialMap
   * create map on initial page load
   * @param {none}
   * @return {none}
@@ -233,14 +262,15 @@ class Map {
  */
 function getYelpRestaurants() {
   let yelpArrayOfRestaurants = [];
-  let restaurantData;
   let ajaxConfig = {
-    dataType: "json",
+    dataType: "text",
     url:
       "https://api.yelp.com/v3/businesses/search?location=92617&term='restaurants'&radius=40000",
-    Method: "GET",
-    Authorization:
-      "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx",
+      crossOrigin: true,
+    method: "GET",
+      headers: {
+        Authorization: "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
+      },
     data: {
       location: 90305,
       term: "food",
@@ -248,11 +278,7 @@ function getYelpRestaurants() {
     },
     success: function(data) {
       console.log(data);
-      for (
-        let arrayIndex = 0;
-        arrayIndex < data.businesses.length;
-        arrayIndex++
-      ) {
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
         let newObj = {};
         newObj.name = data.businesses[arrayIndex].name;
         newObj.address = data.businesses[arrayIndex].location.display_address;
@@ -264,6 +290,7 @@ function getYelpRestaurants() {
         newObj.longittude = data.businesses[arrayIndex].longitude;
         yelpArrayOfRestaurants.push(newObj);
       }
+      return yelpArrayOfRestaurants;
     },
     error: function() {
       console.error("The server returned no information.");
@@ -278,6 +305,48 @@ function getYelpRestaurants() {
  * @param{object}
  * @returns [{object}]
  */
+function getYelpBreweries() {
+    let yelpArrayOfBreweries = [];
+    let BreweryData;
+    let ajaxConfig = {
+        dataType: "json",
+        url:
+            "https://api.yelp.com/v3/businesses/search?location=90305&term=bar&radius=40000",
+        Method: "GET",
+        Authorization:
+            "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx",
+        data: {
+            location: 90305,
+            term: "bar",
+            radius: 40000
+        },
+        success: function(data) {
+            console.log(data);
+            for (
+                let arrayIndex = 0;
+                arrayIndex < data.businesses.length;
+                arrayIndex++
+            ) {
+                let newObj = {};
+                newObj.name = data.businesses[arrayIndex].name;
+                newObj.address = data.businesses[arrayIndex].location.display_address;
+                newObj.closed = data.businesses[arrayIndex].is_closed;
+                newObj.rating = data.businesses[arrayIndex].rating;
+                newObj.url = data.businesses[arrayIndex].url;
+                newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+                newObj.latitude = data.businesses[arrayIndex].latitude;
+                newObj.longittude = data.businesses[arrayIndex].longitude;
+                yelpArrayOfBreweries.push(newObj);
+            }
+            return yelpArrayOfBreweries;
+        },
+        error: function() {
+            console.error("The server returned no information.");
+        }
+    };
+    $.ajax(ajaxConfig);
+}
+
 
 /***************************************************************************
  * function splitYelpInfo
@@ -287,24 +356,49 @@ function getYelpRestaurants() {
  */
 
 /***************************************************************************
- *function getTicketMasterConcerts
- * get concerts and venue info based on zip code
- * @param{string} - zip code, date
- * @returns [{object}]
- */
-function getTicketMasterConcerts(obj) {
-  var data_object = {
-    api_key: "2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi"
-    // city: obj.city, state: obj.state, date: { start: st, end: obj.date.end }        }
-  };
-  $.ajax({
-    data: data_object,
-    dataType: "json",
-    method: "get",
-    url:
-      "https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
-    success: function(response) {
-      console.log(response);
+*function getTicketMasterConcerts
+* get concerts and venue info based on zip code
+* @param{string} - zip code, date
+* @returns [{object}]
+*/
+function getTicketMasterConcerts (city, state) {
+    var ticketmasterData = {
+        city: city,
+        state: state
     }
-  });
+    var data_object = {
+        api_key: '2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi',
+        // city: obj.city, state: obj.state, date: { start: st, end: obj.date.end }  
+        city: ticketmasterData.city, state: ticketmasterData.state
+    };
+    $.ajax({
+        data: data_object,
+        dataType: 'json',
+        method: 'get',
+        url: 'https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi',
+        success: function(response) {
+            var data = [];
+            var allEventsObj = response._embedded.events;
+            for (var tmData_i = 0; tmData_i < allEventsObj.length; tmData_i++){
+                var eventObj = createEventObject(allEventsObj[tmData_i]);
+                data.push(eventObj);
+            }
+            console.log(data)
+        }
+    });
+}
+
+function createEventObject (event){
+    var object = {};
+    object.eventName = event.name;
+    object.startDate = event.dates.start.localTime;
+    object.latitude = event._embedded.venues[0].location.latitude;
+    object.longitude = event._embedded.venues[0].location.longitude;
+    object.zipCode = event._embedded.venues[0].postalCode;
+    object.venueName = event._embedded.venues[0].name;
+    object.generalInfo = event._embedded.venues[0].generalInfo.generalRule;
+    object.ticketUrl = event._embedded.venues[0].url;
+    object.eventImage = event.images[0];
+    object.eventDate = event.dates.start.localDate; 
+    return object;
 }
