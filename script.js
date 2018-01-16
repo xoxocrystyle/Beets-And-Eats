@@ -103,29 +103,56 @@ function getEventDate() {
  * @calls: none
  */
 
+function renderShowsOnDOM(eventDetails) {
+  var row = $("<div>").addClass("show-row media");
+  var imgSection = $("<div>").addClass("media-left");
+  var icon = $("<img>")
+    .addClass("show-icon media-object")
+    .attr("src", eventDetails.eventImg);
+  var showContent = $("<div>").addClass("media-body");
+  var showName = $("<h4>")
+    .addClass("show-name media-heading")
+    .text(eventDetails.eventName);
+  var showDate = `${eventDetails.startDate.slice(5, 10)} - ${eventDetails.startDate.slice(0, 4)}`;
+  var showTime = parseInt(eventDetails.startDate.slice(11, 13));
+  var showDetails = $("<div>").addClass("show-details");
+
+  if (showTime > 12) {
+    var showHour = showtime - 12;
+    showTime = `${showHour}:${eventDetails.startDate.slice(14, 16)} PM`;
+  } else {
+    showTime = `${eventDetails.startDate.slice(11, 16)} AM`;
+  }
+
+  showDetails.text(`${showDate}, ${showTime}`);
+
+  $(imgSection).append(icon);
+  $(showContent).append(showName, showDetails);
+  $(row).append(imgSection, showContent);
+  $(".show-list").append(row);
+}
+
 /***************************************************************************
-*function renderMap
+ *function renderMap
  * create new map instance and render to page
  * @param {integer} zipcode of venue location
-* @param {string} event location lat and long
+ * @param {string} event location lat and long
  * @return {none}
  * call createMarkers, call Map constructor,
  */
 
- function renderMap(venueObject) {
-   var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
-   var barsNearby = getYelpBreweries(venueObject.zipcode);
-   map = new Map(venueObject, restaurantsNearby, barsNearby); //create new instance of map for venue location
-   map.renderMap(); //render map to page
-   //get array of objects from yelp
-   map.createBarMarkers()
-   map.createRestaurantMarkers()
-
+function renderMap(venueObject) {
+  var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
+  var barsNearby = getYelpBreweries(venueObject.zipcode);
+  map = new Map(venueObject, restaurantsNearby, barsNearby); //create new instance of map for venue location
+  map.renderMap(); //render map to page
+  //get array of objects from yelp
+  map.createBarMarkers();
+  map.createRestaurantMarkers();
 }
 
-var exampleObject = {latitude: "33.6412", longitude: "-117.9188" }
-var santabarbara = {latitude: "34.420830", longitude: "-119.698189" }
-
+var exampleObject = { latitude: "33.6412", longitude: "-117.9188" };
+var santabarbara = { latitude: "34.420830", longitude: "-119.698189" };
 
 /***************************************************************************
  * function Map
@@ -135,31 +162,31 @@ var santabarbara = {latitude: "34.420830", longitude: "-119.698189" }
 
  */
 
- class Map{
-   constructor(venueObject, restaurants, bars){
-     this.latitude = parseFloat(venueObject.latitude);
-     this.longitude = parseFloat(venueObject.longitude);
-     this.bars = bars;
-     this.restaurants = restaurants;
-     // this.markerLocation = [];
-    };
-    renderMap(){
-      var map = new google.maps.Map(document.getElementById('map'), {
-       center: {lat: this.latitude, lng: this.longitude},
-       zoom: 15
-     })
-      return map;
-   }
-   createMarkers(){
-     //
-   }
- }
+class Map {
+  constructor(venueObject, restaurants, bars) {
+    this.latitude = parseFloat(venueObject.latitude);
+    this.longitude = parseFloat(venueObject.longitude);
+    this.bars = bars;
+    this.restaurants = restaurants;
+    // this.markerLocation = [];
+  }
+  renderMap() {
+    var map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: this.latitude, lng: this.longitude },
+      zoom: 15
+    });
+    return map;
+  }
+  createMarkers() {
+    //
+  }
+}
 
 /***************************************************************************
-* function updateMap
-* when user zooms in and out, it will repopulate map with markers
+ * function updateMap
+ * when user zooms in and out, it will repopulate map with markers
  * @param {integer}
-* @return {object} map
+ * @return {object} map
  */
 
 /***************************************************************************
@@ -170,8 +197,8 @@ var santabarbara = {latitude: "34.420830", longitude: "-119.698189" }
  */
 
 /***************************************************************************
-* function newMarker
-*constructor
+ * function newMarker
+ *constructor
  * create Makers and Labels
  * @param {string} location
  * @param {string} event venue information
@@ -179,29 +206,80 @@ var santabarbara = {latitude: "34.420830", longitude: "-119.698189" }
  */
 
 /***************************************************************************
-*function getYelpRestaurants
-* get restaurants based on zip code
-* @param{object}
-* @returns [{object}]
+ *function getYelpRestaurants
+ * get restaurants based on zip code
+ * @param{object}
+ * @returns [{object}]
  */
 function getYelpRestaurants() {
-    let yelpArrayOfRestaurants = [];
-    let restaurantData;
+  let yelpArrayOfRestaurants = [];
+  let ajaxConfig = {
+    dataType: "text",
+    url:
+      "https://api.yelp.com/v3/businesses/search?location=92617&term='restaurants'&radius=40000",
+      crossOrigin: true,
+    method: "GET",
+      headers: {
+        Authorization: "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
+      },
+    data: {
+      location: 90305,
+      term: "food",
+      radius: 40000
+    },
+    success: function(data) {
+      console.log(data);
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+        let newObj = {};
+        newObj.name = data.businesses[arrayIndex].name;
+        newObj.address = data.businesses[arrayIndex].location.display_address;
+        newObj.closed = data.businesses[arrayIndex].is_closed;
+        newObj.rating = data.businesses[arrayIndex].rating;
+        newObj.url = data.businesses[arrayIndex].url;
+        newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+        newObj.latitude = data.businesses[arrayIndex].latitude;
+        newObj.longittude = data.businesses[arrayIndex].longitude;
+        yelpArrayOfRestaurants.push(newObj);
+      }
+      return yelpArrayOfRestaurants;
+    },
+    error: function() {
+      console.error("The server returned no information.");
+    }
+  };
+  $.ajax(ajaxConfig);
+}
+
+/***************************************************************************
+ *function getYelpBreweries
+ * get breweries based on zip code
+ * @param{object}
+ * @returns [{object}]
+ */
+function getYelpBreweries() {
+    let yelpArrayOfBreweries = [];
+    let BreweryData;
     let ajaxConfig = {
-        dataType: 'json',
-        url: 'https://api.yelp.com/v3/businesses/search?location=92617&term=\'restaurants\'&radius=40000',
-        Method: 'GET',
-        Authorization: 'Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx',
+        dataType: "json",
+        url:
+            "https://api.yelp.com/v3/businesses/search?location=90305&term=bar&radius=40000",
+        Method: "GET",
+        Authorization:
+            "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx",
         data: {
             location: 90305,
-            term: 'food',
+            term: "bar",
             radius: 40000
         },
         success: function(data) {
             console.log(data);
-            for(let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+            for (
+                let arrayIndex = 0;
+                arrayIndex < data.businesses.length;
+                arrayIndex++
+            ) {
                 let newObj = {};
-                newObj.name =  data.businesses[arrayIndex].name;
+                newObj.name = data.businesses[arrayIndex].name;
                 newObj.address = data.businesses[arrayIndex].location.display_address;
                 newObj.closed = data.businesses[arrayIndex].is_closed;
                 newObj.rating = data.businesses[arrayIndex].rating;
@@ -209,29 +287,23 @@ function getYelpRestaurants() {
                 newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
                 newObj.latitude = data.businesses[arrayIndex].latitude;
                 newObj.longittude = data.businesses[arrayIndex].longitude;
-                yelpArrayOfRestaurants.push(newObj);
+                yelpArrayOfBreweries.push(newObj);
             }
+            return yelpArrayOfBreweries;
         },
         error: function() {
-            console.error('The server returned no information.')
+            console.error("The server returned no information.");
         }
     };
     $.ajax(ajaxConfig);
 }
 
-/***************************************************************************
-*function getYelpBreweries
-* get breweries based on zip code
-* @param{object}
-* @returns [{object}]
-*/
-
 
 /***************************************************************************
-* function splitYelpInfo
-* split apart each object received from yelp’s DB
-* @param{array of object} total info received
-* @return{object} per location
+ * function splitYelpInfo
+ * split apart each object received from yelp’s DB
+ * @param{array of object} total info received
+ * @return{object} per location
  */
 
 /***************************************************************************
