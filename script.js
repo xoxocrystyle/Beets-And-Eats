@@ -161,16 +161,16 @@ function renderShowsOnDOM(eventDetails) {
  */
 
 function renderMap(venueObject) {
-  // var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
-  // var barsNearby = getYelpBreweries(venueObject.zipcode);
-  // map = new Map(venueObject, restaurantsNearby, barsNearby); //create new instance of map for venue location
-  map = new Map(venueObject, 15); //TEST
+  var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
+  var barsNearby = getYelpBreweries(venueObject.zipcode);
+  map = new Map(venueObject, 15, restaurantsNearby, barsNearby); //create new instance of map for venue location
 
   map.renderMap(); //render map to page
-  map.renderAllMarkers();
+
   //get array of objects from yelp
-  // map.createBarMarkers();
-  // map.createRestaurantMarkers();
+  map.createBarMarkers();
+  map.createRestaurantMarkers();
+  map.renderAllMarkers();
 }
 
 var exampleObject = { latitude: "33.6412", longitude: "-117.9188" };
@@ -210,6 +210,14 @@ class Map {
     this.markers.forEach(function(marker){
       marker.renderMarker(); //render marker to map
     })
+  }
+  createBarMarkers(){
+    //push each marker made to  to this.markers
+
+  }
+  createRestaurantMarkers(){
+    //push each marker made to  to this.markers
+
   }
 }
 
@@ -368,7 +376,7 @@ function getTicketMasterConcerts (city, state) {
     }
     var data_object = {
         api_key: '2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi',
-        // city: obj.city, state: obj.state, date: { start: st, end: obj.date.end }  
+        // city: obj.city, state: obj.state, date: { start: st, end: obj.date.end }
         city: ticketmasterData.city, state: ticketmasterData.state
     };
     $.ajax({
@@ -399,6 +407,6 @@ function createEventObject (event){
     object.generalInfo = event._embedded.venues[0].generalInfo.generalRule;
     object.ticketUrl = event._embedded.venues[0].url;
     object.eventImage = event.images[0];
-    object.eventDate = event.dates.start.localDate; 
+    object.eventDate = event.dates.start.localDate;
     return object;
 }
