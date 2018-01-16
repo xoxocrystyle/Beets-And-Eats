@@ -213,13 +213,15 @@ class Map {
  */
 function getYelpRestaurants() {
   let yelpArrayOfRestaurants = [];
-  let restaurantData;
   let ajaxConfig = {
-    dataType: "json",
-    url: "https://api.yelp.com/v3/businesses/search?location=92617&term='restaurants'&radius=40000",
-    Method: "GET",
-    Authorization:
-      "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx",
+    dataType: "text",
+    url:
+      "https://api.yelp.com/v3/businesses/search?location=92617&term='restaurants'&radius=40000",
+      crossOrigin: true,
+    method: "GET",
+      headers: {
+        Authorization: "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
+      },
     data: {
       location: 90305,
       term: "food",
@@ -239,6 +241,7 @@ function getYelpRestaurants() {
         newObj.longittude = data.businesses[arrayIndex].longitude;
         yelpArrayOfRestaurants.push(newObj);
       }
+      return yelpArrayOfRestaurants;
     },
     error: function() {
       console.error("The server returned no information.");
@@ -253,6 +256,48 @@ function getYelpRestaurants() {
  * @param{object}
  * @returns [{object}]
  */
+function getYelpBreweries() {
+    let yelpArrayOfBreweries = [];
+    let BreweryData;
+    let ajaxConfig = {
+        dataType: "json",
+        url:
+            "https://api.yelp.com/v3/businesses/search?location=90305&term=bar&radius=40000",
+        Method: "GET",
+        Authorization:
+            "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx",
+        data: {
+            location: 90305,
+            term: "bar",
+            radius: 40000
+        },
+        success: function(data) {
+            console.log(data);
+            for (
+                let arrayIndex = 0;
+                arrayIndex < data.businesses.length;
+                arrayIndex++
+            ) {
+                let newObj = {};
+                newObj.name = data.businesses[arrayIndex].name;
+                newObj.address = data.businesses[arrayIndex].location.display_address;
+                newObj.closed = data.businesses[arrayIndex].is_closed;
+                newObj.rating = data.businesses[arrayIndex].rating;
+                newObj.url = data.businesses[arrayIndex].url;
+                newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+                newObj.latitude = data.businesses[arrayIndex].latitude;
+                newObj.longittude = data.businesses[arrayIndex].longitude;
+                yelpArrayOfBreweries.push(newObj);
+            }
+            return yelpArrayOfBreweries;
+        },
+        error: function() {
+            console.error("The server returned no information.");
+        }
+    };
+    $.ajax(ajaxConfig);
+}
+
 
 /***************************************************************************
  * function splitYelpInfo
