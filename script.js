@@ -79,18 +79,59 @@
 * get restaurants based on zip code
 * @param{object}
 * @returns [{object}]
+ */
+
+function getYelpRestaurants() {
+    let yelpArrayOfRestaurants = [];
+    let restaurantData;
+    let ajaxConfig = {
+        dataType: 'json',
+        url: 'https://api.yelp.com/v3/businesses/search?location=92617&term=\'restaurants\'&radius=40000',
+        Method: 'GET',
+        Authorization: 'Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx',
+        data: {
+            location: 90305,
+            term: 'food',
+            radius: 40000
+        },
+        success: function(data) {
+            console.log(data);
+            for(let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+                let newObj = {};
+                newObj.name =  data.businesses[arrayIndex].name;
+                newObj.address = data.businesses[arrayIndex].location.display_address;
+                newObj.closed = data.businesses[arrayIndex].is_closed;
+                newObj.rating = data.businesses[arrayIndex].rating;
+                newObj.url = data.businesses[arrayIndex].url;
+                newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+                newObj.latitude = data.businesses[arrayIndex].latitude;
+                newObj.longittude = data.businesses[arrayIndex].longitude;
+                yelpArrayOfRestaurants.push(newObj);
+            }
+        },
+        error: function() {
+            console.error('The server returned no information.')
+        }
+    };
+    $.ajax(ajaxConfig);
+}
+
 /***************************************************************************
 *function getYelpBreweries
 * get breweries based on zip code
 * @param{object}
 * @returns [{object}]
+ */
+
 /***************************************************************************
 * function splitYelpInfo
 * split apart each object received from yelp’s DB
 * @param{array of object} total info received 
 * @return{object} per location
+ */
 /***************************************************************************
 *function getTicketMasterConcerts
 * get concerts and venue info based on zip code
 * @param{string} - zip code, date
 * @returns [{object}]
+ */
