@@ -263,32 +263,28 @@ class Map {
 function getYelpRestaurants() {
   let yelpArrayOfRestaurants = [];
   let ajaxConfig = {
-    dataType: "text",
-    url:
-      "https://api.yelp.com/v3/businesses/search?location=92617&term='restaurants'&radius=40000",
-      crossOrigin: true,
+    dataType: "json",
+    url: "http://danielpaschal.com/yelpproxy.php",
     method: "GET",
-      headers: {
-        Authorization: "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
-      },
     data: {
-      location: 90305,
-      term: "food",
-      radius: 40000
+        location: 90305,
+        term: "food",
+        radius: 40000,
+        api_key: 'pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx'
     },
     success: function(data) {
       console.log(data);
       for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-        let newObj = {};
-        newObj.name = data.businesses[arrayIndex].name;
-        newObj.address = data.businesses[arrayIndex].location.display_address;
-        newObj.closed = data.businesses[arrayIndex].is_closed;
-        newObj.rating = data.businesses[arrayIndex].rating;
-        newObj.url = data.businesses[arrayIndex].url;
-        newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-        newObj.latitude = data.businesses[arrayIndex].latitude;
-        newObj.longittude = data.businesses[arrayIndex].longitude;
-        yelpArrayOfRestaurants.push(newObj);
+          let newObj = {};
+          newObj.name = data.businesses[arrayIndex].name;
+          newObj.address = data.businesses[arrayIndex].location.display_address.join('\n');
+          newObj.closed = data.businesses[arrayIndex].is_closed;
+          newObj.rating = data.businesses[arrayIndex].rating;
+          newObj.url = data.businesses[arrayIndex].url;
+          newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+          newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+          newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
+          yelpArrayOfRestaurants.push(newObj);
       }
       return yelpArrayOfRestaurants;
     },
@@ -307,35 +303,28 @@ function getYelpRestaurants() {
  */
 function getYelpBreweries() {
     let yelpArrayOfBreweries = [];
-    let BreweryData;
     let ajaxConfig = {
         dataType: "json",
-        url:
-            "https://api.yelp.com/v3/businesses/search?location=90305&term=bar&radius=40000",
-        Method: "GET",
-        Authorization:
-            "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx",
+        url: "http://danielpaschal.com/yelpproxy.php",
+        method: "GET",
         data: {
             location: 90305,
             term: "bar",
-            radius: 40000
+            radius: 40000,
+            api_key: 'pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx'
         },
         success: function(data) {
             console.log(data);
-            for (
-                let arrayIndex = 0;
-                arrayIndex < data.businesses.length;
-                arrayIndex++
-            ) {
+            for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
                 let newObj = {};
                 newObj.name = data.businesses[arrayIndex].name;
-                newObj.address = data.businesses[arrayIndex].location.display_address;
+                newObj.address = data.businesses[arrayIndex].location.display_address.join('\n');
                 newObj.closed = data.businesses[arrayIndex].is_closed;
                 newObj.rating = data.businesses[arrayIndex].rating;
                 newObj.url = data.businesses[arrayIndex].url;
                 newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-                newObj.latitude = data.businesses[arrayIndex].latitude;
-                newObj.longittude = data.businesses[arrayIndex].longitude;
+                newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+                newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
                 yelpArrayOfBreweries.push(newObj);
             }
             return yelpArrayOfBreweries;
@@ -346,7 +335,6 @@ function getYelpBreweries() {
     };
     $.ajax(ajaxConfig);
 }
-
 
 /***************************************************************************
  * function splitYelpInfo
