@@ -1,4 +1,3 @@
-
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
  * @params {undefined}
@@ -207,3 +206,18 @@ var santabarbara = {latitude: "34.420830", longitude: "-119.698189" }
 * @returns [{object}]
 */
 
+function getTicketMasterConcerts (obj) {
+    var data_object = {
+        api_key: '2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi',
+        // city: obj.city, state: obj.state, date: { start: st, end: obj.date.end }        } 
+    };
+    $.ajax({
+        data: data_object,
+        dataType: 'json',
+        method: 'get',
+        url: 'https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi,
+        success: function(response) {
+            console.log(response)
+        }
+    })
+}
