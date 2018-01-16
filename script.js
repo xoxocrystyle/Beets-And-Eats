@@ -1,3 +1,5 @@
+$(document).ready(initializeApp);
+var map;
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
  * @params {undefined}
@@ -6,6 +8,7 @@
 
 function initializeApp() {
   $(".submit-button").on("click", handleSearchButtonClick);
+  renderInitialMap();
 }
 
 /***************************************************************************
@@ -132,6 +135,22 @@ function renderShowsOnDOM(eventDetails) {
   $(".show-list").append(row);
 }
 
+ /***************************************************************************
+  *function renderInitialMap
+  * create map on initial page load
+  * @param {none}
+  * @return {none}
+  */
+
+  function renderInitialMap(){
+    var USA = {
+      latitude: "39.011902",
+      longitude: "-98.48424649999998"
+    }
+    map = new Map(USA, 4);
+    map.renderMap();
+  }
+
 /***************************************************************************
  *function renderMap
  * create new map instance and render to page
@@ -142,17 +161,20 @@ function renderShowsOnDOM(eventDetails) {
  */
 
 function renderMap(venueObject) {
-  var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
-  var barsNearby = getYelpBreweries(venueObject.zipcode);
-  map = new Map(venueObject, restaurantsNearby, barsNearby); //create new instance of map for venue location
+  // var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
+  // var barsNearby = getYelpBreweries(venueObject.zipcode);
+  // map = new Map(venueObject, restaurantsNearby, barsNearby); //create new instance of map for venue location
+  map = new Map(venueObject, 15); //TEST
+
   map.renderMap(); //render map to page
+  map.renderAllMarkers();
   //get array of objects from yelp
-  map.createBarMarkers();
-  map.createRestaurantMarkers();
+  // map.createBarMarkers();
+  // map.createRestaurantMarkers();
 }
 
 var exampleObject = { latitude: "33.6412", longitude: "-117.9188" };
-var santabarbara = { latitude: "34.420830", longitude: "-119.698189" };
+var santabarbara = { latitude: "34.420830", longitude: "-119.698189", venueName: 'The Observatory' };
 
 /***************************************************************************
  * function Map
@@ -163,22 +185,31 @@ var santabarbara = { latitude: "34.420830", longitude: "-119.698189" };
  */
 
 class Map {
-  constructor(venueObject, restaurants, bars) {
+  constructor(venueObject,  zoom, restaurants, bars,) {
     this.latitude = parseFloat(venueObject.latitude);
     this.longitude = parseFloat(venueObject.longitude);
     this.bars = bars;
     this.restaurants = restaurants;
+    this.markers = [];
+    this.venueInfo = venueObject;
+    this.zoom = zoom;
     // this.markerLocation = [];
   }
   renderMap() {
     var map = new google.maps.Map(document.getElementById("map"), {
       center: { lat: this.latitude, lng: this.longitude },
-      zoom: 15
+      zoom: this.zoom
     });
+    this.venueInfo.latLong = {lat: this.latitude, lng: this.longitude };
+    var marker = new Marker(this.venueInfo, map, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
+    this.markers.push(marker);
     return map;
   }
-  createMarkers() {
-    //
+  renderAllMarkers() {
+    //loop through list of markers
+    this.markers.forEach(function(marker){
+      marker.renderMarker(); //render marker to map
+    })
   }
 }
 
@@ -190,7 +221,7 @@ class Map {
  */
 
 /***************************************************************************
- * function renderMarkers
+ * function renderMarker
  * create render mark to page
  * @param {string}
  * @param {string} info about the event
@@ -200,10 +231,28 @@ class Map {
  * function newMarker
  *constructor
  * create Makers and Labels
- * @param {string} location
- * @param {string} event venue information
+ * @param {string} venueInfo
+ * @param {object} map
  * @return {object} marker
  */
+ class Marker{
+   constructor(venueInfo, map, markerColor){
+     console.log(venueInfo)
+     this.latLong = venueInfo.latLong;
+     this.venueName = venueInfo.venueName;
+     this.markerColor = markerColor;
+     this.map = map;
+   }
+   renderMarker(){
+     let marker = new google.maps.Marker({
+        position:  this.latLong,
+        map: this.map,
+        label: this.venueName,
+        icon:  this.markerColor
+      })
+      return marker;
+    }
+ }
 
 /***************************************************************************
  *function getYelpRestaurants
