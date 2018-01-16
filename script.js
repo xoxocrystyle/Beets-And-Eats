@@ -104,28 +104,26 @@ function getEventDate() {
  */
 
 /***************************************************************************
-*function renderMap
+ *function renderMap
  * create new map instance and render to page
  * @param {integer} zipcode of venue location
-* @param {string} event location lat and long
+ * @param {string} event location lat and long
  * @return {none}
  * call createMarkers, call Map constructor,
  */
 
- function renderMap(venueObject) {
-   var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
-   var barsNearby = getYelpBreweries(venueObject.zipcode);
-   map = new Map(venueObject, restaurantsNearby, barsNearby); //create new instance of map for venue location
-   map.renderMap(); //render map to page
-   //get array of objects from yelp
-   map.createBarMarkers()
-   map.createRestaurantMarkers()
-
+function renderMap(venueObject) {
+  var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
+  var barsNearby = getYelpBreweries(venueObject.zipcode);
+  map = new Map(venueObject, restaurantsNearby, barsNearby); //create new instance of map for venue location
+  map.renderMap(); //render map to page
+  //get array of objects from yelp
+  map.createBarMarkers();
+  map.createRestaurantMarkers();
 }
 
-var exampleObject = {latitude: "33.6412", longitude: "-117.9188" }
-var santabarbara = {latitude: "34.420830", longitude: "-119.698189" }
-
+var exampleObject = { latitude: "33.6412", longitude: "-117.9188" };
+var santabarbara = { latitude: "34.420830", longitude: "-119.698189" };
 
 /***************************************************************************
  * function Map
@@ -135,31 +133,31 @@ var santabarbara = {latitude: "34.420830", longitude: "-119.698189" }
 
  */
 
- class Map{
-   constructor(venueObject, restaurants, bars){
-     this.latitude = parseFloat(venueObject.latitude);
-     this.longitude = parseFloat(venueObject.longitude);
-     this.bars = bars;
-     this.restaurants = restaurants;
-     // this.markerLocation = [];
-    };
-    renderMap(){
-      var map = new google.maps.Map(document.getElementById('map'), {
-       center: {lat: this.latitude, lng: this.longitude},
-       zoom: 15
-     })
-      return map;
-   }
-   createMarkers(){
-     //
-   }
- }
+class Map {
+  constructor(venueObject, restaurants, bars) {
+    this.latitude = parseFloat(venueObject.latitude);
+    this.longitude = parseFloat(venueObject.longitude);
+    this.bars = bars;
+    this.restaurants = restaurants;
+    // this.markerLocation = [];
+  }
+  renderMap() {
+    var map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: this.latitude, lng: this.longitude },
+      zoom: 15
+    });
+    return map;
+  }
+  createMarkers() {
+    //
+  }
+}
 
 /***************************************************************************
-* function updateMap
-* when user zooms in and out, it will repopulate map with markers
+ * function updateMap
+ * when user zooms in and out, it will repopulate map with markers
  * @param {integer}
-* @return {object} map
+ * @return {object} map
  */
 
 /***************************************************************************
@@ -170,8 +168,8 @@ var santabarbara = {latitude: "34.420830", longitude: "-119.698189" }
  */
 
 /***************************************************************************
-* function newMarker
-*constructor
+ * function newMarker
+ *constructor
  * create Makers and Labels
  * @param {string} location
  * @param {string} event venue information
@@ -179,79 +177,85 @@ var santabarbara = {latitude: "34.420830", longitude: "-119.698189" }
  */
 
 /***************************************************************************
-*function getYelpRestaurants
-* get restaurants based on zip code
-* @param{object}
-* @returns [{object}]
+ *function getYelpRestaurants
+ * get restaurants based on zip code
+ * @param{object}
+ * @returns [{object}]
  */
 function getYelpRestaurants() {
-    let yelpArrayOfRestaurants = [];
-    let restaurantData;
-    let ajaxConfig = {
-        dataType: 'json',
-        url: 'https://api.yelp.com/v3/businesses/search?location=92617&term=\'restaurants\'&radius=40000',
-        Method: 'GET',
-        Authorization: 'Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx',
-        data: {
-            location: 90305,
-            term: 'food',
-            radius: 40000
-        },
-        success: function(data) {
-            console.log(data);
-            for(let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-                let newObj = {};
-                newObj.name =  data.businesses[arrayIndex].name;
-                newObj.address = data.businesses[arrayIndex].location.display_address;
-                newObj.closed = data.businesses[arrayIndex].is_closed;
-                newObj.rating = data.businesses[arrayIndex].rating;
-                newObj.url = data.businesses[arrayIndex].url;
-                newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-                newObj.latitude = data.businesses[arrayIndex].latitude;
-                newObj.longittude = data.businesses[arrayIndex].longitude;
-                yelpArrayOfRestaurants.push(newObj);
-            }
-        },
-        error: function() {
-            console.error('The server returned no information.')
-        }
-    };
-    $.ajax(ajaxConfig);
+  let yelpArrayOfRestaurants = [];
+  let restaurantData;
+  let ajaxConfig = {
+    dataType: "json",
+    url:
+      "https://api.yelp.com/v3/businesses/search?location=92617&term='restaurants'&radius=40000",
+    Method: "GET",
+    Authorization:
+      "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx",
+    data: {
+      location: 90305,
+      term: "food",
+      radius: 40000
+    },
+    success: function(data) {
+      console.log(data);
+      for (
+        let arrayIndex = 0;
+        arrayIndex < data.businesses.length;
+        arrayIndex++
+      ) {
+        let newObj = {};
+        newObj.name = data.businesses[arrayIndex].name;
+        newObj.address = data.businesses[arrayIndex].location.display_address;
+        newObj.closed = data.businesses[arrayIndex].is_closed;
+        newObj.rating = data.businesses[arrayIndex].rating;
+        newObj.url = data.businesses[arrayIndex].url;
+        newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+        newObj.latitude = data.businesses[arrayIndex].latitude;
+        newObj.longittude = data.businesses[arrayIndex].longitude;
+        yelpArrayOfRestaurants.push(newObj);
+      }
+    },
+    error: function() {
+      console.error("The server returned no information.");
+    }
+  };
+  $.ajax(ajaxConfig);
 }
 
 /***************************************************************************
-*function getYelpBreweries
-* get breweries based on zip code
-* @param{object}
-* @returns [{object}]
-*/
-
-
-/***************************************************************************
-* function splitYelpInfo
-* split apart each object received from yelp’s DB
-* @param{array of object} total info received
-* @return{object} per location
+ *function getYelpBreweries
+ * get breweries based on zip code
+ * @param{object}
+ * @returns [{object}]
  */
 
 /***************************************************************************
-*function getTicketMasterConcerts
-* get concerts and venue info based on zip code
-* @param{string} - zip code, date
-* @returns [{object}]
-*/
-function getTicketMasterConcerts (obj) {
-    var data_object = {
-        api_key: '2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi',
-        // city: obj.city, state: obj.state, date: { start: st, end: obj.date.end }        } 
-    };
-    $.ajax({
-        data: data_object,
-        dataType: 'json',
-        method: 'get',
-        url: 'https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi,
-        success: function(response) {
-            console.log(response)
-        }
-    })
+ * function splitYelpInfo
+ * split apart each object received from yelp’s DB
+ * @param{array of object} total info received
+ * @return{object} per location
+ */
+
+/***************************************************************************
+ *function getTicketMasterConcerts
+ * get concerts and venue info based on zip code
+ * @param{string} - zip code, date
+ * @returns [{object}]
+ */
+function getTicketMasterConcerts(obj) {
+  var data_object = {
+    api_key: "2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi"
+    // city: obj.city, state: obj.state, date: { start: st, end: obj.date.end }        }
+  };
+  $.ajax({
+    data: data_object,
+    dataType: "json",
+    method: "get",
+    url:
+      "https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
+    success: function(response) {
+      console.log(response);
+    }
+  });
 }
