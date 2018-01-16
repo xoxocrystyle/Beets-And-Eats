@@ -103,6 +103,35 @@ function getEventDate() {
  * @calls: none
  */
 
+function renderShowsOnDOM(eventDetails) {
+  var row = $("<div>").addClass("show-row media");
+  var imgSection = $("<div>").addClass("media-left");
+  var icon = $("<img>")
+    .addClass("show-icon media-object")
+    .attr("src", eventDetails.eventImg);
+  var showContent = $("<div>").addClass("media-body");
+  var showName = $("<h4>")
+    .addClass("show-name media-heading")
+    .text(eventDetails.eventName);
+  var showDate = `${eventDetails.startDate.slice(5, 10)} - ${eventDetails.startDate.slice(0, 4)}`;
+  var showTime = parseInt(eventDetails.startDate.slice(11, 13));
+  var showDetails = $("<div>").addClass("show-details");
+
+  if (showTime > 12) {
+    var showHour = showtime - 12;
+    showTime = `${showHour}:${eventDetails.startDate.slice(14, 16)} PM`;
+  } else {
+    showTime = `${eventDetails.startDate.slice(11, 16)} AM`;
+  }
+
+  showDetails.text(`${showDate}, ${showTime}`);
+
+  $(imgSection).append(icon);
+  $(showContent).append(showName, showDetails);
+  $(row).append(imgSection, showContent);
+  $(".show-list").append(row);
+}
+
 /***************************************************************************
  *function renderMap
  * create new map instance and render to page
@@ -187,8 +216,7 @@ function getYelpRestaurants() {
   let restaurantData;
   let ajaxConfig = {
     dataType: "json",
-    url:
-      "https://api.yelp.com/v3/businesses/search?location=92617&term='restaurants'&radius=40000",
+    url: "https://api.yelp.com/v3/businesses/search?location=92617&term='restaurants'&radius=40000",
     Method: "GET",
     Authorization:
       "Bearer pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx",
@@ -199,11 +227,7 @@ function getYelpRestaurants() {
     },
     success: function(data) {
       console.log(data);
-      for (
-        let arrayIndex = 0;
-        arrayIndex < data.businesses.length;
-        arrayIndex++
-      ) {
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
         let newObj = {};
         newObj.name = data.businesses[arrayIndex].name;
         newObj.address = data.businesses[arrayIndex].location.display_address;
@@ -252,8 +276,7 @@ function getTicketMasterConcerts(obj) {
     data: data_object,
     dataType: "json",
     method: "get",
-    url:
-      "https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
+    url: "https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     success: function(response) {
       console.log(response);
     }
