@@ -174,16 +174,16 @@ function renderInitialMap() {
  */
 
 function renderMap(venueObject) {
-  // var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
-  // var barsNearby = getYelpBreweries(venueObject.zipcode);
-  // map = new Map(venueObject, restaurantsNearby, barsNearby); //create new instance of map for venue location
-  map = new Map(venueObject, 15); //TEST
+  var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
+  var barsNearby = getYelpBreweries(venueObject.zipcode);
+  map = new Map(venueObject, 15, restaurantsNearby, barsNearby); //create new instance of map for venue location
 
   map.renderMap(); //render map to page
-  map.renderAllMarkers();
+
   //get array of objects from yelp
-  // map.createBarMarkers();
-  // map.createRestaurantMarkers();
+  map.createBarMarkers();
+  map.createRestaurantMarkers();
+  map.renderAllMarkers();
 }
 
 var exampleObject = { latitude: "33.6412", longitude: "-117.9188" };
@@ -223,6 +223,14 @@ class Map {
     this.markers.forEach(function(marker) {
       marker.renderMarker(); //render marker to map
     });
+  }
+  createBarMarkers(){
+    //push each marker made to  to this.markers
+
+  }
+  createRestaurantMarkers(){
+    //push each marker made to  to this.markers
+
   }
 }
 
@@ -390,6 +398,7 @@ function getTicketMasterConcerts(obj) {
       }
       $(".show-listing").on("click", handleConcertClick);
     }
+
   });
 }
 
