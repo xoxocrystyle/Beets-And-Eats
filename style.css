@@ -1,9 +1,35 @@
 html,
 body {
   height: 100vh;
+  width: 100vw;
   margin: 0;
   padding: 0;
 }
 #map {
   height: 90%;
+  border: 1px red solid
+}
+
+.form-control {
+  text-align: center;
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80%;
+  width: 100%;
+}
+
+.submit-button {
+  width: 100%;
+}
+
+.landing-page {
+  width: 50%;
+}
+
+.row {
+    margin: 2%;
 }
