@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <link href="style.css" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOLDBhT3KNjFnh46zAYxoEOqGBmmQYGac&callback=renderInitialMap" async defer></script>
+    <script src="script.js"></script>
+    <meta name="viewport" content="initial-scale=1, user-scalable=no">
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">HOME</a>
+        </div>
+    </nav>
+    <div class="container-fluid">
+      <section class="input-container row">
+          <div class="landing-page">
+              <div class="search-fields row">
+                  <div class="row">
+                      <div class="input-group-lg col-lg-7 col-xs-8">
+                          <input type="text" class="city-name form-control" placeholder="City">
+                      </div>
+                      <div class="input-group-lg col-lg-5 col-xs-4">
+                          <input type="text" class="state-code form-control" placeholder="State" maxlength="2">
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="input-group-lg col-lg-3 col-xs-4">
+                          <input type="text" class="event-month form-control" placeholder="MM" maxlength="2">
+                      </div>
+                      <div class="input-group-lg col-lg-3 col-xs-3">
+                          <input type="text" class="event-day form-control" placeholder="DD" maxlength="2">
+                      </div>
+                      <div class="input-group-lg col-lg-6 col-xs-5">
+                          <input type="text" class="event-year form-control" placeholder="YYYY" maxlength="4">
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-lg-12">
+                          <button type="button" class="submit-button btn btn-default btn-lg">SHOW ME</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+      <section class="show-container">
+
+      </section>
+    </div>
+
+    <!-- <section class="map-container row">
+        <div class="col-lg-12"> -->
+    <div id="map"></div>
+    <!-- </div>
+    </section> -->
+</body>
+
+</html>
+
