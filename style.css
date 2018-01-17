@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding: 0;
 }
+
 body {
   background: linear-gradient(to bottom right, papayawhip, paleturquoise);
   background-attachment: fixed;
@@ -14,32 +15,34 @@ body {
 .form-control {
   text-align: center;
 }
+
 .input-container {
-  border: 1px solid hotpink;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
 }
+
 .submit-button {
   width: 100%;
 }
-.landing-page {
+
+/* .landing-page {
   width: 50%;
-}
+} */
+
 .row {
-  margin: 2%;
+  margin: 2% auto;
 }
 
 .show-container {
-  border: 1px solid black;
   height: 100%;
 }
 
+
 #map {
   height: 100%;
-  border: 1px solid red;
 }
 
 .media {
