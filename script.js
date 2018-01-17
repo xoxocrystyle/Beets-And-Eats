@@ -1,6 +1,7 @@
 $(document).ready(initializeApp);
 var map;
 var markers;
+var infoWindow;
 
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
@@ -19,7 +20,6 @@ function initializeApp() {
  */
 function handleSearchButtonClick() {
   getTicketMasterConcerts(getEventInfo());
-  resetInputs();
 }
 
 /***************************************************************************
@@ -34,6 +34,9 @@ function resetInputs() {
   $(".event-year").val("");
   $(".event-month").val("");
   $(".event-day").val("");
+  $(".error-message")
+    .empty()
+    .removeClass("bg-danger");
 }
 
 /***************************************************************************
@@ -132,6 +135,11 @@ function handleConcertClick(eventObj) {
     position: latLng,
     map: map
   });
+
+  // window = new google.maps.InfoWindow({
+  //   content: eventObj.venueName
+  // });
+
   getYelpData(latLng, 'bar', 'images/yellow-dot.png');
   getYelpData(latLng, 'food', 'images/blue-dot.png');
 
@@ -162,20 +170,22 @@ function renderShowsOnDOM(eventDetailsArray) {
 
 function createShowDOMElement(eventDetails) {
   var listing = $("<div>", {
-    class: "show-listing",
+    class: "show-listing col-lg-6 col-md-6 col-xs-12 col-sm-12",
     on: {
       click: function() {
         handleConcertClick(eventDetails);
         scrollPage("map");
         let info = populateEventSideBar(eventDetails);
-        $(".eventInfo").empty();
+        $(".eventInfo > div").remove();
         $(".eventInfo").append(info);
       }
     }
   });
-  var artistImage = $("<div>").addClass("artist col-lg-3 col-md-3 col-xs-4");
-  var image = $("<img>").attr("src", eventDetails.eventImage.url);
-  var showInfo = $("<div>").addClass("show-info col-lg-3 col-md-3 col-xs-8");
+  var listingRow = $("<div>").addClass("listing row");
+  var artistImage = $("<div>").addClass("artist col-lg-6 col-md-6 col-xs-6 col-sm-6");
+  var imageDiv = $("<div>").addClass("image-div");
+  var image = $("<img>").attr("src", eventDetails.eventImage.url).addClass('show-image');
+  var showInfo = $("<div>").addClass("show-info col-lg-6 col-md-6 col-xs-6 col-sm-6");
   var showName = $("<p>")
     .text(eventDetails.eventName)
     .addClass("show-name");
@@ -205,9 +215,11 @@ function createShowDOMElement(eventDetails) {
   showDetails.text(`Date & Time: ${showDate}, ${showTime}`);
   mobileDetails.text(`${eventDetails.venueName} - ${showDate}, ${showTime}`);
 
-  artistImage.append(image);
+  imageDiv.append(image);
+  artistImage.append(imageDiv);
   showInfo.append(mobileTicketLink, showName, mobileDetails, showDetails, showVenue, ticketLink);
-  listing.append(artistImage, showInfo);
+  listingRow.append(artistImage, showInfo);
+  listing.append(listingRow);
 
   return listing;
 }
@@ -225,6 +237,7 @@ function renderInitialMap() {
     center: losAngeles,
     zoom: 12
   });
+  infoWindow = new google.maps.InfoWindow();
 }
 
 /***************************************************************************
@@ -249,25 +262,23 @@ function createMarkers(array, color) {
  */
 
 function renderMarker(place, color) {
-  console.log(place)
   var latLong = { lat: place.latitude, lng: place.longitude };
   let marker = new google.maps.Marker({
     position: latLong,
     map: map,
     icon: color
   });
-  // var content = createContent(place);
-
-  var infowindow = new google.maps.InfoWindow({
-    content: getContentString(place)
+  google.maps.event.addListener(marker, "click", function() {
+    createWindowHandler(place, marker);
   });
+}
 
-  marker.addListener("click", function() {
-    infowindow.open(map, marker);
-    let info = populateFoodSideBar(place);
-    $(".foodInfo").empty();
-    $(".foodInfo").append(info);
-  });
+function createWindowHandler(place, marker){
+  infoWindow.content = getContentString(place);
+  infoWindow.open(map, marker);
+  let info = populateFoodSideBar(place);
+  $(".foodInfo > div").remove();
+  $(".foodInfo").append(info);
 }
 
 /***************************************************************************
@@ -276,20 +287,14 @@ function renderMarker(place, color) {
  * @param{object} object of location information
  * @returns [string] content stringified
  */
-function getContentString(place){
-  if(place.closed === false) {
-    place.closed = 'Open';
+function getContentString(place) {
+  if (place.closed === false) {
+    place.closed = "Open";
   } else {
-    place.closed = 'Closed';
+    place.closed = "Closed";
   }
-  var contentString =
-    "<h3>" +
-    place.name +
-    "</h4><h4>" +
-    place.phoneNumber +
-    "</h4><h4>" +
-    place.closed;
-    return contentString;
+  var contentString = "<h3>" + place.name + "</h4><h4>" + place.phoneNumber + "</h4><h4>" + place.closed;
+  return contentString;
 }
 
 /***************************************************************************
@@ -298,28 +303,33 @@ function getContentString(place){
  * @param{object} object of location information
  * @returns [object] createddom element
  */
+
 function populateFoodSideBar(place){
   let container = $('<div>');
+  let image = $('<img>', {
+    'src': place.image
+  })
+  let distance = $('<p>', {
+    'text': 'Distance: ' + place.distance
+  })
   let name = $('<h4>',{
     'text': place.name
   });
-  let number = $('<p>', {
-    'text': place.name
+  let number = $("<p>", {
+    text: place.name
   });
-  let address = $('<p>', {
-    'text': place.address
+  let address = $("<p>", {
+    text: place.address
   });
   let rating = $('<p>', {
-    'text': place.rating
+    'text': 'Rating: ' + place.rating
+
   });
-  let yelp = $('<a>', {
-    'href': place.url,
-    'text': 'website'
+  let yelp = $("<a>", {
+    href: place.url,
+    text: "website"
   });
-  let distance = $('<p>', {
-      'text': place.distance
-  });
-  container.append(name, address, number, rating, yelp);
+  container.append(image, name, distance, address, number, rating, yelp);
   return container;
 }
 
@@ -352,14 +362,13 @@ function populateEventSideBar(eventLocation) {
   return container;
 }
 
-
 /***************************************************************************
  *function getYelpData
  * get restaurants based on latLng
  * @param{object}
  * @returns [{object}]
  */
-function getYelpData(latLng, type, color){
+function getYelpData(latLng, type, color) {
   let arrayOfPlaces = [];
   let ajaxConfig = {
     dataType: "json",
@@ -373,11 +382,11 @@ function getYelpData(latLng, type, color){
       api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-        for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-            let newObj = createYelpObj(data, arrayIndex);
-            arrayOfPlaces.push(newObj);
-        }
-      createMarkers(arrayOfPlaces, color );
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+        let newObj = createYelpObj(data, arrayIndex);
+        arrayOfPlaces.push(newObj);
+      }
+      createMarkers(arrayOfPlaces, color);
     },
     error: function() {
       console.error("The server returned no information.");
@@ -393,18 +402,18 @@ function getYelpData(latLng, type, color){
  * @return{object} per location
  */
 function createYelpObj(data, arrayIndex) {
-    let newObj = {};
-    newObj.name = data.businesses[arrayIndex].name;
-    newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
-    newObj.closed = data.businesses[arrayIndex].is_closed;
-    newObj.rating = data.businesses[arrayIndex].rating;
-    newObj.url = data.businesses[arrayIndex].url;
-    newObj.image = data.businesses[arrayIndex].image_url;
-    newObj.distance = (data.businesses[arrayIndex].distance * 0.00062137);
-    newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-    newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-    newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
-    return newObj;
+  let newObj = {};
+  newObj.name = data.businesses[arrayIndex].name;
+  newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
+  newObj.closed = data.businesses[arrayIndex].is_closed;
+  newObj.rating = data.businesses[arrayIndex].rating;
+  newObj.url = data.businesses[arrayIndex].url;
+  newObj.image = data.businesses[arrayIndex].image_url;
+  newObj.distance = data.businesses[arrayIndex].distance * 0.00062137;
+  newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+  newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+  newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
+  return newObj;
 }
 
 /***************************************************************************
@@ -428,12 +437,12 @@ function getTicketMasterConcerts(obj) {
     method: "get",
     url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     success: function(response) {
-      console.log(response);
       if (!response._embedded) {
         searchErrorAlert();
         return;
       }
       scrollPage("event");
+      setTimeout(resetInputs, 1500);
       var data = [];
       $(".show-container").empty();
       var allEventsObj = response._embedded.events;
@@ -504,4 +513,3 @@ function searchErrorAlert() {
     .text("No search results found. Please check the spelling of your city and/or specified date.")
     .addClass("bg-danger");
 }
-
