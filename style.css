@@ -132,3 +132,8 @@ body {
   font-weight: 500;
   line-height: 1;
 }
+
+.error-message {
+  padding: 1%;
+  text-align: center;
+}
