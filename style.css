@@ -16,6 +16,11 @@ body {
   text-align: center;
 }
 
+.breadcrumb {
+  background-color: transparent;
+  margin: 0;
+}
+
 .input-container {
   display: flex;
   justify-content: center;
@@ -27,10 +32,6 @@ body {
 .submit-button {
   width: 100%;
 }
-
-/* .landing-page {
-  width: 50%;
-} */
 
 .row {
   margin: 2% auto;
@@ -61,7 +62,7 @@ body {
   font-weight: 500;
   line-height: 1;
 }
-/*--------------------- MAP -----------------------------------*/
+/*----------------------------------- MAP -----------------------------------*/
 
 .wrapper,
 #map {
