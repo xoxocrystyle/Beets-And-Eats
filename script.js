@@ -100,6 +100,10 @@ function getEventDate() {
  * @returns:
  * @calls: ticketmasterAjaxCall, render map
  */
+ function handleConcertClick(){
+   getYelpBreweries();
+   getYelpRestaurants();
+ }
 
 /***************************************************************************
  * renderShowsOnDOM - create DOM elements for each show in list, update the on-page list of shows
@@ -158,11 +162,11 @@ function renderShowsOnDOM(eventDetails) {
  */
 
 function renderInitialMap() {
-  var USA = {
-    latitude: "39.011902",
-    longitude: "-98.48424649999998"
+  var losAngeles = {
+    latitude: "33.9596",
+    longitude: "-118.3287"
   };
-  map = new Map(USA, 4);
+  map = new Map(losAngeles, 12);
   map.renderMap();
 }
 
@@ -178,9 +182,8 @@ function renderInitialMap() {
 function renderMap(venueObject) {
   var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
   var barsNearby = getYelpBreweries(venueObject.zipcode);
-  map = new Map(venueObject, 15, restaurantsNearby, barsNearby); //create new instance of map for venue location
-
-  map.renderMap(); //render map to page
+  // map = new Map(venueObject, 15, restaurantsNearby, barsNearby); //create new instance of map for venue location
+  // map.renderMap(); //render map to page
 
   //get array of objects from yelp
   map.createBarMarkers();
@@ -200,13 +203,10 @@ var santabarbara = { latitude: "34.420830", longitude: "-119.698189", venueName:
  */
 
 class Map {
-  constructor(venueObject, zoom, restaurants, bars) {
-    this.latitude = parseFloat(venueObject.latitude);
-    this.longitude = parseFloat(venueObject.longitude);
-    this.bars = bars;
-    this.restaurants = restaurants;
+  constructor(location, zoom) {
+    this.latitude = parseFloat(location.latitude);
+    this.longitude = parseFloat(location.longitude);
     this.markers = [];
-    this.venueInfo = venueObject;
     this.zoom = zoom;
     // this.markerLocation = [];
   }
@@ -215,9 +215,9 @@ class Map {
       center: { lat: this.latitude, lng: this.longitude },
       zoom: this.zoom
     });
-    this.venueInfo.latLong = { lat: this.latitude, lng: this.longitude };
-    var marker = new Marker(this.venueInfo, map, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
-    this.markers.push(marker);
+    // this.venueInfo.latLong = { lat: this.latitude, lng: this.longitude };
+    // var marker = new Marker(this.location, map, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
+    // this.markers.push(marker);
     return map;
   }
   renderAllMarkers() {
@@ -232,8 +232,17 @@ class Map {
     for(let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
         let locationObj = array[arrayIndex];
         locationObj.latLong = {lat: locationObj.latitude, lng: locationObj.longitude};
-        let newMarker = new Marker(locationObj, map, color);
-        this.markers.push(newMarker);
+        // let newMarker = new Marker(locationObj, this, color);
+        // console.log(this)
+        // newMarker.renderMarker();
+        debugger;
+        let marker = new google.maps.Marker({
+          position: locationObj.latLong,
+          map: map,
+          // label: this.locationInfo,
+          icon: color
+        });
+        this.markers.push(marker);
     }
 
   }
@@ -263,6 +272,7 @@ class Map {
  */
 class Marker {
   constructor(locationInfo, map, markerColor) {
+    console.log(map)
     this.latLong = locationInfo.latLong;
     this.name = locationInfo.name;
     this.markerColor = markerColor;
@@ -271,8 +281,8 @@ class Marker {
   renderMarker() {
     let marker = new google.maps.Marker({
       position: this.latLong,
-      map: this.map,
-      label: this.locationInfo,
+      setMap: this.map,
+      // label: this.locationInfo,
       icon: this.markerColor
     });
     return marker;
@@ -295,10 +305,9 @@ function getYelpRestaurants() {
       location: 90305,
       term: "food",
       radius: 40000,
-      api_key: "pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
+      api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-      console.log(data);
       for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
         let newObj = {};
         newObj.name = data.businesses[arrayIndex].name;
@@ -308,7 +317,7 @@ function getYelpRestaurants() {
         newObj.url = data.businesses[arrayIndex].url;
         newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
         newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-        newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
+        newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
         yelpArrayOfRestaurants.push(newObj);
       }
       map.createMarkers(yelpArrayOfRestaurants, 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
@@ -328,7 +337,7 @@ function getYelpRestaurants() {
  */
 
 function getYelpBreweries() {
-    let yelpArrayOfBreweries = [];
+  let yelpArrayOfBreweries = [];
     let ajaxConfig = {
         dataType: "json",
         url: "http://danielpaschal.com/yelpproxy.php",
@@ -337,7 +346,7 @@ function getYelpBreweries() {
             location: 90305,
             term: "bar",
             radius: 40000,
-            api_key: 'pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx'
+            api_key: 'VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx'
         },
         success: function(data) {
             for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
@@ -349,7 +358,7 @@ function getYelpBreweries() {
                 newObj.url = data.businesses[arrayIndex].url;
                 newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
                 newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-                newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
+                newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
                 yelpArrayOfBreweries.push(newObj);
             }
             map.createMarkers(yelpArrayOfBreweries, 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
