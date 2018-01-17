@@ -111,8 +111,8 @@ function getEventDate() {
  * @calls: ticketmasterAjaxCall, render map
  */
 
-function handleConcertClick() {
-  console.log("show has been clicked");
+function handleConcertClick(object) {
+  console.log(object);
 }
 
 /***************************************************************************
@@ -393,9 +393,8 @@ function getTicketMasterConcerts(obj) {
         var eventObj = createEventObject(allEventsObj[tmData_i]);
         renderShowsOnDOM(eventObj);
         data.push(eventObj);
+        $(".show-listing").on("click", handleConcertClick(eventObj));
       }
-
-      $(".show-listing").on("click", handleConcertClick);
     }
   });
 }
@@ -408,7 +407,7 @@ function createEventObject(event) {
   object.longitude = event._embedded.venues[0].location.longitude;
   object.zipCode = event._embedded.venues[0].postalCode;
   object.venueName = event._embedded.venues[0].name;
-  object.generalInfo = event._embedded.venues[0].generalInfo.generalRule;
+  //   object.generalInfo = event._embedded.events.info;
   object.ticketUrl = event._embedded.venues[0].url;
   object.eventImage = event.images[0];
   object.eventDate = event.dates.start.localDate;
