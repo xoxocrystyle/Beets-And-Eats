@@ -8,7 +8,6 @@ var map;
 
 function initializeApp() {
   $(".submit-button").on("click", handleSearchButtonClick);
-  renderInitialMap();
 }
 
 /***************************************************************************
