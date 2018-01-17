@@ -1,12 +1,12 @@
 $(document).ready(initializeApp);
 var map;
 var markers;
+
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
  * @params {undefined}
  * @returns  {undefined}
  */
-
 function initializeApp() {
   $(".submit-button").on("click", handleSearchButtonClick);
 }
@@ -19,6 +19,21 @@ function initializeApp() {
  */
 function handleSearchButtonClick() {
   getTicketMasterConcerts(getEventInfo());
+  resetInputs();
+}
+
+/***************************************************************************
+ * resetInputs - gets city and state code from user input and returns information in object
+ * @param: {undefined} none
+ * @returns: object
+ * @calls: inputCityCheck, getStateFromDropDown, getEventDate
+ */
+function resetInputs() {
+  $(".city-name").val("");
+  $(".state-code").val("");
+  $(".event-year").val("");
+  $(".event-month").val("");
+  $(".event-day").val("");
 }
 
 /***************************************************************************
@@ -41,7 +56,6 @@ function getEventInfo() {
  * @returns: string
  * @calls: none
  */
-
 function getCity() {
   if ($(".city-name").val() === "") {
     console.log("Please input a city.");
@@ -56,7 +70,6 @@ function getCity() {
  * @returns: string
  * @calls: none
  */
-
 function getState() {
   return $(".state-code").val();
 }
@@ -67,7 +80,6 @@ function getState() {
  * @returns: object
  * @calls: none
  */
-
 function getEventDate() {
   var date = {};
   var year = $(".event-year").val();
@@ -110,9 +122,11 @@ function getEventDate() {
  * @returns:
  * @calls: ticketmasterAjaxCall, render map
  */
-
 function handleConcertClick(eventObj) {
-  var latLng = { lat: parseFloat(eventObj.latitude), lng: parseFloat(eventObj.longitude) };
+  var latLng = {
+    lat: parseFloat(eventObj.latitude),
+    lng: parseFloat(eventObj.longitude)
+  };
   map = new google.maps.Map(document.getElementById("map"), {
     center: latLng,
     zoom: 15
@@ -132,9 +146,23 @@ function handleConcertClick(eventObj) {
  * @calls: none
  */
 
-function renderShowsOnDOM(eventDetails) {
+function renderShowsOnDOM(eventDetailsArray) {
+  var row;
+
+  for (var index = 0; index < eventDetailsArray.length; index++) {
+    if (index % 2 === 0) {
+      row = $("<div>").addClass("row");
+      row.append(createShowDOMElement(eventDetailsArray[index]));
+    } else {
+      row.append(createShowDOMElement(eventDetailsArray[index]));
+      $(".show-container").append(row);
+    }
+  }
+}
+
+function createShowDOMElement(eventDetails) {
   var listing = $("<div>", {
-    class: "row show-listing",
+    class: "show-listing",
     on: {
       click: function() {
         handleConcertClick(eventDetails);
@@ -144,15 +172,27 @@ function renderShowsOnDOM(eventDetails) {
       }
     }
   });
-
-  var artistImage = $("<div>").addClass("col-xs-4 artist");
+  var artistImage = $("<div>").addClass("col-lg-3 col-xs-4 artist");
   var image = $("<img>").attr("src", eventDetails.eventImage.url);
-  var showInfo = $("<div>").addClass("show-info col-xs-8");
-  var showName = $("<h3>").text(eventDetails.eventName);
-  var showDetails = $("<p>");
+  var showInfo = $("<div>").addClass("show-info col-lg-3 col-xs-8");
+  var showName = $("<p>")
+    .text(eventDetails.eventName)
+    .addClass("show-name");
+  var showDetails = $("<p>").addClass("show-details hidden-xs hidden-sm");
+  var ticketLink = $("<a>")
+    .attr("src", eventDetails.ticketURL)
+    .text("BUY TICKETS")
+    .addClass("ticket-link hidden-xs hidden-sm");
+  var mobileTicketLink = $("<a>")
+    .attr("src", eventDetails.ticketURL)
+    .text("BUY TICKETS")
+    .addClass("ticket-link hidden-md hidden-lg");
   var showDate = `${eventDetails.eventDate.slice(5)}-${eventDetails.eventDate.slice(0, 4)}`;
   var showTime = parseInt(eventDetails.startTime.slice(0, 2));
-  var showVenue = eventDetails.venueName;
+  var showVenue = $("<p>")
+    .text(`Venue: ${eventDetails.venueName}`)
+    .addClass("show-venue hidden-xs hidden-sm");
+  var mobileDetails = $("<p>").addClass("mobile-details hidden-md hidden-lg");
 
   if (showTime > 12) {
     var showHour = showTime - 12;
@@ -161,12 +201,14 @@ function renderShowsOnDOM(eventDetails) {
     showTime = `${eventDetails.startDate.slice(0, 5)} AM`;
   }
 
-  showDetails.text(`${showVenue} - ${showDate}, ${showTime}`);
-  artistImage.append(image);
-  showInfo.append(showName, showDetails);
+  showDetails.text(`Date & Time: ${showDate}, ${showTime}`);
+  mobileDetails.text(`${eventDetails.venueName} - ${showDate}, ${showTime}`);
 
+  artistImage.append(image);
+  showInfo.append(mobileTicketLink, showName, mobileDetails, showDetails, showVenue, ticketLink);
   listing.append(artistImage, showInfo);
-  $(".show-container").append(listing);
+
+  return listing;
 }
 
 /***************************************************************************
@@ -175,7 +217,6 @@ function renderShowsOnDOM(eventDetails) {
  * @param {none}
  * @return {none}
  */
-
 function renderInitialMap() {
   var losAngeles = { lat: 33.9584404, lng: -118.3941214 };
 
@@ -186,27 +227,11 @@ function renderInitialMap() {
 }
 
 /***************************************************************************
- *function createMap
- * create new map
-//  * @param {object} information
-//  * @return {none}
-//  */
-// function createMap() {
-//   map = new google.maps.Map(document.getElementById('map'), {
-//           center: {lat: 33.9596, lng: -118.3287},
-//           zoom: 15
-//         })
-//   getYelpBreweries();
-//   getYelpRestaurants();
-// }
-
-/***************************************************************************
  * function createMarkers
  // * create render mark to page
  * @param {array} array of locations
  * @param {string} color color for markers
  */
-
 function createMarkers(array, color) {
   for (var location = 0; location < array.length; location++) {
     var place = array[location];
@@ -334,13 +359,20 @@ function getYelpRestaurants(zipcode) {
       location: zipcode,
       term: "food",
       radius: 40000,
-      api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
+      api_key:
+        "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+      for (
+        let arrayIndex = 0;
+        arrayIndex < data.businesses.length;
+        arrayIndex++
+      ) {
         let newObj = {};
         newObj.name = data.businesses[arrayIndex].name;
-        newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
+        newObj.address = data.businesses[
+          arrayIndex
+        ].location.display_address.join("\n");
         newObj.closed = data.businesses[arrayIndex].is_closed;
         newObj.rating = data.businesses[arrayIndex].rating;
         newObj.url = data.businesses[arrayIndex].url;
@@ -365,7 +397,6 @@ function getYelpRestaurants(zipcode) {
  * @param{object}
  * @returns [{object}]
  */
-
 function getYelpBreweries(zipcode) {
   let yelpArrayOfBreweries = [];
   let ajaxConfig = {
@@ -376,13 +407,20 @@ function getYelpBreweries(zipcode) {
       location: zipcode,
       term: "bar",
       radius: 40000,
-      api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
+      api_key:
+        "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+      for (
+        let arrayIndex = 0;
+        arrayIndex < data.businesses.length;
+        arrayIndex++
+      ) {
         let newObj = {};
         newObj.name = data.businesses[arrayIndex].name;
-        newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
+        newObj.address = data.businesses[
+          arrayIndex
+        ].location.display_address.join("\n");
         newObj.closed = data.businesses[arrayIndex].is_closed;
         newObj.rating = data.businesses[arrayIndex].rating;
         newObj.url = data.businesses[arrayIndex].url;
@@ -426,15 +464,17 @@ function getTicketMasterConcerts(obj) {
     data: data_object,
     dataType: "json",
     method: "get",
-    url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
+    url:
+      "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     success: function(response) {
       var data = [];
+      $(".show-container").empty();
       var allEventsObj = response._embedded.events;
       for (var tmData_i = 0; tmData_i < allEventsObj.length; tmData_i++) {
         var eventObj = createEventObject(allEventsObj[tmData_i]);
-        renderShowsOnDOM(eventObj);
         data.push(eventObj);
       }
+      renderShowsOnDOM(data);
     }
   });
 }
