@@ -144,10 +144,7 @@ function renderShowsOnDOM(eventDetails) {
   });
 
   var artistImage = $("<div>").addClass("col-xs-4 artist");
-  var image = $("<img>")
-    // .addClass("col-lg-4 hidden-xs hidden-sm")
-    // .addClass("col-lg-4 artist")
-    .attr("src", eventDetails.eventImage.url);
+  var image = $("<img>").attr("src", eventDetails.eventImage.url);
   var showInfo = $("<div>").addClass("show-info col-xs-8");
   var showName = $("<h3>").text(eventDetails.eventName);
   var showDetails = $("<p>");
@@ -163,17 +160,11 @@ function renderShowsOnDOM(eventDetails) {
   }
 
   showDetails.text(`${showVenue} - ${showDate}, ${showTime}`);
-
-  // artistSection.append(showImg);
-  // listing.append(artistSection, showInfo);
-  // showInfo.append(showName, showDetails);
   artistImage.append(image);
   showInfo.append(showName, showDetails);
 
   listing.append(artistImage, showInfo);
   $(".show-container").append(listing);
-  // $(".show-listing").on("click", handleConcertClick.bind(eventDetails));
-  // console.log(eventDetails)
 }
 
 /***************************************************************************
