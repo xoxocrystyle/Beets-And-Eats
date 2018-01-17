@@ -293,8 +293,9 @@ function getContentString(place) {
   } else {
     place.closed = "Closed";
   }
-  var contentString = "<h3>" + place.name + "</h4><h4>" + place.phoneNumber + "</h4><h4>" + place.closed;
-  return contentString;
+  var contentString =
+    "<img "+'src=\'' + place.image + '\'' + " class="+ '\'markerImg\''+ ">" + "<h3>" + place.name + "</h4><h4>" + place.phoneNumber + "</h4><h4>" + place.closed;
+    return contentString;
 }
 
 /***************************************************************************
@@ -324,6 +325,9 @@ function populateFoodSideBar(place){
   let rating = $('<p>', {
     'text': 'Rating: ' + place.rating
 
+  });
+  let distance = $('<p>', {
+      'text': place.distance.toFixed(2) + ' miles away from venue'
   });
   let yelp = $("<a>", {
     href: place.url,
