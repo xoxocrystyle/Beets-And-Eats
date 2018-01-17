@@ -38,14 +38,23 @@ body {
 
 .show-container {
   height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .media {
   margin-top: 0;
 }
 
-.artist > img {
+.show-image {
   width: 100%;
+  /* height: 22vmin;
+  overflow: hidden; */
+}
+
+.image-div {
+  width: 100%;
+  height: 15vmax;
+  overflow: hidden;
 }
 
 .show-details,
@@ -60,6 +69,17 @@ body {
   font-size: 4vmin;
   font-weight: 500;
   line-height: 1;
+}
+
+.show-listing {
+  border-radius: 10px;
+}
+
+.show-listing:hover {
+  border: 3px solid white;
+  box-shadow: 0px 0px 20px 8px #a6a6a6;
+  z-index: 1;
+  cursor: pointer;
 }
 /*--------------------- MAP -----------------------------------*/
 
