@@ -71,9 +71,8 @@ function getState() {
 function getEventDate() {
   var date = {};
   var year = $(".event-year").val();
-  var month;
-  var day;
-  var nextDay = parseInt($(".event-day").val()) + 1;
+  var month = $(".event-month").val();
+  var day = $(".event-day").val();
 
   if ($(".event-month").val().length === 1) {
     month = `0${$(".event-month").val()}`;
@@ -87,13 +86,20 @@ function getEventDate() {
     day = $(".event-day").val();
   }
 
-  if (nextDay.length === 1) {
-    nextDay = `0${nextDay}`;
-  }
+  var startDay = new Date(year, month - 1, day, 0, 0, 0);
+  startDay.toDateString();
+  var utcStartDay = startDay.toUTCString();
+  startDay = new Date(utcStartDay);
 
-  //hard coded for conversion of PST to GMT
-  date.start = `${year}-${month}-${day}T08:00:00Z`;
-  date.end = `${year}-${month}-${nextDay}T08:00:00Z`;
+  var endDay = new Date(year, month - 1, day, 23, 59, 59);
+  endDay.toDateString();
+  var utcEndDay = endDay.toUTCString();
+  endDay = new Date(utcEndDay);
+
+  date.start = startDay.toISOString().slice(0, -5);
+  date.start += "Z";
+  date.end = endDay.toISOString().slice(0, -5);
+  date.end += "Z";
 
   return date;
 }
