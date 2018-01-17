@@ -20,7 +20,6 @@ function initializeApp() {
  */
 function handleSearchButtonClick() {
   getTicketMasterConcerts(getEventInfo());
-  resetInputs();
 }
 
 /***************************************************************************
@@ -35,6 +34,9 @@ function resetInputs() {
   $(".event-year").val("");
   $(".event-month").val("");
   $(".event-day").val("");
+  $(".error-message")
+    .empty()
+    .removeClass("bg-danger");
 }
 
 /***************************************************************************
@@ -168,7 +170,7 @@ function renderShowsOnDOM(eventDetailsArray) {
 
 function createShowDOMElement(eventDetails) {
   var listing = $("<div>", {
-    class: "show-listing",
+    class: "show-listing col-lg-6 col-md-6 col-xs-12 col-sm-12",
     on: {
       click: function() {
         handleConcertClick(eventDetails);
@@ -179,9 +181,11 @@ function createShowDOMElement(eventDetails) {
       }
     }
   });
-  var artistImage = $("<div>").addClass("artist col-lg-3 col-md-3 col-xs-4");
-  var image = $("<img>").attr("src", eventDetails.eventImage.url);
-  var showInfo = $("<div>").addClass("show-info col-lg-3 col-md-3 col-xs-8");
+  var listingRow = $("<div>").addClass("listing row");
+  var artistImage = $("<div>").addClass("artist col-lg-6 col-md-6 col-xs-6 col-sm-6");
+  var imageDiv = $("<div>").addClass("image-div");
+  var image = $("<img>").attr("src", eventDetails.eventImage.url).addClass('show-image');
+  var showInfo = $("<div>").addClass("show-info col-lg-6 col-md-6 col-xs-6 col-sm-6");
   var showName = $("<p>")
     .text(eventDetails.eventName)
     .addClass("show-name");
@@ -211,9 +215,11 @@ function createShowDOMElement(eventDetails) {
   showDetails.text(`Date & Time: ${showDate}, ${showTime}`);
   mobileDetails.text(`${eventDetails.venueName} - ${showDate}, ${showTime}`);
 
-  artistImage.append(image);
+  imageDiv.append(image);
+  artistImage.append(imageDiv);
   showInfo.append(mobileTicketLink, showName, mobileDetails, showDetails, showVenue, ticketLink);
-  listing.append(artistImage, showInfo);
+  listingRow.append(artistImage, showInfo);
+  listing.append(listingRow);
 
   return listing;
 }
@@ -281,20 +287,14 @@ function createWindowHandler(place, marker){
  * @param{object} object of location information
  * @returns [string] content stringified
  */
-function getContentString(place){
-  if(place.closed === false) {
-    place.closed = 'Open';
+function getContentString(place) {
+  if (place.closed === false) {
+    place.closed = "Open";
   } else {
-    place.closed = 'Closed';
+    place.closed = "Closed";
   }
-  var contentString =
-    "<h3>" +
-    place.name +
-    "</h4><h4>" +
-    place.phoneNumber +
-    "</h4><h4>" +
-    place.closed;
-    return contentString;
+  var contentString = "<h3>" + place.name + "</h4><h4>" + place.phoneNumber + "</h4><h4>" + place.closed;
+  return contentString;
 }
 
 /***************************************************************************
@@ -303,6 +303,7 @@ function getContentString(place){
  * @param{object} object of location information
  * @returns [object] createddom element
  */
+
 function populateFoodSideBar(place){
   let container = $('<div>');
   let image = $('<img>', {
@@ -314,18 +315,19 @@ function populateFoodSideBar(place){
   let name = $('<h4>',{
     'text': place.name
   });
-  let number = $('<p>', {
-    'text': place.name
+  let number = $("<p>", {
+    text: place.name
   });
-  let address = $('<p>', {
-    'text': place.address
+  let address = $("<p>", {
+    text: place.address
   });
   let rating = $('<p>', {
     'text': 'Rating: ' + place.rating
+
   });
-  let yelp = $('<a>', {
-    'href': place.url,
-    'text': 'website'
+  let yelp = $("<a>", {
+    href: place.url,
+    text: "website"
   });
   container.append(image, name, distance, address, number, rating, yelp);
   return container;
@@ -360,14 +362,13 @@ function populateEventSideBar(eventLocation) {
   return container;
 }
 
-
 /***************************************************************************
  *function getYelpData
  * get restaurants based on latLng
  * @param{object}
  * @returns [{object}]
  */
-function getYelpData(latLng, type, color){
+function getYelpData(latLng, type, color) {
   let arrayOfPlaces = [];
   let ajaxConfig = {
     dataType: "json",
@@ -381,11 +382,11 @@ function getYelpData(latLng, type, color){
       api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-        for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-            let newObj = createYelpObj(data, arrayIndex);
-            arrayOfPlaces.push(newObj);
-        }
-      createMarkers(arrayOfPlaces, color );
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+        let newObj = createYelpObj(data, arrayIndex);
+        arrayOfPlaces.push(newObj);
+      }
+      createMarkers(arrayOfPlaces, color);
     },
     error: function() {
       console.error("The server returned no information.");
@@ -401,18 +402,18 @@ function getYelpData(latLng, type, color){
  * @return{object} per location
  */
 function createYelpObj(data, arrayIndex) {
-    let newObj = {};
-    newObj.name = data.businesses[arrayIndex].name;
-    newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
-    newObj.closed = data.businesses[arrayIndex].is_closed;
-    newObj.rating = data.businesses[arrayIndex].rating;
-    newObj.url = data.businesses[arrayIndex].url;
-    newObj.image = data.businesses[arrayIndex].image_url;
-    newObj.distance = (data.businesses[arrayIndex].distance * 0.00062137);
-    newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-    newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-    newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
-    return newObj;
+  let newObj = {};
+  newObj.name = data.businesses[arrayIndex].name;
+  newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
+  newObj.closed = data.businesses[arrayIndex].is_closed;
+  newObj.rating = data.businesses[arrayIndex].rating;
+  newObj.url = data.businesses[arrayIndex].url;
+  newObj.image = data.businesses[arrayIndex].image_url;
+  newObj.distance = data.businesses[arrayIndex].distance * 0.00062137;
+  newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+  newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+  newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
+  return newObj;
 }
 
 /***************************************************************************
@@ -441,6 +442,7 @@ function getTicketMasterConcerts(obj) {
         return;
       }
       scrollPage("event");
+      setTimeout(resetInputs, 1500);
       var data = [];
       $(".show-container").empty();
       var allEventsObj = response._embedded.events;
