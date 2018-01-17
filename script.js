@@ -10,6 +10,17 @@ var infoWindow;
  */
 function initializeApp() {
   $(".submit-button").on("click", handleSearchButtonClick);
+  $(".start_button").on("click", handleStartButtonClick);
+}
+
+/***************************************************************************
+ * handleStartButtonClick - when start button is clicked, scroll down to search section
+ * @param {object} event  The event object from the click
+ * @returns: none
+ * @calls: scrollPage
+ */
+function handleStartButtonClick() {
+  scrollPage("search");
 }
 
 /***************************************************************************
@@ -140,8 +151,8 @@ function handleConcertClick(eventObj) {
   //   content: eventObj.venueName
   // });
   $(".foodInfo > div").remove();
-  getYelpData(latLng, 'bar', 'images/yellow-dot.png');
-  getYelpData(latLng, 'food', 'images/blue-dot.png');
+  getYelpData(latLng, "bar", "images/yellow-dot.png");
+  getYelpData(latLng, "food", "images/blue-dot.png");
 
   // getYelpBreweries(latLng);
   // getYelpRestaurants(latLng);
@@ -184,7 +195,9 @@ function createShowDOMElement(eventDetails) {
   var listingRow = $("<div>").addClass("listing row");
   var artistImage = $("<div>").addClass("artist col-lg-6 col-md-6 col-xs-6 col-sm-6");
   var imageDiv = $("<div>").addClass("image-div");
-  var image = $("<img>").attr("src", eventDetails.eventImage.url).addClass('show-image');
+  var image = $("<img>")
+    .attr("src", eventDetails.eventImage.url)
+    .addClass("show-image");
   var showInfo = $("<div>").addClass("show-info col-lg-6 col-md-6 col-xs-6 col-sm-6");
   var showName = $("<p>")
     .text(eventDetails.eventName)
@@ -273,7 +286,7 @@ function renderMarker(place, color) {
   });
 }
 
-function createWindowHandler(place, marker){
+function createWindowHandler(place, marker) {
   infoWindow.content = getContentString(place);
   infoWindow.open(map, marker);
   let info = populateFoodSideBar(place);
@@ -294,8 +307,20 @@ function getContentString(place) {
     place.closed = "Closed";
   }
   var contentString =
-    "<img "+'src=\'' + place.image + '\'' + " class="+ '\'markerImg\''+ ">" + "<h3>" + place.name + "</h4><h4>" + place.phoneNumber + "</h4><h4>" + place.closed;
-    return contentString;
+    "<img " +
+    "src='" +
+    place.image +
+    "'" +
+    " class=" +
+    "'markerImg'" +
+    ">" +
+    "<h3>" +
+    place.name +
+    "</h4><h4>" +
+    place.phoneNumber +
+    "</h4><h4>" +
+    place.closed;
+  return contentString;
 }
 
 /***************************************************************************
@@ -305,17 +330,18 @@ function getContentString(place) {
  * @returns [object] createddom element
  */
 
-function populateFoodSideBar(place){
-  let container = $('<div>');
+function populateFoodSideBar(place) {
+  let container = $("<div>");
 
-  let image = $('<div>', {
-    'class': 'foodImage',
-    'css': {
-      'background-image': 'url("' + place.image + '")'
+  let image = $("<div>", {
+    class: "foodImage",
+    css: {
+      "background-image": 'url("' + place.image + '")'
     }
-  })
-  let name = $('<h3>',{
-    'text': place.name
+  });
+  let name = $("<h3>", {
+    text: place.name,
+    class: "map-food-name"
   });
   let number = $("<p>", {
     text: place.name
@@ -323,12 +349,11 @@ function populateFoodSideBar(place){
   let address = $("<p>", {
     text: place.address
   });
-  let rating = $('<p>', {
-    'text': 'Rating: ' + place.rating
-
+  let rating = $("<p>", {
+    text: "Rating: " + place.rating
   });
-  let distance = $('<p>', {
-      'text': place.distance.toFixed(2) + ' miles away from venue'
+  let distance = $("<p>", {
+    text: place.distance.toFixed(2) + " miles away from venue"
   });
   let yelp = $("<a>", {
     href: place.url,
@@ -346,14 +371,15 @@ function populateFoodSideBar(place){
  */
 function populateEventSideBar(eventLocation) {
   let container = $("<div>");
-  let image = $('<div>', {
-    'class': 'eventImage',
-    'css': {
-      'background-image': 'url("' + eventLocation.eventImage.url + '")'
+  let image = $("<div>", {
+    class: "eventImage",
+    css: {
+      "background-image": 'url("' + eventLocation.eventImage.url + '")'
     }
-  })
+  });
   let eventName = $("<h3>", {
-    text: eventLocation.eventName
+    text: eventLocation.eventName,
+    class: "map-event-name"
   });
   let venueName = $("<p>", {
     text: eventLocation.venueName
@@ -488,8 +514,22 @@ function createEventObject(event, index) {
   return object;
 }
 
+/***************************************************************************
+ * function scrollPage
+ * scrolls to section of page
+ * @param{string} page section
+ * @return{none}
+ */
 function scrollPage(element) {
   switch (element) {
+    case "search":
+      $("html, body").animate(
+        {
+          scrollTop: $("#search-page").offset().top - 60
+        },
+        1500
+      );
+      break;
     case "event":
       $("html, body").animate(
         {

@@ -10,24 +10,23 @@ body {
   background: linear-gradient(to bottom right, papayawhip, paleturquoise);
   background-attachment: fixed;
   background-repeat: no-repeat;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
-.navbar-default{
+.navbar-default {
   background: transparent;
   border-style: none;
 }
 
-
-.navbar-default .navbar-brand{
-  color: #FFF;
+.navbar-default .navbar-brand {
+  color: #fff;
 }
 
-.navbar-default .navbar-nav>li>a{
-  color:  #FFF;
+.navbar-default .navbar-nav > li > a {
+  color: #fff;
 }
 
-.container-fluid{
+.container-fluid {
   padding: 0;
 }
 
@@ -55,26 +54,26 @@ body {
   flex-flow: column;
   height: 100vh;
   width: 100vw;
-  background: url('images/brewsky.png') no-repeat center center fixed;
+  background: url("images/brewsky.png") no-repeat center center fixed;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
 }
 .start_title {
-  font-family: 'Abril Fatface', cursive;
+  font-family: "Abril Fatface", cursive;
   font-size: 15vmin;
   color: seashell;
   text-shadow: 0 0 30px black;
 }
 /*.tag_line {*/
-  /*display: flex;*/
-  /*justify-content: center;*/
-  /*align-items: center;*/
-  /*font-size: 3vmin;*/
-  /*color: seashell;*/
-  /*text-shadow: 0 0 10px black;*/
-  /*margin-bottom: 2%;*/
+/*display: flex;*/
+/*justify-content: center;*/
+/*align-items: center;*/
+/*font-size: 3vmin;*/
+/*color: seashell;*/
+/*text-shadow: 0 0 10px black;*/
+/*margin-bottom: 2%;*/
 /*}*/
 .start_button {
   display: flex;
@@ -82,12 +81,12 @@ body {
   align-items: center;
   color: grey;
   border: 3px solid white;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 3vmin;
   height: 3vmax;
   width: 50%;
   border-radius: 5px;
-  background-color: rgba(255,255,255, 0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   margin: auto;
 }
 .start_button:hover {
@@ -132,10 +131,9 @@ body {
   margin-top: 0;
   margin-bottom: 2px;
   font-size: 4vmin;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1;
 }
-
 
 .show-listing {
   border-radius: 10px;
@@ -147,6 +145,18 @@ body {
   z-index: 1;
   cursor: pointer;
 }
+
+.show-details,
+.show-venue {
+  font-size: 2vmin;
+  margin-bottom: 5px;
+}
+
+.error-message {
+  padding: 1%;
+  text-align: center;
+}
+
 /*--------------------- MAP -----------------------------------*/
 
 .wrapper hr {
@@ -218,36 +228,25 @@ body {
   width: 50%;
 }
 
-.eventInfo > div, .foodInfo > div  {
+.eventInfo > div,
+.foodInfo > div {
   width: 100%;
 }
 
-.foodInfo .foodImage, .eventInfo .eventImage {
+.foodInfo .foodImage,
+.eventInfo .eventImage {
   height: 100px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.show-details,
-.show-venue {
-  font-size: 2vmin;
-  margin-bottom: 5px;
-}
-
-.show-name {
-  margin-top: 0;
-  margin-bottom: 2px;
-  font-size: 5vmin;
-  font-weight: 500;
-  line-height: 1;
-}
-
-.error-message {
-  padding: 1%;
-  text-align: center;
-}
 .markerImg {
   height: 100px;
   width: 150px;
+}
+
+.map-event-name,
+.map-food-name {
+  font-weight: 700;
 }
