@@ -20,7 +20,7 @@ function initializeApp() {
  * @calls: scrollPage
  */
 function handleStartButtonClick() {
-  scrollPage("search");
+  scrollPage("#search-page");
 }
 
 /***************************************************************************
@@ -185,7 +185,7 @@ function createShowDOMElement(eventDetails) {
     on: {
       click: function() {
         handleConcertClick(eventDetails);
-        scrollPage("map");
+        scrollPage("#map");
         let info = populateEventSideBar(eventDetails);
         $(".eventInfo > div").remove();
         $(".eventInfo").append(info);
@@ -474,7 +474,7 @@ function getTicketMasterConcerts(obj) {
         searchErrorAlert();
         return;
       }
-      scrollPage("event");
+      scrollPage("#event-page");
       setTimeout(resetInputs, 1500);
       var data = [];
       $(".show-container").empty();
@@ -516,37 +516,17 @@ function createEventObject(event, index) {
 
 /***************************************************************************
  * function scrollPage
- * scrolls to section of page
+ * scrolls to section of page on button click
  * @param{string} page section
  * @return{none}
  */
 function scrollPage(element) {
-  switch (element) {
-    case "search":
-      $("html, body").animate(
-        {
-          scrollTop: $("#search-page").offset().top - 60
-        },
-        1500
-      );
-      break;
-    case "event":
-      $("html, body").animate(
-        {
-          scrollTop: $("#event-page").offset().top - 60
-        },
-        1500
-      );
-      break;
-    case "map":
-      $("html, body").animate(
-        {
-          scrollTop: $("#map").offset().top - 60
-        },
-        2000
-      );
-      break;
-  }
+  $("html, body").animate(
+    {
+      scrollTop: $(element).offset().top - 60
+    },
+    1500
+  );
 }
 
 /***************************************************************************
