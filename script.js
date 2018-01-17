@@ -142,9 +142,15 @@ function handleConcertClick(eventObj) {
   // window = new google.maps.InfoWindow({
   //   content: eventObj.venueName
   // });
+<<<<<<< HEAD
 
   getYelpData(latLng, "bar", "images/yellow-dot.png");
   getYelpData(latLng, "food", "images/blue-dot.png");
+=======
+  $(".foodInfo > div").remove();
+  getYelpData(latLng, 'bar', 'images/yellow-dot.png');
+  getYelpData(latLng, 'food', 'images/blue-dot.png');
+>>>>>>> f73f68f26cbd854e164b4ae28c24a9bb51967eeb
 
   // getYelpBreweries(latLng);
   // getYelpRestaurants(latLng);
@@ -335,13 +341,16 @@ function getContentString(place) {
  * @returns [object] createddom element
  */
 
-function populateFoodSideBar(place) {
-  let container = $("<div>");
-  let image = $("<img>", {
-    src: place.image
-  });
-  let name = $("<h4>", {
-    text: place.name
+function populateFoodSideBar(place){
+  let container = $('<div>');
+  let image = $('<div>', {
+    'class': 'foodImage',
+    'css': {
+      'background-image': 'url("' + place.image + '")'
+    }
+  })
+  let name = $('<h3>',{
+    'text': place.name
   });
   let number = $("<p>", {
     text: place.name
@@ -371,14 +380,16 @@ function populateFoodSideBar(place) {
  */
 function populateEventSideBar(eventLocation) {
   let container = $("<div>");
-  let image = $("<img>", {
-    src: eventLocation.eventImage.url,
-    class: "eventImage"
-  });
-  let eventName = $("<h4>", {
+  let image = $('<div>', {
+    'class': 'eventImage',
+    'css': {
+      'background-image': 'url("' + eventLocation.eventImage.url + '")'
+    }
+  })
+  let eventName = $("<h3>", {
     text: eventLocation.eventName
   });
-  let venueName = $("<h4>", {
+  let venueName = $("<p>", {
     text: eventLocation.venueName
   });
   let time = $("<p>", {

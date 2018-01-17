@@ -8,14 +8,14 @@
     <link href="https://fonts.googleapis.com/css?family=Ranga:700" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
     <link href="style.css" rel="stylesheet">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOLDBhT3KNjFnh46zAYxoEOqGBmmQYGac&callback=renderInitialMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA27il3ixTgzqWbJEAyDw31c2_yKQfPjp0&callback=renderInitialMap"
+        async defer></script>
     <script src="script.js"></script>
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
 </head>
 
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class = "container">
+    <nav class="visible-md visible-lg navbar navbar-default navbar-fixed-top">
         <div class="navbar-header">
             <a class="navbar-brand" href="#home-page">HOME</a>
         </div>
@@ -31,15 +31,40 @@
             </li>
         </ul>
     </nav>
-   <div class="container-fluid">
+
+    <nav class="visible-sm visible-xs navbar navbar-default navbar-fixed-top">
+            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#mobile-nav-bar" aria-expanded="false">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="mobile-nav-bar">
+                <ul class="navbar-nav nav">
+                    <li class="nav-item">
+                            <a href="#home-page">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#search-page">SEARCH</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#event-page">EVENTS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#map">MAP</a>
+                    </li>
+                </ul>
+            </div>
+    </nav>
+
+    <div class="container-fluid">
         <!-- Landing Page-->
-        <section class ="landing-page" id="home-page">
+        <section class="landing-page" id="home-page">
             <div class="row">
                 <div class="col-lg-12">
-                <h1>Beats and Eats</h1>
+                    <h1>Beats and Eats</h1>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
         <section class="input-container row" id="search-page">
             <div class="search-container">
                 <div class="search-fields row">
@@ -68,15 +93,51 @@
                         </div>
                     </div>
 
-      </section>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="error-message"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="show-container" id="event-page">
+
+        </section>
     </div>
 
-    <!-- <section class="map-container row">
-        <div class="col-lg-12"> -->
-    <div id="map"></div>
-    <!-- </div>
-    </section> -->
+    <div class="wrapper">
+        <div id="map">
+        </div>
+
+        <div class="informationOverlay">
+            <section class='eventInfo'>
+                <h4>Event Information</h4>
+                <hr>
+            </section>
+            <section class='foodInfo'>
+                <h4>Food and Drink Information</h4>
+                <hr>
+            </section>
+        </div>
+        <div class="mapKey">
+            <ul>
+                <li>
+                    <img src="images/red-dot.png" alt='event key'>
+                    <p>Event</p>
+                </li>
+                <li>
+                    <img src="images/blue-dot.png" alt='restaurants key'>
+                    <p>Food</p>
+                </li>
+                <li>
+                    <img src="images/yellow-dot.png" alt='drinks key'>
+                    <p>Drinks</p>
+                </li>
+            </ul>
+        </div>
+    </div>
 </body>
 
 </html>
-
