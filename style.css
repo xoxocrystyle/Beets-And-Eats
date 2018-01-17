@@ -40,9 +40,6 @@ body {
   height: 100%;
 }
 
-#map {
-  height: 100%;
-}
 
 .media {
   margin-top: 0;
@@ -50,4 +47,89 @@ body {
 
 .artist > img {
   width: 100%;
+}
+
+.show-details,
+.show-venue {
+  font-size: 2vmin;
+  margin-bottom: 5px;
+}
+
+.show-name {
+  margin-top: 0;
+  margin-bottom: 2px;
+  font-size: 4vmin;
+  font-weight: 500;
+  line-height: 1;
+}
+/*--------------------- MAP -----------------------------------*/
+
+.wrapper , #map {
+  height: 100%;
+}
+.wrapper {
+  position: relative;
+}
+
+.informationOverlay {
+  position: absolute;
+  top: 6%;
+  left: 0%;
+  z-index: 99;
+  height: 91%;
+  width: 20%;
+  background-color: #ffffff;
+
+}
+
+.mapKey {
+  position: absolute;
+  right: 3%;
+  top: 0%;
+  z-index: 99;
+  height: 5%;
+  width: 20%;
+  background-color: #ffffff;
+}
+
+.mapKey > ul{
+  position: absolute;
+  list-style: none;
+  padding: 0;
+}
+
+.mapKey > ul >li {
+  display: inline-block;
+}
+
+.mapKey > ul >li > p {
+  display: inline-block;
+  font-size: 1vmin;
+}
+
+.mapKey > ul >li > img{
+  display: inline-block;
+  width: 50%;
+}
+
+.eventImage {
+  width: 100%
+}
+
+.eventInfo > div {
+  width: 100%;
+=======
+
+.show-details,
+.show-venue {
+  font-size: 2vmin;
+  margin-bottom: 5px;
+}
+
+.show-name {
+  margin-top: 0;
+  margin-bottom: 2px;
+  font-size: 5vmin;
+  font-weight: 500;
+  line-height: 1;
 }
