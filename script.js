@@ -1,5 +1,6 @@
 $(document).ready(initializeApp);
 var map;
+var markers;
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
  * @params {undefined}
@@ -70,9 +71,8 @@ function getState() {
 function getEventDate() {
   var date = {};
   var year = $(".event-year").val();
-  var month;
-  var day;
-  var nextDay = "0" + (parseInt($(".event-day").val()) + 1);
+  var month = $(".event-month").val();
+  var day = $(".event-day").val();
 
   if ($(".event-month").val().length === 1) {
     month = `0${$(".event-month").val()}`;
@@ -86,10 +86,20 @@ function getEventDate() {
     day = $(".event-day").val();
   }
 
-  debugger;
+  var startDay = new Date(year, month - 1, day, 0, 0, 0);
+  startDay.toDateString();
+  var utcStartDay = startDay.toUTCString();
+  startDay = new Date(utcStartDay);
 
-  date.start = `${year}-${month}-${day}T00:00:00Z`;
-  date.end = `${year}-${month}-${nextDay}T12:00:00Z`;
+  var endDay = new Date(year, month - 1, day, 23, 59, 59);
+  endDay.toDateString();
+  var utcEndDay = endDay.toUTCString();
+  endDay = new Date(utcEndDay);
+
+  date.start = startDay.toISOString().slice(0, -5);
+  date.start += "Z";
+  date.end = endDay.toISOString().slice(0, -5);
+  date.end += "Z";
 
   return date;
 }
@@ -101,6 +111,10 @@ function getEventDate() {
  * @calls: ticketmasterAjaxCall, render map
  */
 
+function handleConcertClick(object) {
+  console.log(object);
+}
+
 /***************************************************************************
  * renderShowsOnDOM - create DOM elements for each show in list, update the on-page list of shows
  * @param: {object} return information from ticketmaster Ajax call
@@ -108,30 +122,15 @@ function getEventDate() {
  * @calls: none
  */
 
-// var test = {
-//   eventDate: "2018-01-23",
-//   eventImage: { url: "https://s1.ticketm.net/dam/a/441/6c483401-d57c-41b7-aee7-bb94e5b58441_29091_ARTIST_PAGE_3_2.jpg" },
-//   eventName: "Los Angeles Lakers vs. Boston Celtics",
-//   generalInfo:
-//     "No Bottles, Cans, Or Coolers. No Smoking In Arena. No Cameras Or Recording Devices At Concerts! Cameras w/No Flash Allowed For Sporting Events Only!",
-//   latitude: "34.043003",
-//   longitude: "-118.267253",
-//   startTime: "19:30:00",
-//   ticketUrl: "http://www.ticketmaster.com/staples-center-tickets-los-angeles/venue/360457",
-//   venueName: "STAPLES Center",
-//   zipCode: "90015"
-// };
-
 function renderShowsOnDOM(eventDetails) {
-  var row = $("<div>").addClass("show-listing row");
+  var listing = $("<div>").addClass("col-lg-4 show-listing");
+  var artistSection = $("<div>").addClass("artist");
   var showImg = $("<img>")
-    .addClass("col-lg-2 hidden-")
+    .addClass("col-lg-4 hidden-xs hidden-sm")
     .attr("src", eventDetails.eventImage.url);
-  var showContent = $("<div>").addClass("col-lg-8");
-  var showName = $("<h3>")
-    .addClass("show-name")
-    .text(eventDetails.eventName);
-  var showDetails = $("<p>").addClass("show-details");
+  var showInfo = $("<div>").addClass("show-info col-lg-8");
+  var showName = $("<h4>").text(eventDetails.eventName);
+  var showDetails = $("<p>");
   var showDate = `${eventDetails.eventDate.slice(5)}-${eventDetails.eventDate.slice(0, 4)}`;
   var showTime = parseInt(eventDetails.startTime.slice(0, 2));
   var showVenue = eventDetails.venueName;
@@ -145,9 +144,10 @@ function renderShowsOnDOM(eventDetails) {
 
   showDetails.text(`${showVenue} - ${showDate}, ${showTime}`);
 
-  $(showContent).append(showName, showDetails);
-  $(row).append(showImg, showContent);
-  $(".show-container").append(row);
+  $(artistSection).append(showImg);
+  $(showInfo).append(showName, showDetails);
+  $(listing).append(artistSection, showInfo);
+  $(".show-container").append(listing);
 }
 
 /***************************************************************************
@@ -158,126 +158,62 @@ function renderShowsOnDOM(eventDetails) {
  */
 
 function renderInitialMap() {
-  var USA = {
-    latitude: "39.011902",
-    longitude: "-98.48424649999998"
-  };
-  map = new Map(USA, 4);
-  map.renderMap();
+  var losAngeles = {lat: 33.9584404, lng: -118.3941214};
+
+  map = new google.maps.Map(document.getElementById('map'), {
+          center: losAngeles,
+          zoom: 12
+        })
 }
 
 /***************************************************************************
- *function renderMap
- * create new map instance and render to page
- * @param {integer} zipcode of venue location
- * @param {string} event location lat and long
+ *function createMap
+ * create new map
+ * @param {object} information
  * @return {none}
- * call createMarkers, call Map constructor,
  */
-
-function renderMap(venueObject) {
-  var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
-  var barsNearby = getYelpBreweries(venueObject.zipcode);
-  map = new Map(venueObject, 15, restaurantsNearby, barsNearby); //create new instance of map for venue location
-
-  map.renderMap(); //render map to page
-
-  //get array of objects from yelp
-  map.createBarMarkers();
-  map.createRestaurantMarkers();
-  map.renderAllMarkers();
-}
-
-var exampleObject = { latitude: "33.6412", longitude: "-117.9188" };
-var santabarbara = { latitude: "34.420830", longitude: "-119.698189", venueName: "The Observatory" };
-
-/***************************************************************************
- * function Map
- * @constructor - create map object with lat and long
- * @param {integer} zipcode of venue location
-* @return {object} map
-
- */
-
-class Map {
-  constructor(venueObject, zoom, restaurants, bars) {
-    this.latitude = parseFloat(venueObject.latitude);
-    this.longitude = parseFloat(venueObject.longitude);
-    this.bars = bars;
-    this.restaurants = restaurants;
-    this.markers = [];
-    this.venueInfo = venueObject;
-    this.zoom = zoom;
-    // this.markerLocation = [];
-  }
-  renderMap() {
-    var map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: this.latitude, lng: this.longitude },
-      zoom: this.zoom
-    });
-    this.venueInfo.latLong = { lat: this.latitude, lng: this.longitude };
-    var marker = new Marker(this.venueInfo, map, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
-    this.markers.push(marker);
-    return map;
-  }
-  renderAllMarkers() {
-    //loop through list of markers
-    this.markers.forEach(function(marker) {
-      marker.renderMarker(); //render marker to map
-    });
-  }
-
-  createMarkers(array, color){
-    //push each marker made to  to this.markers
-    for(let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
-        let locationObj = array[arrayIndex];
-        locationObj.latLong = {lat: locationObj.latitude, lng: locationObj.longitude};
-        let newMarker = new Marker(locationObj, map, color);
-        this.markers.push(newMarker);
-    }
-
-  }
+function createMap(){
+  map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 33.9596, lng: -118.3287},
+          zoom: 15
+        })
+  getYelpBreweries();
+  getYelpRestaurants();
 }
 
 /***************************************************************************
- * function updateMap
- * when user zooms in and out, it will repopulate map with markers
- * @param {integer}
- * @return {object} map
- */
-
-/***************************************************************************
- * function renderMarker
+ * function createMarkers
  * create render mark to page
- * @param {string}
- * @param {string} info about the event
+ * @param {array} array of locations
+ * @param {string} color color for markers
  */
 
-/***************************************************************************
- * function newMarker
- *constructor
- * create Makers and Labels
- * @param {string} venueInfo
- * @param {object} map
- * @return {object} marker
- */
-class Marker {
-  constructor(locationInfo, map, markerColor) {
-    this.latLong = locationInfo.latLong;
-    this.name = locationInfo.name;
-    this.markerColor = markerColor;
-    this.map = map;
-  }
-  renderMarker() {
-    let marker = new google.maps.Marker({
-      position: this.latLong,
-      map: this.map,
-      label: this.locationInfo,
-      icon: this.markerColor
-    });
-    return marker;
-  }
-}
+ function createMarkers(array, color){
+   for(var location = 0; location<array.length; location++){
+     var place = array[location];
+     var latLong = {lat: place.latitude, lng: place.longitude};
+     let marker = new google.maps.Marker({
+       position: latLong,
+       map: map,
+       // label: this.locationInfo,
+       icon: color
+     });
+     // var content = createContent(place);
+     var contentString = '<h3>' + place.name + '</h3><h4>' + place.address+ '</h4><h4>' + place.phoneNumber + '</h4><h4>' + place.rating + '</h4><h4>Open:' + place.closed +'</h4><a href=' + place.url + ' target=\'_blank\'>Website:</a>'
+     var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+      marker.addListener('click', function() {
+        infowindow.open(map, marker);
+      });
+   }
+
+ }
+
+ function createContent(object){
+   var windowInfo = $('<h1>').text(object.name);
+   return windowInfo;
+ }
 
 /***************************************************************************
  *function getYelpRestaurants
@@ -295,10 +231,9 @@ function getYelpRestaurants() {
       location: 90305,
       term: "food",
       radius: 40000,
-      api_key: "pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
+      api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-      console.log(data);
       for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
         let newObj = {};
         newObj.name = data.businesses[arrayIndex].name;
@@ -308,10 +243,11 @@ function getYelpRestaurants() {
         newObj.url = data.businesses[arrayIndex].url;
         newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
         newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-        newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
+        newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
         yelpArrayOfRestaurants.push(newObj);
       }
-      map.createMarkers(yelpArrayOfRestaurants, 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+
+      createMarkers(yelpArrayOfRestaurants, 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
     },
     error: function() {
       console.error("The server returned no information.");
@@ -328,7 +264,7 @@ function getYelpRestaurants() {
  */
 
 function getYelpBreweries() {
-    let yelpArrayOfBreweries = [];
+  let yelpArrayOfBreweries = [];
     let ajaxConfig = {
         dataType: "json",
         url: "http://danielpaschal.com/yelpproxy.php",
@@ -337,7 +273,7 @@ function getYelpBreweries() {
             location: 90305,
             term: "bar",
             radius: 40000,
-            api_key: 'pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx'
+            api_key: 'VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx'
         },
         success: function(data) {
             for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
@@ -349,10 +285,10 @@ function getYelpBreweries() {
                 newObj.url = data.businesses[arrayIndex].url;
                 newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
                 newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-                newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
+                newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
                 yelpArrayOfBreweries.push(newObj);
             }
-            map.createMarkers(yelpArrayOfBreweries, 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+            createMarkers(yelpArrayOfBreweries, 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
         },
         error: function() {
             console.error("The server returned no information.");
@@ -375,7 +311,6 @@ function getYelpBreweries() {
  * @returns [{object}]
  */
 function getTicketMasterConcerts(obj) {
-  console.log(obj);
   var data_object = {
     api_key: "2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     city: obj.city,
@@ -390,16 +325,14 @@ function getTicketMasterConcerts(obj) {
     method: "get",
     url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     success: function(response) {
-      console.log(response);
       var data = [];
       var allEventsObj = response._embedded.events;
       for (var tmData_i = 0; tmData_i < allEventsObj.length; tmData_i++) {
         var eventObj = createEventObject(allEventsObj[tmData_i]);
         renderShowsOnDOM(eventObj);
         data.push(eventObj);
+        $(".show-listing").on("click", handleConcertClick(eventObj));
       }
-
-      //   $(".show-listing").on("click", handleConcertClick);
     }
   });
 }
@@ -412,7 +345,7 @@ function createEventObject(event) {
   object.longitude = event._embedded.venues[0].location.longitude;
   object.zipCode = event._embedded.venues[0].postalCode;
   object.venueName = event._embedded.venues[0].name;
-  object.generalInfo = event._embedded.venues[0].generalInfo.generalRule;
+  //   object.generalInfo = event._embedded.events.info;
   object.ticketUrl = event._embedded.venues[0].url;
   object.eventImage = event.images[0];
   object.eventDate = event.dates.start.localDate;
