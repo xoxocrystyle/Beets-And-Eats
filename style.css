@@ -115,8 +115,12 @@ body {
   width: 100%;
 }
 
-.eventInfo > div {
+.eventInfo > div, .foodInfo > div  {
   width: 100%;
+}
+
+.informationOverlay img {
+  width: 100%
 }
 
 .show-details,
