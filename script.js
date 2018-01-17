@@ -279,13 +279,18 @@ function renderMarker(place, color) {
  * @returns [string] content stringified
  */
 function getContentString(place){
+  if(place.closed === false) {
+    place.closed = 'Open';
+  } else {
+    place.closed = 'Closed';
+  }
   var contentString =
     "<h3>" +
     place.name +
     "</h4><h4>" +
     place.phoneNumber +
-    "</h4><h4>Open:" +
-    place.closed
+    "</h4><h4>" +
+    place.closed;
     return contentString;
 }
 
@@ -299,20 +304,23 @@ function populateFoodSideBar(place){
   let container = $('<div>');
   let name = $('<h4>',{
     'text': place.name
-  })
+  });
   let number = $('<p>', {
     'text': place.name
-  })
+  });
   let address = $('<p>', {
     'text': place.address
-  })
+  });
   let rating = $('<p>', {
     'text': place.rating
-  })
+  });
   let yelp = $('<a>', {
     'href': place.url,
     'text': 'website'
-  })
+  });
+  let distance = $('<p>', {
+      'text': place.distance
+  });
   container.append(name, address, number, rating, yelp);
   return container;
 }
@@ -387,6 +395,8 @@ function createYelpObj(data, arrayIndex) {
     newObj.closed = data.businesses[arrayIndex].is_closed;
     newObj.rating = data.businesses[arrayIndex].rating;
     newObj.url = data.businesses[arrayIndex].url;
+    newObj.image = data.businesses[arrayIndex].image_url;
+    newObj.distance = (data.businesses[arrayIndex].distance * 0.00062137);
     newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
     newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
     newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
