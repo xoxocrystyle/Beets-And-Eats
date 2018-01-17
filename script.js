@@ -1,5 +1,6 @@
 $(document).ready(initializeApp);
 var map;
+var markers;
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
  * @params {undefined}
@@ -8,7 +9,6 @@ var map;
 
 function initializeApp() {
   $(".submit-button").on("click", handleSearchButtonClick);
-  renderInitialMap();
 }
 
 /***************************************************************************
@@ -158,125 +158,62 @@ function renderShowsOnDOM(eventDetails) {
  */
 
 function renderInitialMap() {
-  var USA = {
-    latitude: "39.011902",
-    longitude: "-98.48424649999998"
-  };
-  map = new Map(USA, 4);
-  map.renderMap();
+  var losAngeles = {lat: 33.9584404, lng: -118.3941214};
+
+  map = new google.maps.Map(document.getElementById('map'), {
+          center: losAngeles,
+          zoom: 12
+        })
 }
 
 /***************************************************************************
- *function renderMap
- * create new map instance and render to page
- * @param {integer} zipcode of venue location
- * @param {string} event location lat and long
+ *function createMap
+ * create new map
+ * @param {object} information
  * @return {none}
- * call createMarkers, call Map constructor,
  */
-
-function renderMap(venueObject) {
-  var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
-  var barsNearby = getYelpBreweries(venueObject.zipcode);
-  map = new Map(venueObject, 15, restaurantsNearby, barsNearby); //create new instance of map for venue location
-
-  map.renderMap(); //render map to page
-
-  //get array of objects from yelp
-  map.createBarMarkers();
-  map.createRestaurantMarkers();
-  map.renderAllMarkers();
-}
-
-var exampleObject = { latitude: "33.6412", longitude: "-117.9188" };
-var santabarbara = { latitude: "34.420830", longitude: "-119.698189", venueName: "The Observatory" };
-
-/***************************************************************************
- * function Map
- * @constructor - create map object with lat and long
- * @param {integer} zipcode of venue location
-* @return {object} map
-
- */
-
-class Map {
-  constructor(venueObject, zoom, restaurants, bars) {
-    this.latitude = parseFloat(venueObject.latitude);
-    this.longitude = parseFloat(venueObject.longitude);
-    this.bars = bars;
-    this.restaurants = restaurants;
-    this.markers = [];
-    this.venueInfo = venueObject;
-    this.zoom = zoom;
-    // this.markerLocation = [];
-  }
-  renderMap() {
-    var map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: this.latitude, lng: this.longitude },
-      zoom: this.zoom
-    });
-    this.venueInfo.latLong = { lat: this.latitude, lng: this.longitude };
-    var marker = new Marker(this.venueInfo, map, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
-    this.markers.push(marker);
-    return map;
-  }
-  renderAllMarkers() {
-    //loop through list of markers
-    this.markers.forEach(function(marker) {
-      marker.renderMarker(); //render marker to map
-    });
-  }
-
-  createMarkers(array, color) {
-    //push each marker made to  to this.markers
-    for (let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
-      let locationObj = array[arrayIndex];
-      locationObj.latLong = { lat: locationObj.latitude, lng: locationObj.longitude };
-      let newMarker = new Marker(locationObj, map, color);
-      this.markers.push(newMarker);
-    }
-  }
+function createMap(){
+  map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 33.9596, lng: -118.3287},
+          zoom: 15
+        })
+  getYelpBreweries();
+  getYelpRestaurants();
 }
 
 /***************************************************************************
- * function updateMap
- * when user zooms in and out, it will repopulate map with markers
- * @param {integer}
- * @return {object} map
- */
-
-/***************************************************************************
- * function renderMarker
+ * function createMarkers
  * create render mark to page
- * @param {string}
- * @param {string} info about the event
+ * @param {array} array of locations
+ * @param {string} color color for markers
  */
 
-/***************************************************************************
- * function newMarker
- *constructor
- * create Makers and Labels
- * @param {string} venueInfo
- * @param {object} map
- * @return {object} marker
- */
-class Marker {
-  constructor(locationInfo, map, markerColor) {
-    this.latLong = locationInfo.latLong;
-    this.name = locationInfo.name;
-    this.markerColor = markerColor;
-    this.map = map;
-  }
-  renderMarker() {
-    let marker = new google.maps.Marker({
-      position: this.latLong,
-      map: this.map,
-      label: this.locationInfo,
-      icon: this.markerColor
-    });
-    return marker;
-  }
-}
+ function createMarkers(array, color){
+   for(var location = 0; location<array.length; location++){
+     var place = array[location];
+     var latLong = {lat: place.latitude, lng: place.longitude};
+     let marker = new google.maps.Marker({
+       position: latLong,
+       map: map,
+       // label: this.locationInfo,
+       icon: color
+     });
+     // var content = createContent(place);
+     var contentString = '<h3>' + place.name + '</h3><h4>' + place.address+ '</h4><h4>' + place.phoneNumber + '</h4><h4>' + place.rating + '</h4><h4>Open:' + place.closed +'</h4><a href=' + place.url + ' target=\'_blank\'>Website:</a>'
+     var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+      marker.addListener('click', function() {
+        infowindow.open(map, marker);
+      });
+   }
+
+ }
+
+ function createContent(object){
+   var windowInfo = $('<h1>').text(object.name);
+   return windowInfo;
+ }
 
 /***************************************************************************
  *function getYelpRestaurants
@@ -294,7 +231,7 @@ function getYelpRestaurants() {
       location: 90305,
       term: "food",
       radius: 40000,
-      api_key: "pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
+      api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
       for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
@@ -306,10 +243,11 @@ function getYelpRestaurants() {
         newObj.url = data.businesses[arrayIndex].url;
         newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
         newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-        newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
+        newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
         yelpArrayOfRestaurants.push(newObj);
       }
-      map.createMarkers(yelpArrayOfRestaurants, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
+
+      createMarkers(yelpArrayOfRestaurants, 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
     },
     error: function() {
       console.error("The server returned no information.");
@@ -327,36 +265,36 @@ function getYelpRestaurants() {
 
 function getYelpBreweries() {
   let yelpArrayOfBreweries = [];
-  let ajaxConfig = {
-    dataType: "json",
-    url: "http://danielpaschal.com/yelpproxy.php",
-    method: "GET",
-    data: {
-      location: 90305,
-      term: "bar",
-      radius: 40000,
-      api_key: "pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
-    },
-    success: function(data) {
-      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-        let newObj = {};
-        newObj.name = data.businesses[arrayIndex].name;
-        newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
-        newObj.closed = data.businesses[arrayIndex].is_closed;
-        newObj.rating = data.businesses[arrayIndex].rating;
-        newObj.url = data.businesses[arrayIndex].url;
-        newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-        newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-        newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
-        yelpArrayOfBreweries.push(newObj);
-      }
-      map.createMarkers(yelpArrayOfBreweries, "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png");
-    },
-    error: function() {
-      console.error("The server returned no information.");
-    }
-  };
-  $.ajax(ajaxConfig);
+    let ajaxConfig = {
+        dataType: "json",
+        url: "http://danielpaschal.com/yelpproxy.php",
+        method: "GET",
+        data: {
+            location: 90305,
+            term: "bar",
+            radius: 40000,
+            api_key: 'VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx'
+        },
+        success: function(data) {
+            for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+                let newObj = {};
+                newObj.name = data.businesses[arrayIndex].name;
+                newObj.address = data.businesses[arrayIndex].location.display_address.join('\n');
+                newObj.closed = data.businesses[arrayIndex].is_closed;
+                newObj.rating = data.businesses[arrayIndex].rating;
+                newObj.url = data.businesses[arrayIndex].url;
+                newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+                newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+                newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
+                yelpArrayOfBreweries.push(newObj);
+            }
+            createMarkers(yelpArrayOfBreweries, 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+        },
+        error: function() {
+            console.error("The server returned no information.");
+        }
+    };
+    $.ajax(ajaxConfig);
 }
 
 /***************************************************************************
