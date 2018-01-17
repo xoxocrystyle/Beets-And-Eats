@@ -97,6 +97,10 @@ body {
 }
 /*--------------------- MAP -----------------------------------*/
 
+.wrapper hr {
+  margin-top: 0;
+  margin-bottom: 2%;
+}
 
 .wrapper,
 #map {
@@ -112,8 +116,24 @@ body {
   left: 0%;
   z-index: 99;
   height: 91%;
-  width: 20%;
+  width: 26%;
+  padding: 2%;
   background-color: #ffffff;
+  overflow: scroll;
+}
+
+.informationOverlay h4 {
+  text-align: center;
+  font-size: 2.5vmin;
+}
+
+.informationOverlay h3 {
+  text-align: center;
+  font-size: 3vmin;
+}
+
+.informationOverlay p {
+  font-size: 2vmin;
 }
 
 .mapKey {
@@ -146,16 +166,15 @@ body {
   width: 50%;
 }
 
-.eventImage {
-  width: 100%;
-}
-
 .eventInfo > div, .foodInfo > div  {
   width: 100%;
 }
 
-.informationOverlay img {
-  width: 100%
+.foodInfo .foodImage, .eventInfo .eventImage {
+  height: 100px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .show-details,
@@ -180,4 +199,3 @@ body {
   height: 100px;
   width: 150px;
 }
-
