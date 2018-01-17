@@ -135,18 +135,21 @@ function handleConcertClick(eventObj) {
 
 function renderShowsOnDOM(eventDetails) {
   var listing = $("<div>", {
-    'class': 'col-lg-4 show-listing',
+    'class': 'row show-listing',
     'on': {
       click: function(){
         handleConcertClick(eventDetails);
       }
     }
   })
-  var artistSection = $("<div>").addClass("artist");
-  var showImg = $("<img>")
-    .addClass("col-lg-4 hidden-xs hidden-sm")
+
+
+  var artistImage = $("<div>").addClass("col-xs-4 artist");
+  var image = $("<img>")
+    // .addClass("col-lg-4 hidden-xs hidden-sm")
+    // .addClass("col-lg-4 artist")
     .attr("src", eventDetails.eventImage.url);
-  var showInfo = $("<div>").addClass("show-info col-lg-8");
+  var showInfo = $("<div>").addClass("show-info col-xs-8");
   var showName = $("<h4>").text(eventDetails.eventName);
   var showDetails = $("<p>");
   var showDate = `${eventDetails.eventDate.slice(5)}-${eventDetails.eventDate.slice(0, 4)}`;
@@ -162,9 +165,13 @@ function renderShowsOnDOM(eventDetails) {
 
   showDetails.text(`${showVenue} - ${showDate}, ${showTime}`);
 
-  $(artistSection).append(showImg);
-  $(showInfo).append(showName, showDetails);
-  $(listing).append(artistSection, showInfo);
+  // artistSection.append(showImg);
+  // listing.append(artistSection, showInfo);
+  // showInfo.append(showName, showDetails);
+  artistImage.append(image);
+  showInfo.append(showName, showDetails);
+
+  listing.append(artistImage, showInfo);
   $(".show-container").append(listing);
   // $(".show-listing").on("click", handleConcertClick.bind(eventDetails));
   // console.log(eventDetails)
