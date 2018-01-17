@@ -310,9 +310,6 @@ function populateFoodSideBar(place){
   let image = $('<img>', {
     'src': place.image
   })
-  let distance = $('<p>', {
-    'text': 'Distance: ' + place.distance
-  })
   let name = $('<h4>',{
     'text': place.name
   });
