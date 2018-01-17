@@ -132,8 +132,11 @@ function handleConcertClick(eventObj) {
     position: latLng,
     map: map
   });
-  getYelpBreweries(latLng);
-  getYelpRestaurants(latLng);
+  getYelpData(latLng, 'bar', 'images/yellow-dot.png');
+  getYelpData(latLng, 'food', 'images/blue-dot.png');
+
+  // getYelpBreweries(latLng);
+  // getYelpRestaurants(latLng);
 }
 
 /***************************************************************************
@@ -246,6 +249,7 @@ function createMarkers(array, color) {
  */
 
 function renderMarker(place, color) {
+  console.log(place)
   var latLong = { lat: place.latitude, lng: place.longitude };
   let marker = new google.maps.Marker({
     position: latLong,
@@ -272,9 +276,20 @@ function renderMarker(place, color) {
  * @param{object} object of location information
  * @returns [string] content stringified
  */
-function getContentString(place) {
-  var contentString = "<h3>" + place.name + "</h4><h4>" + place.phoneNumber + "</h4><h4>Open:" + place.closed;
-  return contentString;
+function getContentString(place){
+  if(place.closed === false) {
+    place.closed = 'Open';
+  } else {
+    place.closed = 'Closed';
+  }
+  var contentString =
+    "<h3>" +
+    place.name +
+    "</h4><h4>" +
+    place.phoneNumber +
+    "</h4><h4>" +
+    place.closed;
+    return contentString;
 }
 
 /***************************************************************************
@@ -283,23 +298,26 @@ function getContentString(place) {
  * @param{object} object of location information
  * @returns [object] createddom element
  */
-function populateFoodSideBar(place) {
-  let container = $("<div>");
-  let name = $("<h4>", {
-    text: place.name
+function populateFoodSideBar(place){
+  let container = $('<div>');
+  let name = $('<h4>',{
+    'text': place.name
   });
-  let number = $("<p>", {
-    text: place.name
+  let number = $('<p>', {
+    'text': place.name
   });
-  let address = $("<p>", {
-    text: place.address
+  let address = $('<p>', {
+    'text': place.address
   });
-  let rating = $("<p>", {
-    text: place.rating
+  let rating = $('<p>', {
+    'text': place.rating
   });
-  let yelp = $("<a>", {
-    href: place.url,
-    text: "website"
+  let yelp = $('<a>', {
+    'href': place.url,
+    'text': 'website'
+  });
+  let distance = $('<p>', {
+      'text': place.distance
   });
   container.append(name, address, number, rating, yelp);
   return container;
@@ -334,63 +352,32 @@ function populateEventSideBar(eventLocation) {
   return container;
 }
 
-/***************************************************************************
- *function getYelpRestaurants
- * get restaurants based on zip code
- * @param{object}
- * @returns [{object}]
- */
-function getYelpRestaurants(latLng) {
-  let yelpArrayOfRestaurants = [];
-  let ajaxConfig = {
-    dataType: "json",
-    url: "http://danielpaschal.com/yelpproxy.php",
-    method: "GET",
-    data: {
-      location: JSON.stringify(latLng),
-      term: "food",
-      radius: 40000,
-      api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
-    },
-    success: function(data) {
-      console.log(data);
-      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-        let newObj = createYelpObj(data, arrayIndex);
-        yelpArrayOfRestaurants.push(newObj);
-      }
-      createMarkers(yelpArrayOfRestaurants, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
-    },
-    error: function() {
-      console.error("The server returned no information.");
-    }
-  };
-  $.ajax(ajaxConfig);
-}
 
 /***************************************************************************
- *function getYelpBreweries
- * get breweries based on zip code
+ *function getYelpData
+ * get restaurants based on latLng
  * @param{object}
  * @returns [{object}]
  */
-function getYelpBreweries(latLng) {
-  let yelpArrayOfBreweries = [];
+function getYelpData(latLng, type, color){
+  let arrayOfPlaces = [];
   let ajaxConfig = {
     dataType: "json",
     url: "http://danielpaschal.com/yelpproxy.php",
     method: "GET",
     data: {
-      location: JSON.stringify(latLng),
-      term: "bar",
+      latitude: latLng.lat,
+      longitude: latLng.lng,
+      term: type,
       radius: 40000,
       api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-        let newObj = createYelpObj(data, arrayIndex);
-        yelpArrayOfBreweries.push(newObj);
-      }
-      createMarkers(yelpArrayOfBreweries, "images/yellow-dot.png");
+        for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+            let newObj = createYelpObj(data, arrayIndex);
+            arrayOfPlaces.push(newObj);
+        }
+      createMarkers(arrayOfPlaces, color );
     },
     error: function() {
       console.error("The server returned no information.");
@@ -406,16 +393,18 @@ function getYelpBreweries(latLng) {
  * @return{object} per location
  */
 function createYelpObj(data, arrayIndex) {
-  let newObj = {};
-  newObj.name = data.businesses[arrayIndex].name;
-  newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
-  newObj.closed = data.businesses[arrayIndex].is_closed;
-  newObj.rating = data.businesses[arrayIndex].rating;
-  newObj.url = data.businesses[arrayIndex].url;
-  newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-  newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-  newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
-  return newObj;
+    let newObj = {};
+    newObj.name = data.businesses[arrayIndex].name;
+    newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
+    newObj.closed = data.businesses[arrayIndex].is_closed;
+    newObj.rating = data.businesses[arrayIndex].rating;
+    newObj.url = data.businesses[arrayIndex].url;
+    newObj.image = data.businesses[arrayIndex].image_url;
+    newObj.distance = (data.businesses[arrayIndex].distance * 0.00062137);
+    newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+    newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+    newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
+    return newObj;
 }
 
 /***************************************************************************
@@ -515,3 +504,4 @@ function searchErrorAlert() {
     .text("No search results found. Please check the spelling of your city and/or specified date.")
     .addClass("bg-danger");
 }
+
