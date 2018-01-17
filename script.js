@@ -19,6 +19,7 @@ function initializeApp() {
  */
 function handleSearchButtonClick() {
   getTicketMasterConcerts(getEventInfo());
+  scrollPage("event");
   resetInputs();
 }
 
@@ -163,9 +164,11 @@ function createShowDOMElement(eventDetails) {
     on: {
       click: function() {
         handleConcertClick(eventDetails);
+        scrollPage("map");
         let info = populateEventSideBar(eventDetails);
         $('.eventInfo').empty();
         $('.eventInfo').append(info);
+
       }
     }
   });
@@ -484,4 +487,25 @@ function createEventObject(event, index) {
   object.eventDate = event[index].dates.start.localDate;
   object.note = event[index].pleaseNote;
   return object;
+}
+
+function scrollPage(element) {
+  switch (element) {
+    case "event":
+      $("html, body").animate(
+        {
+          scrollTop: $("#event-page").offset().top - 60
+        },
+        1500
+      );
+      break;
+    case "map":
+      $("html, body").animate(
+        {
+          scrollTop: $("#map").offset().top - 60
+        },
+        2000
+      );
+      break;
+  }
 }
