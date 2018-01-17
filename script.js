@@ -283,12 +283,7 @@ function getContentString(place){
     place.closed = 'Closed';
   }
   var contentString =
-    "<h3>" +
-    place.name +
-    "</h4><h4>" +
-    place.phoneNumber +
-    "</h4><h4>" +
-    place.closed;
+    "<img "+'src=\'' + place.image + '\'' + " class="+ '\'markerImg\''+ ">" + "<h3>" + place.name + "</h4><h4>" + place.phoneNumber + "</h4><h4>" + place.closed;
     return contentString;
 }
 
@@ -317,9 +312,9 @@ function populateFoodSideBar(place){
     'text': 'website'
   });
   let distance = $('<p>', {
-      'text': place.distance
+      'text': place.distance.toFixed(2) + ' miles away from venue'
   });
-  container.append(name, address, number, rating, yelp);
+  container.append(name, address, number, rating, yelp, distance);
   return container;
 }
 

@@ -137,3 +137,8 @@ body {
   padding: 1%;
   text-align: center;
 }
+.markerImg {
+  height: 100px;
+  width: 150px;
+}
+
