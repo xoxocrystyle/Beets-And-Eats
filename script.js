@@ -134,7 +134,6 @@ function handleConcertClick(eventObj) {
   let marker = new google.maps.Marker({
     position: latLng,
     map: map,
-    label: eventObj.venueName
   });
   getYelpBreweries(eventObj.zipCode);
   getYelpRestaurants(eventObj.zipCode);
@@ -167,6 +166,9 @@ function createShowDOMElement(eventDetails) {
     on: {
       click: function() {
         handleConcertClick(eventDetails);
+        let info = populateEventSideBar(eventDetails);
+        $('.eventInfo').empty();
+        $('.eventInfo').append(info);
       }
     }
   });
@@ -225,64 +227,121 @@ function renderInitialMap() {
 }
 
 /***************************************************************************
- *function createMap
- * create new map
- * @param {object} information
- * @return {none}
- */
-function createMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 33.9596, lng: -118.3287},
-          zoom: 15
-        })
-  getYelpBreweries();
-  getYelpRestaurants();
-}
-
-/***************************************************************************
  * function createMarkers
- * create render mark to page
+ // * create render mark to page
  * @param {array} array of locations
  * @param {string} color color for markers
  */
 function createMarkers(array, color) {
   for (var location = 0; location < array.length; location++) {
     var place = array[location];
-    var latLong = { lat: place.latitude, lng: place.longitude };
-    let marker = new google.maps.Marker({
-      position: latLong,
-      map: map,
-      // label: this.locationInfo,
-      icon: color
-    });
-    // var content = createContent(place);
-    var contentString =
-      "<h3>" +
-      place.name +
-      "</h3><h4>" +
-      place.address +
-      "</h4><h4>" +
-      place.phoneNumber +
-      "</h4><h4>" +
-      place.rating +
-      "</h4><h4>Open:" +
-      place.closed +
-      "</h4><a href=" +
-      place.url +
-      " target='_blank'>Website:</a>";
-    var infowindow = new google.maps.InfoWindow({
-      content: contentString
-    });
-    marker.addListener("click", function() {
-      infowindow.open(map, marker);
-    });
+    renderMarker(place, color);
   }
 }
 
-function createContent(object) {
-  var windowInfo = $("<h1>").text(object.name);
-  return windowInfo;
+/***************************************************************************
+ *function renderMarker
+ * create marker and render to page and add click listenr
+ * @param{object} object of location information
+ * @param{string} url of marker color
+ * @returns [string] content stringified
+ */
+
+function renderMarker(place, color) {
+  var latLong = { lat: place.latitude, lng: place.longitude };
+  let marker = new google.maps.Marker({
+    position: latLong,
+    map: map,
+    icon: color
+  });
+  // var content = createContent(place);
+
+  var infowindow = new google.maps.InfoWindow({
+    content: getContentString(place)
+  });
+
+  marker.addListener("click", function() {
+    infowindow.open(map, marker);
+    let info = populateFoodSideBar(place);
+    $('.foodInfo').empty();
+    $('.foodInfo').append(info);
+  });
 }
+
+/***************************************************************************
+ *function getContentString
+ * create information for marker window
+ * @param{object} object of location information
+ * @returns [string] content stringified
+ */
+function getContentString(place){
+  var contentString =
+    "<h3>" +
+    place.name +
+    "</h4><h4>" +
+    place.phoneNumber +
+    "</h4><h4>Open:" +
+    place.closed
+    return contentString;
+}
+
+/***************************************************************************
+ *function populateSideBar
+ * populate side bar with location information
+ * @param{object} object of location information
+ * @returns [object] createddom element
+ */
+function populateFoodSideBar(place){
+  let container = $('<div>');
+  let name = $('<h4>',{
+    'text': place.name
+  })
+  let number = $('<p>', {
+    'text': place.name
+  })
+  let address = $('<p>', {
+    'text': place.address
+  })
+  let rating = $('<p>', {
+    'text': place.rating
+  })
+  let yelp = $('<a>', {
+    'href': place.url,
+    'text': 'website'
+  })
+  container.append(name, address, number, rating, yelp);
+  return container;
+}
+
+/***************************************************************************
+ *function populateEventSideBar
+ * populate side bar with event information
+ * @param{object} object of event information
+ * @returns [object] createddom element
+ */
+function populateEventSideBar(eventLocation){
+  let container = $('<div>');
+  let image = $('<img>', {
+    'src': eventLocation.eventImage.url,
+    'class': 'eventImage'
+  })
+  let eventName = $('<h4>',{
+    'text': eventLocation.eventName
+  })
+  let venueName = $('<h4>',{
+    'text': eventLocation.venueName
+  })
+  let time = $('<p>', {
+    'text': eventLocation.startTime
+  })
+  let tickets = $('<a>', {
+    'href': eventLocation.ticketURL,
+    'text': 'Buy Tickets'
+  })
+  container.append(image, eventName, venueName, time, tickets);
+  return container;
+}
+
 
 /***************************************************************************
  *function getYelpRestaurants
@@ -323,10 +382,7 @@ function getYelpRestaurants(zipcode) {
         yelpArrayOfRestaurants.push(newObj);
       }
 
-      createMarkers(
-        yelpArrayOfRestaurants,
-        "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-      );
+      createMarkers(yelpArrayOfRestaurants, "images/blue-dot.png");
     },
     error: function() {
       console.error("The server returned no information.");
@@ -373,10 +429,7 @@ function getYelpBreweries(zipcode) {
         newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
         yelpArrayOfBreweries.push(newObj);
       }
-      createMarkers(
-        yelpArrayOfBreweries,
-        "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
-      );
+      createMarkers(yelpArrayOfBreweries, "images/yellow-dot.png");
     },
     error: function() {
       console.error("The server returned no information.");
