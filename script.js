@@ -112,7 +112,7 @@ function getEventDate() {
  */
 
 function handleConcertClick(eventObj) {
-  var latLng = { lat: parseFloat(eventObj.latitude), lng: parseFloat(eventObj.longitude) };
+  let latLng = { lat: parseFloat(eventObj.latitude), lng: parseFloat(eventObj.longitude) };
   map = new google.maps.Map(document.getElementById("map"), {
     center: latLng,
     zoom: 15
@@ -122,8 +122,8 @@ function handleConcertClick(eventObj) {
     map: map,
     label: eventObj.venueName
   });
-  getYelpBreweries(eventObj.zipCode);
-  getYelpRestaurants(eventObj.zipCode);
+  getYelpBreweries(latLng);
+  getYelpRestaurants(latLng);
 }
 
 /***************************************************************************
@@ -156,7 +156,7 @@ function renderShowsOnDOM(eventDetails) {
     var showHour = showTime - 12;
     showTime = `${showHour}:${eventDetails.startTime.slice(3, 5)} PM`;
   } else {
-    showTime = `${eventDetails.startDate.slice(0, 5)} AM`;
+    showTime = `${eventDetails.startTime.slice(0, 5)} AM`;
   }
 
   showDetails.text(`${showVenue} - ${showDate}, ${showTime}`);
@@ -250,32 +250,24 @@ function createContent(object) {
  * @param{object}
  * @returns [{object}]
  */
-function getYelpRestaurants(zipcode) {
+function getYelpRestaurants(latLng) {
   let yelpArrayOfRestaurants = [];
   let ajaxConfig = {
     dataType: "json",
     url: "http://danielpaschal.com/yelpproxy.php",
     method: "GET",
     data: {
-      location: zipcode,
+      location: JSON.stringify(latLng),
       term: "food",
       radius: 40000,
       api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-        let newObj = {};
-        newObj.name = data.businesses[arrayIndex].name;
-        newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
-        newObj.closed = data.businesses[arrayIndex].is_closed;
-        newObj.rating = data.businesses[arrayIndex].rating;
-        newObj.url = data.businesses[arrayIndex].url;
-        newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-        newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-        newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
-        yelpArrayOfRestaurants.push(newObj);
-      }
-
+        console.log(data);
+        for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+            let newObj = createYelpObj(data, arrayIndex);
+            yelpArrayOfRestaurants.push(newObj);
+        }
       createMarkers(yelpArrayOfRestaurants, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
     },
     error: function() {
@@ -292,29 +284,21 @@ function getYelpRestaurants(zipcode) {
  * @returns [{object}]
  */
 
-function getYelpBreweries(zipcode) {
+function getYelpBreweries(latLng) {
   let yelpArrayOfBreweries = [];
   let ajaxConfig = {
     dataType: "json",
     url: "http://danielpaschal.com/yelpproxy.php",
     method: "GET",
     data: {
-      location: zipcode,
+      location: JSON.stringify(latLng),
       term: "bar",
       radius: 40000,
       api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
       for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-        let newObj = {};
-        newObj.name = data.businesses[arrayIndex].name;
-        newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
-        newObj.closed = data.businesses[arrayIndex].is_closed;
-        newObj.rating = data.businesses[arrayIndex].rating;
-        newObj.url = data.businesses[arrayIndex].url;
-        newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-        newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-        newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
+        let newObj = createYelpObj(data, arrayIndex);
         yelpArrayOfBreweries.push(newObj);
       }
       createMarkers(yelpArrayOfBreweries, "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png");
@@ -327,11 +311,23 @@ function getYelpBreweries(zipcode) {
 }
 
 /***************************************************************************
- * function splitYelpInfo
- * split apart each object received from yelp’s DB
- * @param{array of object} total info received
+ * function createYelpObj
+ * create an object for each iteration of the yelp ajax call
+ * @param{object, arrayIndex} event object and current Index
  * @return{object} per location
  */
+function createYelpObj(data, arrayIndex) {
+    let newObj = {};
+    newObj.name = data.businesses[arrayIndex].name;
+    newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
+    newObj.closed = data.businesses[arrayIndex].is_closed;
+    newObj.rating = data.businesses[arrayIndex].rating;
+    newObj.url = data.businesses[arrayIndex].url;
+    newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+    newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+    newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
+    return newObj;
+}
 
 /***************************************************************************
  *function getTicketMasterConcerts
@@ -357,7 +353,10 @@ function getTicketMasterConcerts(obj) {
       var data = [];
       var allEventsObj = response._embedded.events;
       for (var tmData_i = 0; tmData_i < allEventsObj.length; tmData_i++) {
-        var eventObj = createEventObject(allEventsObj[tmData_i]);
+        if (!allEventsObj[tmData_i]._embedded.venues[0].location) {
+          continue;
+        }
+        var eventObj = createEventObject(allEventsObj, tmData_i);
         renderShowsOnDOM(eventObj);
         data.push(eventObj);
       }
@@ -371,18 +370,18 @@ function getTicketMasterConcerts(obj) {
  * @param{array of object} total info received
  * @return{object} per location
  */
-function createEventObject(event) {
+function createEventObject(event, index) {
   var object = {};
-  object.eventName = event.name;
-  object.startTime = event.dates.start.localTime;
-  object.latitude = event._embedded.venues[0].location.latitude;
-  object.longitude = event._embedded.venues[0].location.longitude;
-  object.zipCode = event._embedded.venues[0].postalCode;
-  object.venueName = event._embedded.venues[0].name;
-  object.ticketURL = event.url;
-  object.venueUrl = event._embedded.venues[0].url;
-  object.eventImage = event.images[0];
-  object.eventDate = event.dates.start.localDate;
-  object.note = event.pleaseNote;
+  object.eventName = event[index].name;
+  object.startTime = event[index].dates.start.localTime;
+  object.latitude = event[index]._embedded.venues[0].location.latitude;
+  object.longitude = event[index]._embedded.venues[0].location.longitude;
+  object.zipCode = event[index]._embedded.venues[0].postalCode;
+  object.venueName = event[index]._embedded.venues[0].name;
+  object.ticketURL = event[index].url;
+  object.venueUrl = event[index]._embedded.venues[0].url;
+  object.eventImage = event[index].images[0];
+  object.eventDate = event[index].dates.start.localDate;
+  object.note = event[index].pleaseNote;
   return object;
 }
