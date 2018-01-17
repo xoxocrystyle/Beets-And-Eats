@@ -46,7 +46,7 @@ function getCity() {
   if ($(".city-name").val() === "") {
     console.log("Please input a city.");
   } else {
-    return $(".city").val();
+    return $(".city-name").val();
   }
 }
 
@@ -73,6 +73,7 @@ function getEventDate() {
   var year = $(".event-year").val();
   var month;
   var day;
+  var nextDay = "0" + (parseInt($(".event-day").val()) + 1);
 
   if ($(".event-month").val().length === 1) {
     month = `0${$(".event-month").val()}`;
@@ -80,14 +81,16 @@ function getEventDate() {
     month = $(".event-month").val();
   }
 
-  if ($(".event-date").val().length === 1) {
+  if ($(".event-day").val().length === 1) {
     day = `0${$(".event-day").val()}`;
   } else {
     day = $(".event-day").val();
   }
 
+  debugger;
+
   date.start = `${year}-${month}-${day}T00:00:00Z`;
-  date.end = `${year}-${month}-${day}T23:59:59Z`;
+  date.end = `${year}-${month}-${nextDay}T12:00:00Z`;
 
   return date;
 }
@@ -106,36 +109,36 @@ function getEventDate() {
  * @calls: none
  */
 
-var test = {
-  eventDate: "2018-01-23",
-  eventImage: { url: "https://s1.ticketm.net/dam/a/441/6c483401-d57c-41b7-aee7-bb94e5b58441_29091_ARTIST_PAGE_3_2.jpg" },
-  eventName: "Los Angeles Lakers vs. Boston Celtics",
-  generalInfo:
-    "No Bottles, Cans, Or Coolers. No Smoking In Arena. No Cameras Or Recording Devices At Concerts! Cameras w/No Flash Allowed For Sporting Events Only!",
-  latitude: "34.043003",
-  longitude: "-118.267253",
-  startDate: "19:30:00",
-  ticketUrl: "http://www.ticketmaster.com/staples-center-tickets-los-angeles/venue/360457",
-  venueName: "STAPLES Center",
-  zipCode: "90015"
-};
+// var test = {
+//   eventDate: "2018-01-23",
+//   eventImage: { url: "https://s1.ticketm.net/dam/a/441/6c483401-d57c-41b7-aee7-bb94e5b58441_29091_ARTIST_PAGE_3_2.jpg" },
+//   eventName: "Los Angeles Lakers vs. Boston Celtics",
+//   generalInfo:
+//     "No Bottles, Cans, Or Coolers. No Smoking In Arena. No Cameras Or Recording Devices At Concerts! Cameras w/No Flash Allowed For Sporting Events Only!",
+//   latitude: "34.043003",
+//   longitude: "-118.267253",
+//   startTime: "19:30:00",
+//   ticketUrl: "http://www.ticketmaster.com/staples-center-tickets-los-angeles/venue/360457",
+//   venueName: "STAPLES Center",
+//   zipCode: "90015"
+// };
 
 function renderShowsOnDOM(eventDetails) {
   var row = $("<div>").addClass("show-listing row");
   var showImg = $("<img>")
-    .addClass("col-lg-4")
+    .addClass("col-lg-2 hidden-")
     .attr("src", eventDetails.eventImage.url);
   var showContent = $("<div>").addClass("col-lg-8");
-  var showName = $("<h4>")
+  var showName = $("<h3>")
     .addClass("show-name")
     .text(eventDetails.eventName);
   var showDetails = $("<p>").addClass("show-details");
-  var showDate = `${eventDetails.eventDate.slice(5)} - ${eventDetails.eventDate.slice(0, 4)}`;
+  var showDate = `${eventDetails.eventDate.slice(5)}-${eventDetails.eventDate.slice(0, 4)}`;
   var showTime = parseInt(eventDetails.startTime.slice(0, 2));
   var showVenue = eventDetails.venueName;
 
   if (showTime > 12) {
-    var showHour = showtime - 12;
+    var showHour = showTime - 12;
     showTime = `${showHour}:${eventDetails.startTime.slice(3, 5)} PM`;
   } else {
     showTime = `${eventDetails.startDate.slice(0, 5)} AM`;
@@ -224,13 +227,11 @@ class Map {
       marker.renderMarker(); //render marker to map
     });
   }
-  createBarMarkers(){
+  createBarMarkers() {
     //push each marker made to  to this.markers
-
   }
-  createRestaurantMarkers(){
+  createRestaurantMarkers() {
     //push each marker made to  to this.markers
-
   }
 }
 
@@ -288,24 +289,24 @@ function getYelpRestaurants() {
     url: "http://danielpaschal.com/yelpproxy.php",
     method: "GET",
     data: {
-        location: 90305,
-        term: "food",
-        radius: 40000,
-        api_key: 'pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx'
+      location: 90305,
+      term: "food",
+      radius: 40000,
+      api_key: "pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
     },
     success: function(data) {
       console.log(data);
       for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-          let newObj = {};
-          newObj.name = data.businesses[arrayIndex].name;
-          newObj.address = data.businesses[arrayIndex].location.display_address.join('\n');
-          newObj.closed = data.businesses[arrayIndex].is_closed;
-          newObj.rating = data.businesses[arrayIndex].rating;
-          newObj.url = data.businesses[arrayIndex].url;
-          newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-          newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-          newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
-          yelpArrayOfRestaurants.push(newObj);
+        let newObj = {};
+        newObj.name = data.businesses[arrayIndex].name;
+        newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
+        newObj.closed = data.businesses[arrayIndex].is_closed;
+        newObj.rating = data.businesses[arrayIndex].rating;
+        newObj.url = data.businesses[arrayIndex].url;
+        newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+        newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+        newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
+        yelpArrayOfRestaurants.push(newObj);
       }
       return yelpArrayOfRestaurants;
     },
@@ -323,38 +324,38 @@ function getYelpRestaurants() {
  * @returns [{object}]
  */
 function getYelpBreweries() {
-    let yelpArrayOfBreweries = [];
-    let ajaxConfig = {
-        dataType: "json",
-        url: "http://danielpaschal.com/yelpproxy.php",
-        method: "GET",
-        data: {
-            location: 90305,
-            term: "bar",
-            radius: 40000,
-            api_key: 'pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx'
-        },
-        success: function(data) {
-            console.log(data);
-            for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-                let newObj = {};
-                newObj.name = data.businesses[arrayIndex].name;
-                newObj.address = data.businesses[arrayIndex].location.display_address.join('\n');
-                newObj.closed = data.businesses[arrayIndex].is_closed;
-                newObj.rating = data.businesses[arrayIndex].rating;
-                newObj.url = data.businesses[arrayIndex].url;
-                newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-                newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-                newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
-                yelpArrayOfBreweries.push(newObj);
-            }
-            return yelpArrayOfBreweries;
-        },
-        error: function() {
-            console.error("The server returned no information.");
-        }
-    };
-    $.ajax(ajaxConfig);
+  let yelpArrayOfBreweries = [];
+  let ajaxConfig = {
+    dataType: "json",
+    url: "http://danielpaschal.com/yelpproxy.php",
+    method: "GET",
+    data: {
+      location: 90305,
+      term: "bar",
+      radius: 40000,
+      api_key: "pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
+    },
+    success: function(data) {
+      console.log(data);
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+        let newObj = {};
+        newObj.name = data.businesses[arrayIndex].name;
+        newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
+        newObj.closed = data.businesses[arrayIndex].is_closed;
+        newObj.rating = data.businesses[arrayIndex].rating;
+        newObj.url = data.businesses[arrayIndex].url;
+        newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+        newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+        newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
+        yelpArrayOfBreweries.push(newObj);
+      }
+      return yelpArrayOfBreweries;
+    },
+    error: function() {
+      console.error("The server returned no information.");
+    }
+  };
+  $.ajax(ajaxConfig);
 }
 
 /***************************************************************************
@@ -371,18 +372,22 @@ function getYelpBreweries() {
  * @returns [{object}]
  */
 function getTicketMasterConcerts(obj) {
+  console.log(obj);
   var data_object = {
     api_key: "2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     city: obj.city,
-    state: obj.state,
-    date: { start: obj.date.start, end: obj.date.end }
+    stateCode: obj.state,
+    startDateTime: obj.date.start,
+    endDateTime: obj.date.end,
+    radius: 20
   };
   $.ajax({
     data: data_object,
     dataType: "json",
     method: "get",
-    url: "https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
+    url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     success: function(response) {
+      console.log(response);
       var data = [];
       var allEventsObj = response._embedded.events;
       for (var tmData_i = 0; tmData_i < allEventsObj.length; tmData_i++) {
@@ -390,9 +395,9 @@ function getTicketMasterConcerts(obj) {
         renderShowsOnDOM(eventObj);
         data.push(eventObj);
       }
-      $(".show-listing").on("click", handleConcertClick);
-    }
 
+      //   $(".show-listing").on("click", handleConcertClick);
+    }
   });
 }
 
