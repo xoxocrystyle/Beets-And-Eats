@@ -166,6 +166,7 @@ function renderInitialMap() {
         })
 }
 
+
 /***************************************************************************
  *function createMap
  * create new map
