@@ -73,7 +73,7 @@ function getEventDate() {
   var year = $(".event-year").val();
   var month;
   var day;
-  var nextDay = "0" + (parseInt($(".event-day").val()) + 1);
+  var nextDay = parseInt($(".event-day").val()) + 1;
 
   if ($(".event-month").val().length === 1) {
     month = `0${$(".event-month").val()}`;
@@ -87,10 +87,13 @@ function getEventDate() {
     day = $(".event-day").val();
   }
 
-  debugger;
+  if (nextDay.length === 1) {
+    nextDay = `0${nextDay}`;
+  }
 
-  date.start = `${year}-${month}-${day}T00:00:00Z`;
-  date.end = `${year}-${month}-${nextDay}T12:00:00Z`;
+  //hard coded for conversion of PST to GMT
+  date.start = `${year}-${month}-${day}T08:00:00Z`;
+  date.end = `${year}-${month}-${nextDay}T08:00:00Z`;
 
   return date;
 }
@@ -228,15 +231,14 @@ class Map {
     });
   }
 
-  createMarkers(array, color){
+  createMarkers(array, color) {
     //push each marker made to  to this.markers
-    for(let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
-        let locationObj = array[arrayIndex];
-        locationObj.latLong = {lat: locationObj.latitude, lng: locationObj.longitude};
-        let newMarker = new Marker(locationObj, map, color);
-        this.markers.push(newMarker);
+    for (let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
+      let locationObj = array[arrayIndex];
+      locationObj.latLong = { lat: locationObj.latitude, lng: locationObj.longitude };
+      let newMarker = new Marker(locationObj, map, color);
+      this.markers.push(newMarker);
     }
-
   }
 }
 
@@ -312,7 +314,7 @@ function getYelpRestaurants() {
         newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
         yelpArrayOfRestaurants.push(newObj);
       }
-      map.createMarkers(yelpArrayOfRestaurants, 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+      map.createMarkers(yelpArrayOfRestaurants, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
     },
     error: function() {
       console.error("The server returned no information.");
@@ -329,37 +331,37 @@ function getYelpRestaurants() {
  */
 
 function getYelpBreweries() {
-    let yelpArrayOfBreweries = [];
-    let ajaxConfig = {
-        dataType: "json",
-        url: "http://danielpaschal.com/yelpproxy.php",
-        method: "GET",
-        data: {
-            location: 90305,
-            term: "bar",
-            radius: 40000,
-            api_key: 'pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx'
-        },
-        success: function(data) {
-            for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-                let newObj = {};
-                newObj.name = data.businesses[arrayIndex].name;
-                newObj.address = data.businesses[arrayIndex].location.display_address.join('\n');
-                newObj.closed = data.businesses[arrayIndex].is_closed;
-                newObj.rating = data.businesses[arrayIndex].rating;
-                newObj.url = data.businesses[arrayIndex].url;
-                newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-                newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-                newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
-                yelpArrayOfBreweries.push(newObj);
-            }
-            map.createMarkers(yelpArrayOfBreweries, 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
-        },
-        error: function() {
-            console.error("The server returned no information.");
-        }
-    };
-    $.ajax(ajaxConfig);
+  let yelpArrayOfBreweries = [];
+  let ajaxConfig = {
+    dataType: "json",
+    url: "http://danielpaschal.com/yelpproxy.php",
+    method: "GET",
+    data: {
+      location: 90305,
+      term: "bar",
+      radius: 40000,
+      api_key: "pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
+    },
+    success: function(data) {
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+        let newObj = {};
+        newObj.name = data.businesses[arrayIndex].name;
+        newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
+        newObj.closed = data.businesses[arrayIndex].is_closed;
+        newObj.rating = data.businesses[arrayIndex].rating;
+        newObj.url = data.businesses[arrayIndex].url;
+        newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+        newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+        newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
+        yelpArrayOfBreweries.push(newObj);
+      }
+      map.createMarkers(yelpArrayOfBreweries, "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png");
+    },
+    error: function() {
+      console.error("The server returned no information.");
+    }
+  };
+  $.ajax(ajaxConfig);
 }
 
 /***************************************************************************
