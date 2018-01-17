@@ -133,8 +133,11 @@ function handleConcertClick(eventObj) {
     position: latLng,
     map: map,
   });
-  getYelpBreweries(latLng);
-  getYelpRestaurants(latLng);
+  getYelpData(latLng, 'bar', 'images/yellow-dot.png');
+  getYelpData(latLng, 'food', 'images/blue-dot.png');
+
+  // getYelpBreweries(latLng);
+  // getYelpRestaurants(latLng);
 }
 
 /***************************************************************************
@@ -248,6 +251,7 @@ function createMarkers(array, color) {
  */
 
 function renderMarker(place, color) {
+  console.log(place)
   var latLong = { lat: place.latitude, lng: place.longitude };
   let marker = new google.maps.Marker({
     position: latLong,
@@ -342,66 +346,26 @@ function populateEventSideBar(eventLocation){
   return container;
 }
 
-
-/***************************************************************************
- *function getYelpRestaurants
- * get restaurants based on zip code
- * @param{object}
- * @returns [{object}]
- */
-function getYelpRestaurants(latLng) {
-  let yelpArrayOfRestaurants = [];
+function getYelpData(latLng, type, color){
+  let arrayOfPlaces = [];
   let ajaxConfig = {
     dataType: "json",
     url: "http://danielpaschal.com/yelpproxy.php",
     method: "GET",
     data: {
-      location: JSON.stringify(latLng),
-      term: "food",
+      latitude: latLng.lat,
+      longitude: latLng.lng,
+      term: type,
       radius: 40000,
       api_key:
         "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-        console.log(data);
         for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
             let newObj = createYelpObj(data, arrayIndex);
-            yelpArrayOfRestaurants.push(newObj);
+            arrayOfPlaces.push(newObj);
         }
-      createMarkers(yelpArrayOfRestaurants, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
-    },
-    error: function() {
-      console.error("The server returned no information.");
-    }
-  };
-  $.ajax(ajaxConfig);
-}
-
-/***************************************************************************
- *function getYelpBreweries
- * get breweries based on zip code
- * @param{object}
- * @returns [{object}]
- */
-function getYelpBreweries(latLng) {
-  let yelpArrayOfBreweries = [];
-  let ajaxConfig = {
-    dataType: "json",
-    url: "http://danielpaschal.com/yelpproxy.php",
-    method: "GET",
-    data: {
-      location: JSON.stringify(latLng),
-      term: "bar",
-      radius: 40000,
-      api_key:
-        "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
-    },
-    success: function(data) {
-      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-        let newObj = createYelpObj(data, arrayIndex);
-        yelpArrayOfBreweries.push(newObj);
-      }
-      createMarkers(yelpArrayOfBreweries, "images/yellow-dot.png");
+      createMarkers(arrayOfPlaces, color );
     },
     error: function() {
       console.error("The server returned no information.");
