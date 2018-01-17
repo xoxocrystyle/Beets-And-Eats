@@ -19,7 +19,6 @@ function initializeApp() {
  */
 function handleSearchButtonClick() {
   getTicketMasterConcerts(getEventInfo());
-  scrollPage("event");
   resetInputs();
 }
 
@@ -131,7 +130,7 @@ function handleConcertClick(eventObj) {
   });
   let marker = new google.maps.Marker({
     position: latLng,
-    map: map,
+    map: map
   });
   getYelpBreweries(latLng);
   getYelpRestaurants(latLng);
@@ -166,15 +165,14 @@ function createShowDOMElement(eventDetails) {
         handleConcertClick(eventDetails);
         scrollPage("map");
         let info = populateEventSideBar(eventDetails);
-        $('.eventInfo').empty();
-        $('.eventInfo').append(info);
-
+        $(".eventInfo").empty();
+        $(".eventInfo").append(info);
       }
     }
   });
-  var artistImage = $("<div>").addClass("col-lg-3 col-xs-4 artist");
+  var artistImage = $("<div>").addClass("artist col-lg-3 col-md-3 col-xs-4");
   var image = $("<img>").attr("src", eventDetails.eventImage.url);
-  var showInfo = $("<div>").addClass("show-info col-lg-3 col-xs-8");
+  var showInfo = $("<div>").addClass("show-info col-lg-3 col-md-3 col-xs-8");
   var showName = $("<p>")
     .text(eventDetails.eventName)
     .addClass("show-name");
@@ -263,8 +261,8 @@ function renderMarker(place, color) {
   marker.addListener("click", function() {
     infowindow.open(map, marker);
     let info = populateFoodSideBar(place);
-    $('.foodInfo').empty();
-    $('.foodInfo').append(info);
+    $(".foodInfo").empty();
+    $(".foodInfo").append(info);
   });
 }
 
@@ -274,15 +272,9 @@ function renderMarker(place, color) {
  * @param{object} object of location information
  * @returns [string] content stringified
  */
-function getContentString(place){
-  var contentString =
-    "<h3>" +
-    place.name +
-    "</h4><h4>" +
-    place.phoneNumber +
-    "</h4><h4>Open:" +
-    place.closed
-    return contentString;
+function getContentString(place) {
+  var contentString = "<h3>" + place.name + "</h4><h4>" + place.phoneNumber + "</h4><h4>Open:" + place.closed;
+  return contentString;
 }
 
 /***************************************************************************
@@ -291,24 +283,24 @@ function getContentString(place){
  * @param{object} object of location information
  * @returns [object] createddom element
  */
-function populateFoodSideBar(place){
-  let container = $('<div>');
-  let name = $('<h4>',{
-    'text': place.name
-  })
-  let number = $('<p>', {
-    'text': place.name
-  })
-  let address = $('<p>', {
-    'text': place.address
-  })
-  let rating = $('<p>', {
-    'text': place.rating
-  })
-  let yelp = $('<a>', {
-    'href': place.url,
-    'text': 'website'
-  })
+function populateFoodSideBar(place) {
+  let container = $("<div>");
+  let name = $("<h4>", {
+    text: place.name
+  });
+  let number = $("<p>", {
+    text: place.name
+  });
+  let address = $("<p>", {
+    text: place.address
+  });
+  let rating = $("<p>", {
+    text: place.rating
+  });
+  let yelp = $("<a>", {
+    href: place.url,
+    text: "website"
+  });
   container.append(name, address, number, rating, yelp);
   return container;
 }
@@ -319,29 +311,28 @@ function populateFoodSideBar(place){
  * @param{object} object of event information
  * @returns [object] createddom element
  */
-function populateEventSideBar(eventLocation){
-  let container = $('<div>');
-  let image = $('<img>', {
-    'src': eventLocation.eventImage.url,
-    'class': 'eventImage'
-  })
-  let eventName = $('<h4>',{
-    'text': eventLocation.eventName
-  })
-  let venueName = $('<h4>',{
-    'text': eventLocation.venueName
-  })
-  let time = $('<p>', {
-    'text': eventLocation.startTime
-  })
-  let tickets = $('<a>', {
-    'href': eventLocation.ticketURL,
-    'text': 'Buy Tickets'
-  })
+function populateEventSideBar(eventLocation) {
+  let container = $("<div>");
+  let image = $("<img>", {
+    src: eventLocation.eventImage.url,
+    class: "eventImage"
+  });
+  let eventName = $("<h4>", {
+    text: eventLocation.eventName
+  });
+  let venueName = $("<h4>", {
+    text: eventLocation.venueName
+  });
+  let time = $("<p>", {
+    text: eventLocation.startTime
+  });
+  let tickets = $("<a>", {
+    href: eventLocation.ticketURL,
+    text: "Buy Tickets"
+  });
   container.append(image, eventName, venueName, time, tickets);
   return container;
 }
-
 
 /***************************************************************************
  *function getYelpRestaurants
@@ -359,15 +350,14 @@ function getYelpRestaurants(latLng) {
       location: JSON.stringify(latLng),
       term: "food",
       radius: 40000,
-      api_key:
-        "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
+      api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-        console.log(data);
-        for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-            let newObj = createYelpObj(data, arrayIndex);
-            yelpArrayOfRestaurants.push(newObj);
-        }
+      console.log(data);
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
+        let newObj = createYelpObj(data, arrayIndex);
+        yelpArrayOfRestaurants.push(newObj);
+      }
       createMarkers(yelpArrayOfRestaurants, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
     },
     error: function() {
@@ -393,8 +383,7 @@ function getYelpBreweries(latLng) {
       location: JSON.stringify(latLng),
       term: "bar",
       radius: 40000,
-      api_key:
-        "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
+      api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
       for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
@@ -417,16 +406,16 @@ function getYelpBreweries(latLng) {
  * @return{object} per location
  */
 function createYelpObj(data, arrayIndex) {
-    let newObj = {};
-    newObj.name = data.businesses[arrayIndex].name;
-    newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
-    newObj.closed = data.businesses[arrayIndex].is_closed;
-    newObj.rating = data.businesses[arrayIndex].rating;
-    newObj.url = data.businesses[arrayIndex].url;
-    newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-    newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-    newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
-    return newObj;
+  let newObj = {};
+  newObj.name = data.businesses[arrayIndex].name;
+  newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
+  newObj.closed = data.businesses[arrayIndex].is_closed;
+  newObj.rating = data.businesses[arrayIndex].rating;
+  newObj.url = data.businesses[arrayIndex].url;
+  newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
+  newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
+  newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
+  return newObj;
 }
 
 /***************************************************************************
@@ -448,9 +437,14 @@ function getTicketMasterConcerts(obj) {
     data: data_object,
     dataType: "json",
     method: "get",
-    url:
-      "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
+    url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     success: function(response) {
+      console.log(response);
+      if (!response._embedded) {
+        searchErrorAlert();
+        return;
+      }
+      scrollPage("event");
       var data = [];
       $(".show-container").empty();
       var allEventsObj = response._embedded.events;
@@ -508,4 +502,16 @@ function scrollPage(element) {
       );
       break;
   }
+}
+
+/***************************************************************************
+ * function searchErrorAlert
+ * alert that user search returned no results
+ * @param none
+ * @return none
+ */
+function searchErrorAlert() {
+  $(".error-message")
+    .text("No search results found. Please check the spelling of your city and/or specified date.")
+    .addClass("bg-danger");
 }

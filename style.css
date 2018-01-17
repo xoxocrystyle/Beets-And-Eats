@@ -40,7 +40,6 @@ body {
   height: 100%;
 }
 
-
 .media {
   margin-top: 0;
 }
@@ -64,7 +63,8 @@ body {
 }
 /*--------------------- MAP -----------------------------------*/
 
-.wrapper , #map {
+.wrapper,
+#map {
   height: 100%;
 }
 .wrapper {
@@ -79,7 +79,6 @@ body {
   height: 91%;
   width: 20%;
   background-color: #ffffff;
-
 }
 
 .mapKey {
@@ -92,33 +91,33 @@ body {
   background-color: #ffffff;
 }
 
-.mapKey > ul{
+.mapKey > ul {
   position: absolute;
   list-style: none;
   padding: 0;
 }
 
-.mapKey > ul >li {
+.mapKey > ul > li {
   display: inline-block;
 }
 
-.mapKey > ul >li > p {
+.mapKey > ul > li > p {
   display: inline-block;
   font-size: 1vmin;
 }
 
-.mapKey > ul >li > img{
+.mapKey > ul > li > img {
   display: inline-block;
   width: 50%;
 }
 
 .eventImage {
-  width: 100%
+  width: 100%;
 }
 
 .eventInfo > div {
   width: 100%;
-=======
+}
 
 .show-details,
 .show-venue {
@@ -132,4 +131,9 @@ body {
   font-size: 5vmin;
   font-weight: 500;
   line-height: 1;
+}
+
+.error-message {
+  padding: 1%;
+  text-align: center;
 }
