@@ -48,6 +48,20 @@ body {
 .artist > img {
   width: 100%;
 }
+
+.show-details,
+.show-venue {
+  font-size: 2vmin;
+  margin-bottom: 5px;
+}
+
+.show-name {
+  margin-top: 0;
+  margin-bottom: 2px;
+  font-size: 4vmin;
+  font-weight: 500;
+  line-height: 1;
+}
 /*--------------------- MAP -----------------------------------*/
 
 .wrapper , #map {
