@@ -174,20 +174,15 @@ function renderInitialMap() {
  */
 
 function renderMap(venueObject) {
-  var restaurantsNearby = getYelpRestaurants(venueObject.zipcode);
-  var barsNearby = getYelpBreweries(venueObject.zipcode);
-  map = new Map(venueObject, 15, restaurantsNearby, barsNearby); //create new instance of map for venue location
-
-  map.renderMap(); //render map to page
-
+  map = new Map(venueObject, 15); //create new instance of map for venue location
+  // map.renderMap(); //render map to page
   //get array of objects from yelp
-  map.createBarMarkers();
-  map.createRestaurantMarkers();
-  map.renderAllMarkers();
+  // map.createBarMarkers();
+  // map.createRestaurantMarkers();
+  // map.renderAllMarkers();
 }
 
-var exampleObject = { latitude: "33.6412", longitude: "-117.9188" };
-var santabarbara = { latitude: "34.420830", longitude: "-119.698189", venueName: "The Observatory" };
+var santabarbara = { latitude: "34.0522", longitude: "-118.2437", venueName: "The Observatory", zipcode: '90001' };
 
 /***************************************************************************
  * function Map
@@ -201,8 +196,6 @@ class Map {
   constructor(venueObject, zoom, restaurants, bars) {
     this.latitude = parseFloat(venueObject.latitude);
     this.longitude = parseFloat(venueObject.longitude);
-    this.bars = bars;
-    this.restaurants = restaurants;
     this.markers = [];
     this.venueInfo = venueObject;
     this.zoom = zoom;
@@ -224,14 +217,11 @@ class Map {
       marker.renderMarker(); //render marker to map
     });
   }
-  createBarMarkers(){
+  createYelpMarkers(array){
     //push each marker made to  to this.markers
-
+    console.log(array)
   }
-  createRestaurantMarkers(){
-    //push each marker made to  to this.markers
 
-  }
 }
 
 /***************************************************************************
@@ -258,7 +248,6 @@ class Map {
  */
 class Marker {
   constructor(venueInfo, map, markerColor) {
-    console.log(venueInfo);
     this.latLong = venueInfo.latLong;
     this.venueName = venueInfo.venueName;
     this.markerColor = markerColor;
@@ -294,7 +283,6 @@ function getYelpRestaurants() {
         api_key: 'pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx'
     },
     success: function(data) {
-      console.log(data);
       for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
           let newObj = {};
           newObj.name = data.businesses[arrayIndex].name;
@@ -307,7 +295,7 @@ function getYelpRestaurants() {
           newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
           yelpArrayOfRestaurants.push(newObj);
       }
-      return yelpArrayOfRestaurants;
+      map.createYelpMarkers(yelpArrayOfRestaurants);
     },
     error: function() {
       console.error("The server returned no information.");
@@ -323,7 +311,7 @@ function getYelpRestaurants() {
  * @returns [{object}]
  */
 function getYelpBreweries() {
-    let yelpArrayOfBreweries = [];
+
     let ajaxConfig = {
         dataType: "json",
         url: "http://danielpaschal.com/yelpproxy.php",
@@ -335,7 +323,7 @@ function getYelpBreweries() {
             api_key: 'pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx'
         },
         success: function(data) {
-            console.log(data);
+            let yelpArrayOfBreweries = [];
             for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
                 let newObj = {};
                 newObj.name = data.businesses[arrayIndex].name;
@@ -348,7 +336,7 @@ function getYelpBreweries() {
                 newObj.longittude = data.businesses[arrayIndex].coordinates.longitude;
                 yelpArrayOfBreweries.push(newObj);
             }
-            return yelpArrayOfBreweries;
+            map.createYelpMarkers(yelpArrayOfBreweries);
         },
         error: function() {
             console.error("The server returned no information.");
