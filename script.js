@@ -1,6 +1,7 @@
 $(document).ready(initializeApp);
 var map;
 var markers;
+var infoWindow;
 
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
@@ -132,6 +133,11 @@ function handleConcertClick(eventObj) {
     position: latLng,
     map: map
   });
+
+  // window = new google.maps.InfoWindow({
+  //   content: eventObj.venueName
+  // });
+
   getYelpData(latLng, 'bar', 'images/yellow-dot.png');
   getYelpData(latLng, 'food', 'images/blue-dot.png');
 
@@ -168,7 +174,7 @@ function createShowDOMElement(eventDetails) {
         handleConcertClick(eventDetails);
         scrollPage("map");
         let info = populateEventSideBar(eventDetails);
-        $(".eventInfo").empty();
+        $(".eventInfo > div").remove();
         $(".eventInfo").append(info);
       }
     }
@@ -225,6 +231,7 @@ function renderInitialMap() {
     center: losAngeles,
     zoom: 12
   });
+  infoWindow = new google.maps.InfoWindow();
 }
 
 /***************************************************************************
@@ -249,25 +256,23 @@ function createMarkers(array, color) {
  */
 
 function renderMarker(place, color) {
-  console.log(place)
   var latLong = { lat: place.latitude, lng: place.longitude };
   let marker = new google.maps.Marker({
     position: latLong,
     map: map,
     icon: color
   });
-  // var content = createContent(place);
-
-  var infowindow = new google.maps.InfoWindow({
-    content: getContentString(place)
+  google.maps.event.addListener(marker, "click", function() {
+    createWindowHandler(place, marker);
   });
+}
 
-  marker.addListener("click", function() {
-    infowindow.open(map, marker);
-    let info = populateFoodSideBar(place);
-    $(".foodInfo").empty();
-    $(".foodInfo").append(info);
-  });
+function createWindowHandler(place, marker){
+  infoWindow.content = getContentString(place);
+  infoWindow.open(map, marker);
+  let info = populateFoodSideBar(place);
+  $(".foodInfo > div").remove();
+  $(".foodInfo").append(info);
 }
 
 /***************************************************************************
@@ -300,6 +305,12 @@ function getContentString(place){
  */
 function populateFoodSideBar(place){
   let container = $('<div>');
+  let image = $('<img>', {
+    'src': place.image
+  })
+  let distance = $('<p>', {
+    'text': 'Distance: ' + place.distance
+  })
   let name = $('<h4>',{
     'text': place.name
   });
@@ -310,16 +321,13 @@ function populateFoodSideBar(place){
     'text': place.address
   });
   let rating = $('<p>', {
-    'text': place.rating
+    'text': 'Rating: ' + place.rating
   });
   let yelp = $('<a>', {
     'href': place.url,
     'text': 'website'
   });
-  let distance = $('<p>', {
-      'text': place.distance
-  });
-  container.append(name, address, number, rating, yelp);
+  container.append(image, name, distance, address, number, rating, yelp);
   return container;
 }
 
@@ -428,7 +436,6 @@ function getTicketMasterConcerts(obj) {
     method: "get",
     url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     success: function(response) {
-      console.log(response);
       if (!response._embedded) {
         searchErrorAlert();
         return;
@@ -504,4 +511,3 @@ function searchErrorAlert() {
     .text("No search results found. Please check the spelling of your city and/or specified date.")
     .addClass("bg-danger");
 }
-
