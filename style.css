@@ -16,6 +16,11 @@ body {
   text-align: center;
 }
 
+.breadcrumb {
+  background-color: transparent;
+  margin: 0;
+}
+
 .input-container {
   display: flex;
   justify-content: center;
@@ -27,10 +32,6 @@ body {
 .submit-button {
   width: 100%;
 }
-
-/* .landing-page {
-  width: 50%;
-} */
 
 .row {
   margin: 2% auto;
@@ -69,6 +70,7 @@ body {
   line-height: 1;
 }
 
+
 .show-listing {
   border-radius: 10px;
 }
@@ -80,6 +82,7 @@ body {
   cursor: pointer;
 }
 /*--------------------- MAP -----------------------------------*/
+
 
 .wrapper,
 #map {
@@ -133,8 +136,12 @@ body {
   width: 100%;
 }
 
-.eventInfo > div {
+.eventInfo > div, .foodInfo > div  {
   width: 100%;
+}
+
+.informationOverlay img {
+  width: 100%
 }
 
 .show-details,
