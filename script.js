@@ -112,7 +112,18 @@ function getEventDate() {
  */
 
 function handleConcertClick(eventObj) {
-  console.log(eventObj);
+  var latLng = {lat: parseFloat(eventObj.latitude), lng: parseFloat(eventObj.longitude)};
+  map = new google.maps.Map(document.getElementById('map'), {
+          center: latLng,
+          zoom: 15
+        })
+  let marker = new google.maps.Marker({
+    position: latLng,
+    map: map,
+    label: eventObj.venueName
+  });
+  getYelpBreweries(eventObj.zipCode);
+  getYelpRestaurants(eventObj.zipCode);
 }
 
 /***************************************************************************
@@ -124,18 +135,21 @@ function handleConcertClick(eventObj) {
 
 function renderShowsOnDOM(eventDetails) {
   var listing = $("<div>", {
-    'class': 'col-lg-4 show-listing',
+    'class': 'row show-listing',
     'on': {
       click: function(){
         handleConcertClick(eventDetails);
       }
     }
   })
-  var artistSection = $("<div>").addClass("artist");
-  var showImg = $("<img>")
-    .addClass("col-lg-4 hidden-xs hidden-sm")
+
+
+  var artistImage = $("<div>").addClass("col-xs-4 artist");
+  var image = $("<img>")
+    // .addClass("col-lg-4 hidden-xs hidden-sm")
+    // .addClass("col-lg-4 artist")
     .attr("src", eventDetails.eventImage.url);
-  var showInfo = $("<div>").addClass("show-info col-lg-8");
+  var showInfo = $("<div>").addClass("show-info col-xs-8");
   var showName = $("<h4>").text(eventDetails.eventName);
   var showDetails = $("<p>");
   var showDate = `${eventDetails.eventDate.slice(5)}-${eventDetails.eventDate.slice(0, 4)}`;
@@ -151,9 +165,13 @@ function renderShowsOnDOM(eventDetails) {
 
   showDetails.text(`${showVenue} - ${showDate}, ${showTime}`);
 
-  $(artistSection).append(showImg);
-  $(showInfo).append(showName, showDetails);
-  $(listing).append(artistSection, showInfo);
+  // artistSection.append(showImg);
+  // listing.append(artistSection, showInfo);
+  // showInfo.append(showName, showDetails);
+  artistImage.append(image);
+  showInfo.append(showName, showDetails);
+
+  listing.append(artistImage, showInfo);
   $(".show-container").append(listing);
   // $(".show-listing").on("click", handleConcertClick.bind(eventDetails));
   // console.log(eventDetails)
@@ -183,12 +201,12 @@ function renderInitialMap() {
  * @return {none}
  */
 function createMap(){
-  map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 33.9596, lng: -118.3287},
-          zoom: 15
-        })
-  getYelpBreweries();
-  getYelpRestaurants();
+  // map = new google.maps.Map(document.getElementById('map'), {
+  //         center: {lat: 33.9596, lng: -118.3287},
+  //         zoom: 15
+  //       })
+  // getYelpBreweries();
+  // getYelpRestaurants();
 }
 
 /***************************************************************************
@@ -231,14 +249,14 @@ function createMap(){
  * @param{object}
  * @returns [{object}]
  */
-function getYelpRestaurants() {
+function getYelpRestaurants(zipcode) {
   let yelpArrayOfRestaurants = [];
   let ajaxConfig = {
     dataType: "json",
     url: "http://danielpaschal.com/yelpproxy.php",
     method: "GET",
     data: {
-      location: 90305,
+      location: zipcode,
       term: "food",
       radius: 40000,
       api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
@@ -273,14 +291,14 @@ function getYelpRestaurants() {
  * @returns [{object}]
  */
 
-function getYelpBreweries() {
+function getYelpBreweries(zipcode) {
   let yelpArrayOfBreweries = [];
     let ajaxConfig = {
         dataType: "json",
         url: "http://danielpaschal.com/yelpproxy.php",
         method: "GET",
         data: {
-            location: 90305,
+            location: zipcode,
             term: "bar",
             radius: 40000,
             api_key: 'VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx'

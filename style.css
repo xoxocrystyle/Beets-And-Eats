@@ -48,3 +48,7 @@ body {
 .media {
   margin-top: 0;
 }
+
+.artist > img {
+  width: 100%;
+}
