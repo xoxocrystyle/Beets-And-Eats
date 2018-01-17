@@ -111,8 +111,8 @@ function getEventDate() {
  * @calls: ticketmasterAjaxCall, render map
  */
 
-function handleConcertClick(object) {
-  console.log(object);
+function handleConcertClick(eventObj) {
+  console.log(eventObj);
 }
 
 /***************************************************************************
@@ -123,7 +123,14 @@ function handleConcertClick(object) {
  */
 
 function renderShowsOnDOM(eventDetails) {
-  var listing = $("<div>").addClass("col-lg-4 show-listing");
+  var listing = $("<div>", {
+    'class': 'col-lg-4 show-listing',
+    'on': {
+      click: function(){
+        handleConcertClick(eventDetails);
+      }
+    }
+  })
   var artistSection = $("<div>").addClass("artist");
   var showImg = $("<img>")
     .addClass("col-lg-4 hidden-xs hidden-sm")
@@ -148,6 +155,8 @@ function renderShowsOnDOM(eventDetails) {
   $(showInfo).append(showName, showDetails);
   $(listing).append(artistSection, showInfo);
   $(".show-container").append(listing);
+  // $(".show-listing").on("click", handleConcertClick.bind(eventDetails));
+  // console.log(eventDetails)
 }
 
 /***************************************************************************
@@ -332,7 +341,6 @@ function getTicketMasterConcerts(obj) {
         var eventObj = createEventObject(allEventsObj[tmData_i]);
         renderShowsOnDOM(eventObj);
         data.push(eventObj);
-        $(".show-listing").on("click", handleConcertClick(eventObj));
       }
     }
   });
