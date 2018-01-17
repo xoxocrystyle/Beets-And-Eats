@@ -12,6 +12,24 @@ body {
   background-repeat: no-repeat;
 }
 
+.navbar-default{
+  background: transparent;
+  border-style: none;
+}
+
+
+.navbar-default .navbar-brand{
+  color: #FFF;
+}
+
+.navbar-default .navbar-nav>li>a{
+  color:  #FFF;
+}
+
+.container-fluid{
+  padding: 0;
+}
+
 .form-control {
   text-align: center;
 }
