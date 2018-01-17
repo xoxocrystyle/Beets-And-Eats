@@ -105,6 +105,10 @@ function getEventDate() {
  * @calls: ticketmasterAjaxCall, render map
  */
 
+function handleConcertClick() {
+  console.log("show has been clicked");
+}
+
 /***************************************************************************
  * renderShowsOnDOM - create DOM elements for each show in list, update the on-page list of shows
  * @param: {object} return information from ticketmaster Ajax call
@@ -112,30 +116,15 @@ function getEventDate() {
  * @calls: none
  */
 
-// var test = {
-//   eventDate: "2018-01-23",
-//   eventImage: { url: "https://s1.ticketm.net/dam/a/441/6c483401-d57c-41b7-aee7-bb94e5b58441_29091_ARTIST_PAGE_3_2.jpg" },
-//   eventName: "Los Angeles Lakers vs. Boston Celtics",
-//   generalInfo:
-//     "No Bottles, Cans, Or Coolers. No Smoking In Arena. No Cameras Or Recording Devices At Concerts! Cameras w/No Flash Allowed For Sporting Events Only!",
-//   latitude: "34.043003",
-//   longitude: "-118.267253",
-//   startTime: "19:30:00",
-//   ticketUrl: "http://www.ticketmaster.com/staples-center-tickets-los-angeles/venue/360457",
-//   venueName: "STAPLES Center",
-//   zipCode: "90015"
-// };
-
 function renderShowsOnDOM(eventDetails) {
-  var row = $("<div>").addClass("show-listing row");
+  var listing = $("<div>").addClass("col-lg-4 show-listing");
+  var artistSection = $("<div>").addClass("artist");
   var showImg = $("<img>")
-    .addClass("col-lg-2 hidden-")
+    .addClass("col-lg-4 hidden-xs hidden-sm")
     .attr("src", eventDetails.eventImage.url);
-  var showContent = $("<div>").addClass("col-lg-8");
-  var showName = $("<h3>")
-    .addClass("show-name")
-    .text(eventDetails.eventName);
-  var showDetails = $("<p>").addClass("show-details");
+  var showInfo = $("<div>").addClass("show-info col-lg-8");
+  var showName = $("<h4>").text(eventDetails.eventName);
+  var showDetails = $("<p>");
   var showDate = `${eventDetails.eventDate.slice(5)}-${eventDetails.eventDate.slice(0, 4)}`;
   var showTime = parseInt(eventDetails.startTime.slice(0, 2));
   var showVenue = eventDetails.venueName;
@@ -149,9 +138,10 @@ function renderShowsOnDOM(eventDetails) {
 
   showDetails.text(`${showVenue} - ${showDate}, ${showTime}`);
 
-  $(showContent).append(showName, showDetails);
-  $(row).append(showImg, showContent);
-  $(".show-container").append(row);
+  $(artistSection).append(showImg);
+  $(showInfo).append(showName, showDetails);
+  $(listing).append(artistSection, showInfo);
+  $(".show-container").append(listing);
 }
 
 /***************************************************************************
@@ -301,7 +291,6 @@ function getYelpRestaurants() {
       api_key: "pURiuoXhZlcO2BTtM2Rzs12nrUjIU9r-SBSKNv_Ma0C9vHSvmCnQRzq_nRyR59-XLCzVd3GlGzGUVSZANd1xOnY0JPvKrQiz94R4_1MdpKQC_yj8YUUB0U2nyl1dWnYx"
     },
     success: function(data) {
-      console.log(data);
       for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
         let newObj = {};
         newObj.name = data.businesses[arrayIndex].name;
@@ -378,7 +367,6 @@ function getYelpBreweries() {
  * @returns [{object}]
  */
 function getTicketMasterConcerts(obj) {
-  console.log(obj);
   var data_object = {
     api_key: "2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     city: obj.city,
@@ -393,7 +381,6 @@ function getTicketMasterConcerts(obj) {
     method: "get",
     url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     success: function(response) {
-      console.log(response);
       var data = [];
       var allEventsObj = response._embedded.events;
       for (var tmData_i = 0; tmData_i < allEventsObj.length; tmData_i++) {
@@ -402,7 +389,7 @@ function getTicketMasterConcerts(obj) {
         data.push(eventObj);
       }
 
-      //   $(".show-listing").on("click", handleConcertClick);
+      $(".show-listing").on("click", handleConcertClick);
     }
   });
 }
