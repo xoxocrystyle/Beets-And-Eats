@@ -15,11 +15,17 @@
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="navbar-header">
-            <a class="navbar-brand" href="">HOME</a>
+            <!-- <a class="navbar-brand" href="">HOME</a> -->
+            <ol class="breadcrumb">
+                <li><a href="#">HOME</a></li>
+                <li><a href="#search-page">SEARCH</a></li>
+                <li><a href="#event-page">EVENTS</a></li>
+                <li><a href="#map">MAP</a></li>
+            </ol>
         </div>
     </nav>
     <div class="container-fluid">
-      <section class="input-container row">
+      <section class="input-container row"  id="search-page">
           <div class="landing-page">
               <div class="search-fields row">
                   <div class="row">
@@ -49,7 +55,7 @@
               </div>
           </div>
       </section>
-      <section class="show-container">
+      <section class="show-container" id="event-page">
 
       </section>
     </div>
