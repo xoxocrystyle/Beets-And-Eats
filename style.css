@@ -17,7 +17,6 @@ body {
   border-style: none;
 }
 
-
 .navbar-default .navbar-brand{
   color: #FFF;
 }
@@ -25,6 +24,12 @@ body {
 .navbar-default .navbar-nav>li>a{
   color:  #FFF;
 }
+
+.navbar-default.scrolled{
+  background: white; 
+}
+
+.navbar-default .navbar-nav>li>a.scrolled
 
 .container-fluid{
   padding: 0;
