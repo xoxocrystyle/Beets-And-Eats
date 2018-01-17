@@ -19,6 +19,7 @@ function initializeApp() {
  */
 function handleSearchButtonClick() {
   getTicketMasterConcerts(getEventInfo());
+  scrollPage("event");
 }
 
 /***************************************************************************
@@ -137,6 +138,7 @@ function renderShowsOnDOM(eventDetails) {
     on: {
       click: function() {
         handleConcertClick(eventDetails);
+        scrollPage("map");
       }
     }
   });
@@ -189,10 +191,10 @@ function renderInitialMap() {
  * @return {none}
  */
 function createMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 33.9596, lng: -118.3287},
-          zoom: 15
-        })
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 33.9596, lng: -118.3287 },
+    zoom: 15
+  });
   getYelpBreweries();
   getYelpRestaurants();
 }
@@ -403,4 +405,25 @@ function createEventObject(event) {
   object.eventDate = event.dates.start.localDate;
   object.note = event.pleaseNote;
   return object;
+}
+
+function scrollPage(element) {
+  switch (element) {
+    case "event":
+      $("html, body").animate(
+        {
+          scrollTop: $("#event-page").offset().top - 60
+        },
+        1500
+      );
+      break;
+    case "map":
+      $("html, body").animate(
+        {
+          scrollTop: $("#map").offset().top - 60
+        },
+        2000
+      );
+      break;
+  }
 }
