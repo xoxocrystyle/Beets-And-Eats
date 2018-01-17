@@ -172,72 +172,6 @@ function renderInitialMap() {
  * @param {object} information
  * @return {none}
  */
-
-function renderMap(venueObject) {
-  map = new Map(venueObject, 15); //create new instance of map for venue location
-  // map.renderMap(); //render map to page
-  //get array of objects from yelp
-  // map.createBarMarkers();
-  // map.createRestaurantMarkers();
-  // map.renderAllMarkers();
-}
-
-var santabarbara = { latitude: "34.0522", longitude: "-118.2437", venueName: "The Observatory", zipcode: '90001' };
-
-/***************************************************************************
- * function Map
- * @constructor - create map object with lat and long
- * @param {integer} zipcode of venue location
-* @return {object} map
-
- */
-
-class Map {
-  constructor(venueObject, zoom, restaurants, bars) {
-    this.latitude = parseFloat(venueObject.latitude);
-    this.longitude = parseFloat(venueObject.longitude);
-    this.markers = [];
-    this.venueInfo = venueObject;
-    this.zoom = zoom;
-    // this.markerLocation = [];
-  }
-  renderMap() {
-    var map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: this.latitude, lng: this.longitude },
-      zoom: this.zoom
-    });
-    this.venueInfo.latLong = { lat: this.latitude, lng: this.longitude };
-    var marker = new Marker(this.venueInfo, map, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
-    this.markers.push(marker);
-    return map;
-  }
-  renderAllMarkers() {
-    //loop through list of markers
-    this.markers.forEach(function(marker) {
-      marker.renderMarker(); //render marker to map
-    });
-  }
-  createMarkers(array, color){
-    //push each marker made to  to this.markers
-    for(let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
-        let locationObj = array[arrayIndex];
-        locationObj.latLong = {lat: locationObj.latitude, lng: locationObj.longitude};
-        let newMarker = new Marker(locationObj, map, color);
-        this.markers.push(newMarker);
-    }
-
-}
-
-/***************************************************************************
- * function updateMap
- * when user zooms in and out, it will repopulate map with markers
- * @param {integer}
- * @return {object} map
- */
-
-/***************************************************************************
- * function renderMarker
-=======
 function createMap(){
   map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 33.9596, lng: -118.3287},
@@ -249,7 +183,6 @@ function createMap(){
 
 /***************************************************************************
  * function createMarkers
->>>>>>> 3fbf9baff402969109aa308ddce5450dae311099
  * create render mark to page
  * @param {array} array of locations
  * @param {string} color color for markers
