@@ -1,7 +1,6 @@
-html,
 body {
   height: 100vh;
-  width: 100vw;
+  /*width: 100vw;*/
   margin: 0;
   padding: 0;
 }
@@ -28,7 +27,8 @@ body {
 
 .navbar-default .navbar-brand {
   color: #fff;
-  margin-left: 20px;
+  padding-left: 64%;
+
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -62,7 +62,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  width: 100%;
+  /*width: 100%;*/
 }
 
 /* Landing Page CSS */
@@ -73,7 +73,7 @@ body {
   align-items: center;
   flex-flow: column;
   height: 100vh;
-  width: 100vw;
+  /*width: 100vw;*/
   background: url("images/brewsky.png") no-repeat center center fixed;
   background-size: cover;
   -webkit-background-size: cover;
@@ -81,6 +81,8 @@ body {
   -o-background-size: cover;
 }
 .start_title {
+  display: flex;
+  justify-content: center;
   font-family: "Abril Fatface", cursive;
   font-size: 15vmin;
   color: seashell;
@@ -123,6 +125,10 @@ body {
 
 .row {
   margin: 2% auto;
+}
+
+.landing-page{
+  margin: 0% auto;
 }
 
 /* Events Page CSS */
@@ -200,6 +206,7 @@ body {
 .wrapper,
 #map {
   height: 100%;
+  width: 100%;
 }
 .wrapper {
   position: relative;
