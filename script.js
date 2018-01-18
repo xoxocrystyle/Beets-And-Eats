@@ -167,6 +167,12 @@ function handleConcertClick(eventObj) {
 
 function renderShowsOnDOM(eventDetailsArray) {
   var row;
+  var title = $("<div>", {
+    class: "show_tag_line"
+  });
+  var titleText = $("<span>").text("Choose Your Event");
+  title.append(titleText);
+  $(".show-container").append(title);
 
   for (var index = 0; index < eventDetailsArray.length; index++) {
     if (index % 2 === 0) {
@@ -484,7 +490,6 @@ function getTicketMasterConcerts(obj) {
           continue;
         }
         var eventObj = createEventObject(allEventsObj, tmData_i);
-        renderShowsOnDOM(eventObj);
         data.push(eventObj);
       }
       renderShowsOnDOM(data);
