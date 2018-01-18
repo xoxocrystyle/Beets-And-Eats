@@ -164,7 +164,7 @@ function handleConcertClick(eventObj) {
     openVenueWindow(eventObj, marker);
   });
 
-  $(".foodInfo > sectionInfo").remove();
+  $(".foodInfo  .sectionInfo").remove();
   getYelpData(latLng, 'bar', 'images/yellow-dot.png');
   getYelpData(latLng, 'food', 'images/blue-dot.png');
 
@@ -365,7 +365,7 @@ function populateFoodSideBar(place){
     class: "map-food-name"
   });
   let number = $("<p>", {
-    text: place.name
+    text: place.phoneNumber
   });
   let address = $("<p>", {
     text: place.address
@@ -378,7 +378,8 @@ function populateFoodSideBar(place){
   });
   let yelp = $("<a>", {
     href: place.url,
-    text: "website"
+    text: "WEBSITE",
+    target: '_blank'
   });
   container.append(image, name, distance, address, number, rating, yelp);
   return container;
@@ -404,14 +405,16 @@ function populateEventSideBar(eventLocation) {
     class: "map-event-name"
   });
   let venueName = $("<p>", {
-    text: eventLocation.venueName
+    text: 'Venue: ' +eventLocation.venueName
   });
   let time = $("<p>", {
-    text: eventLocation.startTime
+    text: 'Event Time: ' + eventLocation.startTime
   });
   let tickets = $("<a>", {
     href: eventLocation.ticketURL,
-    text: "Buy Tickets"
+    text: "BUY TICKETS",
+    target: '_blank'
+
   });
   container.append(image, eventName, venueName, time, tickets);
   return container;
