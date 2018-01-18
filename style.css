@@ -207,14 +207,14 @@ body {
 
 .informationOverlay {
   position: absolute;
-  top: 6%;
-  left: 0%;
+  top: 0;
+  left: 0;
   z-index: 99;
-  height: 91%;
+  height: 97%;
   width: 26%;
   padding: 2%;
   background-color: #ffffff;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .informationOverlay h4 {
