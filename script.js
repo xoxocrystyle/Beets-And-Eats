@@ -3,6 +3,19 @@ var map;
 var markers;
 var infoWindow;
 
+
+/***************************************************************************
+ * changeColorScroll - when you scroll down after to search, nav bar changes color
+ * @param {undefined} none
+ * @returns: {undefined}
+ * @calls: none
+ */
+$(function() {
+  $(document).scroll(function(){
+    var $nav = $(".navbar-default");
+    $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+  });
+});
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
  * @params {undefined}

@@ -18,19 +18,30 @@ body {
   border-style: none;
 }
 
+.navbar-default.scrolled{
+  background: #fff !important;
+  transition: background-color 200ms linear;
+  color: gray;
+}
+
 .navbar-default .navbar-brand{
   color: #FFF;
+  margin-left:  20px;
 }
 
 .navbar-default .navbar-nav>li>a{
   color:  #FFF;
+  margin-right:  20px;
+}
+.navbar-default.scrolled .navbar-brand{
+  color: #000;
+  margin-left:  20px;
 }
 
-.navbar-default.scrolled{
-  background: white; 
+.navbar-default.scrolled .navbar-nav>li>a{
+  color:  #000;
+  margin-right:  20px;
 }
-
-.navbar-default .navbar-nav>li>a.scrolled
 
 .container-fluid{
   padding: 0;
