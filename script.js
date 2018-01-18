@@ -157,8 +157,7 @@ function getTicketMasterConcerts(obj) {
     data: data_object,
     dataType: "json",
     method: "get",
-    url:
-      "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
+    url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     success: function(response) {
       if (!response._embedded) {
         searchErrorAlert();
@@ -199,15 +198,10 @@ function getYelpData(latLng, type, color) {
       longitude: latLng.lng,
       term: type,
       radius: 40000,
-      api_key:
-        "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
+      api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-      for (
-        let arrayIndex = 0;
-        arrayIndex < data.businesses.length;
-        arrayIndex++
-      ) {
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
         let newObj = createYelpObj(data, arrayIndex);
         arrayOfPlaces.push(newObj);
       }
@@ -309,31 +303,17 @@ function createShowDOMElement(eventDetails) {
     }
   });
   let listingRow = $("<div>").addClass("listing row");
-  let artistImage = $("<div>").addClass(
-    "artist col-lg-6 col-md-6 col-xs-6 col-sm-6"
-  );
+  let artistImage = $("<div>").addClass("artist col-lg-6 col-md-6 col-xs-6 col-sm-6");
   let imageDiv = $("<div>").addClass("image-div");
   let image = $("<img>")
     .attr("src", eventDetails.eventImage.url)
     .addClass("show-image");
-  let showInfo = $("<div>").addClass(
-    "show-info col-lg-6 col-md-6 col-xs-6 col-sm-6"
-  );
+  let showInfo = $("<div>").addClass("show-info col-lg-6 col-md-6 col-xs-6 col-sm-6");
   let showName = $("<p>")
     .text(eventDetails.eventName)
     .addClass("show-name");
   let showDetails = $("<p>").addClass("show-details hidden-xs hidden-sm");
-  let ticketLink = $("<a>")
-    .attr("src", eventDetails.ticketURL)
-    .text("BUY TICKETS")
-    .addClass("ticket-link hidden-xs hidden-sm");
-  let mobileTicketLink = $("<a>")
-    .attr("src", eventDetails.ticketURL)
-    .text("BUY TICKETS")
-    .addClass("ticket-link hidden-md hidden-lg");
-  let showDate = `${eventDetails.eventDate.slice(
-    5
-  )}-${eventDetails.eventDate.slice(0, 4)}`;
+  let showDate = `${eventDetails.eventDate.slice(5)}-${eventDetails.eventDate.slice(0, 4)}`;
   let showTime = parseInt(eventDetails.startTime.slice(0, 2));
   let showVenue = $("<p>")
     .text(`Venue: ${eventDetails.venueName}`)
@@ -352,14 +332,7 @@ function createShowDOMElement(eventDetails) {
 
   imageDiv.append(image);
   artistImage.append(imageDiv);
-  showInfo.append(
-    mobileTicketLink,
-    showName,
-    mobileDetails,
-    showDetails,
-    showVenue,
-    ticketLink
-  );
+  showInfo.append(showName, mobileDetails, showDetails, showVenue);
   listingRow.append(artistImage, showInfo);
   listing.append(listingRow);
 
@@ -427,13 +400,7 @@ function getContentString(place) {
   } else {
     place.closed = "Closed";
   }
-  let contentString =
-    "<h4>" +
-    place.name +
-    "</h4><p>" +
-    place.distance.toFixed(2) +
-    " miles away from venue</p><p>" +
-    place.closed;
+  let contentString = "<h4>" + place.name + "</h4><p>" + place.distance.toFixed(2) + " miles away from venue</p><p>" + place.closed;
   return contentString;
 }
 
@@ -516,9 +483,7 @@ function populateEventSideBar(eventLocation) {
 function createYelpObj(data, arrayIndex) {
   let newObj = {};
   newObj.name = data.businesses[arrayIndex].name;
-  newObj.address = data.businesses[arrayIndex].location.display_address.join(
-    "\n"
-  );
+  newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
   newObj.closed = data.businesses[arrayIndex].is_closed;
   newObj.rating = data.businesses[arrayIndex].rating;
   newObj.url = data.businesses[arrayIndex].url;
@@ -558,9 +523,7 @@ function createEventObject(event, index) {
  */
 function searchErrorAlert() {
   $(".error-message")
-    .text(
-      "No search results found. Please check the spelling of your city and/or specified date."
-    )
+    .text("No search results found. Please check the spelling of your city and/or specified date.")
     .addClass("bg-danger");
 }
 
