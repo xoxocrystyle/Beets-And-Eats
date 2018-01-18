@@ -213,10 +213,10 @@ body {
 
 .informationOverlay {
   position: absolute;
-  top: 0;
+  top: 6%;
   left: 0;
   z-index: 99;
-  height: 97%;
+  height: 91%;
   width: 26%;
   padding: 2%;
   background-color: #ffffff;
