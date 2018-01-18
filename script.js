@@ -126,10 +126,7 @@ function getEventDate() {
  * @calls: ticketmasterAjaxCall, render map
  */
 function handleConcertClick(eventObj) {
-  let latLng = {
-    lat: parseFloat(eventObj.latitude),
-    lng: parseFloat(eventObj.longitude)
-  };
+  let latLng = { lat: parseFloat(eventObj.latitude), lng: parseFloat(eventObj.longitude) };
   map = new google.maps.Map(document.getElementById("map"), {
     center: latLng,
     zoom: 15
@@ -142,15 +139,9 @@ function handleConcertClick(eventObj) {
   // window = new google.maps.InfoWindow({
   //   content: eventObj.venueName
   // });
-<<<<<<< HEAD
-
-  getYelpData(latLng, "bar", "images/yellow-dot.png");
-  getYelpData(latLng, "food", "images/blue-dot.png");
-=======
   $(".foodInfo > div").remove();
   getYelpData(latLng, 'bar', 'images/yellow-dot.png');
   getYelpData(latLng, 'food', 'images/blue-dot.png');
->>>>>>> f73f68f26cbd854e164b4ae28c24a9bb51967eeb
 
   // getYelpBreweries(latLng);
   // getYelpRestaurants(latLng);
@@ -191,16 +182,10 @@ function createShowDOMElement(eventDetails) {
     }
   });
   var listingRow = $("<div>").addClass("listing row");
-  var artistImage = $("<div>").addClass(
-    "artist col-lg-6 col-md-6 col-xs-6 col-sm-6"
-  );
+  var artistImage = $("<div>").addClass("artist col-lg-6 col-md-6 col-xs-6 col-sm-6");
   var imageDiv = $("<div>").addClass("image-div");
-  var image = $("<img>")
-    .attr("src", eventDetails.eventImage.url)
-    .addClass("show-image");
-  var showInfo = $("<div>").addClass(
-    "show-info col-lg-6 col-md-6 col-xs-6 col-sm-6"
-  );
+  var image = $("<img>").attr("src", eventDetails.eventImage.url).addClass('show-image');
+  var showInfo = $("<div>").addClass("show-info col-lg-6 col-md-6 col-xs-6 col-sm-6");
   var showName = $("<p>")
     .text(eventDetails.eventName)
     .addClass("show-name");
@@ -213,9 +198,7 @@ function createShowDOMElement(eventDetails) {
     .attr("src", eventDetails.ticketURL)
     .text("BUY TICKETS")
     .addClass("ticket-link hidden-md hidden-lg");
-  var showDate = `${eventDetails.eventDate.slice(
-    5
-  )}-${eventDetails.eventDate.slice(0, 4)}`;
+  var showDate = `${eventDetails.eventDate.slice(5)}-${eventDetails.eventDate.slice(0, 4)}`;
   var showTime = parseInt(eventDetails.startTime.slice(0, 2));
   var showVenue = $("<p>")
     .text(`Venue: ${eventDetails.venueName}`)
@@ -234,14 +217,7 @@ function createShowDOMElement(eventDetails) {
 
   imageDiv.append(image);
   artistImage.append(imageDiv);
-  showInfo.append(
-    mobileTicketLink,
-    showName,
-    mobileDetails,
-    showDetails,
-    showVenue,
-    ticketLink
-  );
+  showInfo.append(mobileTicketLink, showName, mobileDetails, showDetails, showVenue, ticketLink);
   listingRow.append(artistImage, showInfo);
   listing.append(listingRow);
 
@@ -297,7 +273,7 @@ function renderMarker(place, color) {
   });
 }
 
-function createWindowHandler(place, marker) {
+function createWindowHandler(place, marker){
   infoWindow.content = getContentString(place);
   infoWindow.open(map, marker);
   let info = populateFoodSideBar(place);
@@ -318,20 +294,8 @@ function getContentString(place) {
     place.closed = "Closed";
   }
   var contentString =
-    "<img " +
-    "src='" +
-    place.image +
-    "'" +
-    " class=" +
-    "'markerImg'" +
-    ">" +
-    "<h3>" +
-    place.name +
-    "</h4><h4>" +
-    place.phoneNumber +
-    "</h4><h4>" +
-    place.closed;
-  return contentString;
+    "<img "+'src=\'' + place.image + '\'' + " class="+ '\'markerImg\''+ ">" + "<h3>" + place.name + "</h4><h4>" + place.phoneNumber + "</h4><h4>" + place.closed;
+    return contentString;
 }
 
 /***************************************************************************
@@ -358,11 +322,12 @@ function populateFoodSideBar(place){
   let address = $("<p>", {
     text: place.address
   });
-  let rating = $("<p>", {
-    text: "Rating: " + place.rating
+  let rating = $('<p>', {
+    'text': 'Rating: ' + place.rating
+
   });
-  let distance = $("<p>", {
-    text: place.distance.toFixed(2) + " miles away from venue"
+  let distance = $('<p>', {
+      'text': place.distance.toFixed(2) + ' miles away from venue'
   });
   let yelp = $("<a>", {
     href: place.url,
@@ -420,15 +385,10 @@ function getYelpData(latLng, type, color) {
       longitude: latLng.lng,
       term: type,
       radius: 40000,
-      api_key:
-        "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
+      api_key: "VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
     },
     success: function(data) {
-      for (
-        let arrayIndex = 0;
-        arrayIndex < data.businesses.length;
-        arrayIndex++
-      ) {
+      for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
         let newObj = createYelpObj(data, arrayIndex);
         arrayOfPlaces.push(newObj);
       }
@@ -450,9 +410,7 @@ function getYelpData(latLng, type, color) {
 function createYelpObj(data, arrayIndex) {
   let newObj = {};
   newObj.name = data.businesses[arrayIndex].name;
-  newObj.address = data.businesses[arrayIndex].location.display_address.join(
-    "\n"
-  );
+  newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
   newObj.closed = data.businesses[arrayIndex].is_closed;
   newObj.rating = data.businesses[arrayIndex].rating;
   newObj.url = data.businesses[arrayIndex].url;
@@ -483,8 +441,7 @@ function getTicketMasterConcerts(obj) {
     data: data_object,
     dataType: "json",
     method: "get",
-    url:
-      "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
+    url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
     success: function(response) {
       if (!response._embedded) {
         searchErrorAlert();
@@ -545,7 +502,7 @@ function scrollPage(element) {
         {
           scrollTop: $("#map").offset().top - 60
         },
-        2000
+        1500
       );
       break;
   }
@@ -559,8 +516,6 @@ function scrollPage(element) {
  */
 function searchErrorAlert() {
   $(".error-message")
-    .text(
-      "No search results found. Please check the spelling of your city and/or specified date."
-    )
+    .text("No search results found. Please check the spelling of your city and/or specified date.")
     .addClass("bg-danger");
 }
