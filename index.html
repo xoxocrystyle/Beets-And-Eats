@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Montserrat:400,700" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Abril+Fatface" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
@@ -50,7 +50,7 @@
                 <li class="nav-item">
                     <a href="#event-page">EVENTS</a>
                 </li>
-                <li class="nav-item">
+                <li class="navs-item">
                     <a href="#map">MAP</a>
                 </li>
             </ul>
@@ -59,15 +59,18 @@
 
     <div class="container-fluid">
         <!-- Landing Page-->
-        <section class ="landing-page" id="home-page">
+        <section class="landing-page" id="home-page">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="start_title">Beets & Eats</div>
-                    <div class="start_button"><span>Lettuce Plan Your Night</span></div>
-            </div>
+                    <div class="start_button">
+                        <span>Lettuce Plan Your Night</span>
+                    </div>
+                </div>
         </section>
         <section class="input-container row" id="search-page">
             <div class="search-container">
+                <div class="search_tag_line"><span>Choose a Location and Date</span></div>
                 <div class="search-fields row">
                     <div class="row">
                         <div class="input-group-lg col-lg-7 col-xs-8">
@@ -90,7 +93,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <button type="button" class="submit-button btn btn-default btn-lg">SHOW ME</button>
+                            <button type="button" class="submit-button btn btn-default btn-lg">SHOW THYME</button>
                         </div>
                     </div>
 
@@ -104,12 +107,12 @@
         </section>
 
         <section class="show-container" id="event-page">
-
+            <div class="show_tag_line"><span>Which Event Looks Good?</span></div>
         </section>
-    </div>
-    <div class="wrapper">
-        <div id="map">
         </div>
+        <div class="wrapper">
+            <div id="map">
+            </div>
 
         <div class="informationOverlay">
             <section class='eventInfo'>
@@ -133,6 +136,7 @@
         </div>
 
     </div>
+
 </body>
 
 </html>
