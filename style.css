@@ -95,6 +95,15 @@ body {
   border-color: white;
   background-color: white;
 }
+.search_tag_line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  font-size: 3vmax;
+  font-family: 'Abril Fatface', cursive;
+  color: cadetblue;
+}
 .submit-button {
   width: 100%;
 }
@@ -107,7 +116,15 @@ body {
   height: 100%;
   background-color: rgba(255, 255, 255, 0.5);
 }
-
+.show_tag_line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  font-size: 3vmax;
+  font-family: 'Abril Fatface', cursive;
+  color: cadetblue;
+}
 .media {
   margin-top: 0;
 }
