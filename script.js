@@ -1,14 +1,6 @@
 $(document).ready(initializeApp);
 let map;
 let infoWindow;
-let mapStyle = [
-  {
-    "featureType": "poi",
-    "stylers": [
-      { "visibility": "off" }
-    ]
-  }
-]
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
  * @params {undefined}
@@ -28,8 +20,7 @@ function renderInitialMap() {
   let usa = { lat: 33.9584404, lng: -118.3941214 };
   map = new google.maps.Map(document.getElementById("map"), {
     center: usa,
-    zoom: 3,
-    styles: mapStyle
+    zoom: 3
   });
   infoWindow = new google.maps.InfoWindow();
 }
@@ -235,8 +226,7 @@ function handleConcertClick(eventObj) {
   };
   map = new google.maps.Map(document.getElementById("map"), {
     center: latLng,
-    zoom: 16,
-    styles: mapStyle
+    zoom: 16
   });
   let marker = new google.maps.Marker({
     position: latLng,
