@@ -20,7 +20,7 @@ body {
 
 
 .navbar-default.scrolled{
-  background: #fff !important;
+  background: #fff;
   transition: background-color 200ms linear;
   color: gray;
 }
@@ -42,6 +42,7 @@ body {
 .navbar-default.scrolled .navbar-nav>li>a{
   color:  #000;
   margin-right:  20px;
+}
 
 .navbar-default .navbar-nav > li > a {
   color: #fff;
@@ -87,15 +88,6 @@ body {
   color: seashell;
   text-shadow: 0 0 30px black;
 }
-/*.tag_line {*/
-/*display: flex;*/
-/*justify-content: center;*/
-/*align-items: center;*/
-/*font-size: 3vmin;*/
-/*color: seashell;*/
-/*text-shadow: 0 0 10px black;*/
-/*margin-bottom: 2%;*/
-/*}*/
 .start_button {
   display: flex;
   justify-content: center;
