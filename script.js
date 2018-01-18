@@ -136,15 +136,24 @@ function handleConcertClick(eventObj) {
     map: map
   });
 
-  // window = new google.maps.InfoWindow({
-  //   content: eventObj.venueName
-  // });
-  $(".foodInfo > div").remove();
+  marker.addListener("click", function() {
+    openVenueWindow(eventObj, marker);
+  });
+
+  $(".foodInfo > sectionInfo").remove();
   getYelpData(latLng, 'bar', 'images/yellow-dot.png');
   getYelpData(latLng, 'food', 'images/blue-dot.png');
 
   // getYelpBreweries(latLng);
   // getYelpRestaurants(latLng);
+}
+
+function openVenueWindow(place, marker){
+  infoWindow.close();
+  infoWindow = new google.maps.InfoWindow({
+    content:  '<h4>' + place.venueName + '</h4>'
+  })
+  infoWindow.open(map, marker);
 }
 
 /***************************************************************************
@@ -176,7 +185,7 @@ function createShowDOMElement(eventDetails) {
         handleConcertClick(eventDetails);
         scrollPage("map");
         let info = populateEventSideBar(eventDetails);
-        $(".eventInfo > div").remove();
+        $(".eventInfo .sectionInfo").remove();
         $(".eventInfo").append(info);
       }
     }
@@ -268,16 +277,20 @@ function renderMarker(place, color) {
     map: map,
     icon: color
   });
-  google.maps.event.addListener(marker, "click", function() {
-    createWindowHandler(place, marker);
+
+  marker.addListener("click", function() {
+    openWindow(place, marker);
   });
 }
 
-function createWindowHandler(place, marker){
-  infoWindow.content = getContentString(place);
+function openWindow(place, marker){
+  infoWindow.close();
+  infoWindow = new google.maps.InfoWindow({
+    content:  getContentString(place)
+  })
   infoWindow.open(map, marker);
+  $(".foodInfo > .sectionInfo").remove(); //empty the existing info
   let info = populateFoodSideBar(place);
-  $(".foodInfo > div").remove();
   $(".foodInfo").append(info);
 }
 
@@ -294,7 +307,7 @@ function getContentString(place) {
     place.closed = "Closed";
   }
   var contentString =
-    "<img "+'src=\'' + place.image + '\'' + " class="+ '\'markerImg\''+ ">" + "<h3>" + place.name + "</h4><h4>" + place.phoneNumber + "</h4><h4>" + place.closed;
+    "<h4>" + place.name + "</h4><p>" + place.distance.toFixed(2) + " miles away from venue</p><p>" + place.closed;
     return contentString;
 }
 
@@ -306,7 +319,7 @@ function getContentString(place) {
  */
 
 function populateFoodSideBar(place){
-  let container = $('<div>');
+  let container = $('<div>').addClass('sectionInfo');
   let image = $('<div>', {
     'class': 'foodImage',
     'css': {
@@ -344,7 +357,7 @@ function populateFoodSideBar(place){
  * @returns [object] createddom element
  */
 function populateEventSideBar(eventLocation) {
-  let container = $("<div>");
+  let container = $("<div>").addClass('sectionInfo');;
   let image = $('<div>', {
     'class': 'eventImage',
     'css': {

@@ -188,6 +188,10 @@ body {
   font-size: 2vmin;
 }
 
+.infoTitle{
+  text-align: center;
+}
+
 .mapKey {
   position: absolute;
   right: 3%;
@@ -204,21 +208,7 @@ body {
   padding: 0;
 }
 
-.mapKey > ul > li {
-  display: inline-block;
-}
-
-.mapKey > ul > li > p {
-  display: inline-block;
-  font-size: 1vmin;
-}
-
-.mapKey > ul > li > img {
-  display: inline-block;
-  width: 50%;
-}
-
-.eventInfo > div, .foodInfo > div  {
+.eventInfo > .sectionInfo, .foodInfo > .sectionInfo  {
   width: 100%;
 }
 
@@ -250,4 +240,12 @@ body {
 .markerImg {
   height: 100px;
   width: 150px;
+}
+
+.markerKey, .informationOverlay h4 {
+  display: inline-block;
+}
+
+img.markerKey {
+  width: 10%;
 }
