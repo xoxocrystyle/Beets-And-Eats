@@ -28,7 +28,6 @@ body {
 .navbar-default .navbar-brand {
   color: #fff;
   padding-left: 64%;
-
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -110,7 +109,7 @@ body {
 
 /* Search Page CSS  */
 
-.search_tag_line {
+.search_tag_line > span {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -127,7 +126,7 @@ body {
   margin: 2% auto;
 }
 
-.landing-page{
+.landing-page {
   margin: 0% auto;
 }
 
