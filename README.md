@@ -8,9 +8,9 @@ Hackathon project involving the combination of different data sources into an ap
 - Must be issue-managed via meistertask 
 
 ### Beets and Eats
-> [Website](http://beetsandeats.andreawayte.com)
-> 2 days to incoporate 3 APIs to create web application of choice
->Contribution to project: Google Maps API, render location, populate maps with locations of restaurants, bars, and venue location
+> - [Website](http://beetsandeats.andreawayte.com)
+> - 2 days to incoporate 3 APIs to create web application of choice
+> - Contribution to project: Google Maps API, render location, populate maps with locations of restaurants, bars, and venue location
 
 
 
