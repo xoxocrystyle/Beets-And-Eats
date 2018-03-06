@@ -227,7 +227,7 @@ function handleConcertClick(eventObj) {
   };
   map = new google.maps.Map(document.getElementById("map"), {
     center: latLng,
-    zoom: 15
+    zoom: 16
   });
   let marker = new google.maps.Marker({
     position: latLng,
