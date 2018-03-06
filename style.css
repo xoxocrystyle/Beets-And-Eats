@@ -37,7 +37,7 @@ body {
 
 .navbar-default .navbar-brand {
 	color: #fff;
-	text-shadow: 0px 0px 5px black;
+	text-shadow: 0px 0px 2px black;
 	padding-left: 64%;
 }
 
@@ -53,11 +53,13 @@ body {
 }
 .navbar-default.scrolled .navbar-brand {
 	color: #000;
+	text-shadow: 0px 0px 15px white;
 	margin-left: 20px;
 }
 
 .navbar-default.scrolled .navbar-nav > li > a {
 	color: #000;
+	text-shadow: 0px 0px 15px white;
 	margin-right: 20px;
 }
 

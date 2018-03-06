@@ -1,5 +1,6 @@
 $(document).ready(initializeApp);
 let map;
+let markers;
 let infoWindow;
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
@@ -288,15 +289,9 @@ function renderShowsOnDOM(eventDetailsArray) {
  * @returns {undefined} DOM element
  */
 
-<<<<<<< HEAD
-function renderShowsOnDOM(eventDetails) {
-  var listing = $("<div>", {
-    class: "row show-listing",
-=======
 function createShowDOMElement(eventDetails) {
   let listing = $("<div>", {
     class: "show-listing col-lg-6 col-md-6 col-xs-12 col-sm-12",
->>>>>>> 04d2c47ced350b41559f02a7c391257d02994cc3
     on: {
       click: function() {
         handleConcertClick(eventDetails);
