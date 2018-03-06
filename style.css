@@ -175,6 +175,8 @@ body {
 
 .show-listing {
   border-radius: 10px;
+  border: 3px solid transparent;
+  box-shadow: 0px 0px 20px 8px transparent;
 }
 
 .show-listing:hover {
