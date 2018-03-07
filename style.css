@@ -9,7 +9,7 @@ body {
 	background: linear-gradient(to bottom right, papayawhip, paleturquoise);
 	background-attachment: fixed;
 	background-repeat: no-repeat;
-	font-family: "Montserrat", sans-serif;
+	font-family: 'Montserrat', sans-serif;
 }
 
 /* Navigation Bar CSS */
@@ -54,7 +54,6 @@ body {
 .navbar-default.scrolled .navbar-brand {
 	color: #000;
 	text-shadow: 0px 0px 15px white;
-	margin-left: 20px;
 }
 
 .navbar-default.scrolled .navbar-nav > li > a {
@@ -92,7 +91,7 @@ body {
 	flex-flow: column;
 	height: 100vh;
 	/*width: 100vw;*/
-	background: url("images/brewsky.png") no-repeat center center fixed;
+	background: url('images/brewsky.png') no-repeat center center fixed;
 	background-size: cover;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -101,7 +100,7 @@ body {
 .start_title {
 	display: flex;
 	justify-content: center;
-	font-family: "Abril Fatface", cursive;
+	font-family: 'Abril Fatface', cursive;
 	font-size: 15vmin;
 	color: seashell;
 	text-shadow: 0 0 30px black;
@@ -117,7 +116,7 @@ body {
 	align-items: center;
 	color: grey;
 	border: 3px solid white;
-	font-family: "Montserrat", sans-serif;
+	font-family: 'Montserrat', sans-serif;
 	font-size: 3vmin;
 	height: 3vmax;
 	width: 50%;
@@ -139,7 +138,7 @@ body {
 	align-items: center;
 	margin: auto;
 	font-size: 3vmax;
-	font-family: "Abril Fatface", cursive;
+	font-family: 'Abril Fatface', cursive;
 	color: cadetblue;
 	cursor: default;
 }
@@ -167,7 +166,7 @@ body {
 	align-items: center;
 	margin: auto;
 	font-size: 3vmax;
-	font-family: "Abril Fatface", cursive;
+	font-family: 'Abril Fatface', cursive;
 	color: cadetblue;
 }
 .media {
@@ -191,8 +190,8 @@ body {
 }
 
 #map {
-  height: 100%;
-  width: 100%;
+	height: 100%;
+	width: 100%;
 }
 
 .show-name {
