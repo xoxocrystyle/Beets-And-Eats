@@ -239,19 +239,21 @@ body {
 	width: 100%;
 }
 .wrapper {
-	position: relative;
+  position: relative;
+  display: inline-block;
+  width: 74%;
 }
 
 .informationOverlay {
-	position: absolute;
-	top: 6%;
-	left: 0;
-	z-index: 99;
-	height: 91%;
-	width: 26%;
-	padding: 2%;
-	background-color: #ffffff;
-	overflow: auto;
+  z-index: 99;
+  height: 100%;
+  width: 26%;
+  padding: 2%;
+  background-color: #ffffff;
+  overflow: scroll;
+  float: left;
+  
+
 }
 
 .informationOverlay h4 {
@@ -322,4 +324,16 @@ img.markerKey {
 .map-event-name,
 .map-food-name {
 	font-weight: 700;
+}
+
+@media all and (max-width: 780px) {
+  .informationOverlay{
+    float: none;
+    width: 100%;
+  }
+
+  .wrapper {
+    position: relative;
+    display: inline;
+  }
 }
