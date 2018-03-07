@@ -261,7 +261,9 @@ function handleConcertClick(eventObj) {
 	});
 	let marker = new google.maps.Marker({
 		position: latLng,
-		map: map
+		map: map,
+		//icon provided by freepik.com
+		icon: 'images/stage.png'
 	});
 
 	marker.addListener('click', function() {
@@ -269,8 +271,9 @@ function handleConcertClick(eventObj) {
 	});
 
 	$('.foodInfo  .sectionInfo').remove();
-	getYelpData(latLng, 'bar', 'images/yellow-dot.png');
-	getYelpData(latLng, 'food', 'images/blue-dot.png');
+	//icons provided by freepik.com
+	getYelpData(latLng, 'bar', 'images/drink.png');
+	getYelpData(latLng, 'food', 'images/food.png');
 }
 /***************************************************************************
  * openVenueWindow - opens marker window for venue marker
@@ -379,7 +382,6 @@ function createMarkers(array, color) {
 	for (let location = 0; location < array.length; location++) {
 		let place = array[location];
 		renderMarker(place, color);
-		console.log(place)
 	}
 }
 
@@ -397,7 +399,6 @@ function renderMarker(place, color) {
 		map: map,
 		icon: color
 	});
-
 
 	marker.addListener('click', function() {
 		openWindow(place, marker);
@@ -433,11 +434,10 @@ function getContentString(place) {
 	} else {
 		place.closed = 'Closed';
 	}
-	let contentString =
-		`<a href=${place.url} target="_blank">
+	let contentString = `<a href=${place.url} target="_blank">
 			<h4>${place.name}</h4>
 		</a>
-		<p>${place.distance.toFixed(2)} miles away from ${eventLocation}</p>`
+		<p>${place.distance.toFixed(2)} miles away from ${eventLocation}</p>`;
 
 	return contentString;
 }
@@ -502,7 +502,7 @@ function populateEventSideBar(eventLocation) {
 		html: 'Venue: ' + `<span class="eventLocation">${eventLocation.venueName}</span>`
 	});
 	let time = $('<p>', {
-		text: 'Event Time: ' +  eventLocation.startTime
+		text: 'Event Time: ' + eventLocation.startTime
 	});
 	let tickets = $('<a>', {
 		href: eventLocation.ticketURL,
@@ -582,11 +582,11 @@ function scrollPage(element) {
 /***************************************************************************
  * Listens for window scroll and collpase menu
  */
-$(window).on('scroll', function () {
+$(window).on('scroll', function() {
 	$('.navbar-collapse.collapse').removeClass('in');
 	$('.navbar-collapse.collapse').attr('aria-expanded', false);
 	return false;
-})
+});
 
 /***************************************************************************
  * anonymous function - navigation bar changes color on scroll
