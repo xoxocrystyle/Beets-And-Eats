@@ -39,7 +39,9 @@ Begin by entering the location and date of the night you want to plan. Next, scr
 Beets and Eats is the result of a 2 day Hackathon project at Learning Fuze, web development program. The idea spawned from the need to find good restaurants and drinks near a venue location. The goal is for users to easily plan an evening without having to walk far!
 
 
-![Landing Page](images/landingpage.jpg) ![Search for Events](images/searchpage.jpg)
-![Listings Page](images/listings.jpg) ![Map Page](images/map.jpg)
+![Landing Page](images/landingpage.jpg) | ![Search for Events](images/searchpage.jpg)
+:-------------------------:|:-------------------------:
+
+![Listings Page](images/listings.jpg) | ![Map Page](images/map.jpg)
 
 
