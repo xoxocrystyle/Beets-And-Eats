@@ -580,6 +580,15 @@ function scrollPage(element) {
 }
 
 /***************************************************************************
+ * Listens for window scroll and collpase menu
+ */
+$(window).on('scroll', function () {
+	$('.navbar-collapse.collapse').removeClass('in');
+	$('.navbar-collapse.collapse').attr('aria-expanded', false);
+	return false;
+})
+
+/***************************************************************************
  * anonymous function - navigation bar changes color on scroll
  * @param {undefined} none
  * @returns: {undefined}
