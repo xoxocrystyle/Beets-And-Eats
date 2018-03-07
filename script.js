@@ -379,6 +379,7 @@ function createMarkers(array, color) {
 	for (let location = 0; location < array.length; location++) {
 		let place = array[location];
 		renderMarker(place, color);
+		console.log(place)
 	}
 }
 
@@ -396,6 +397,7 @@ function renderMarker(place, color) {
 		map: map,
 		icon: color
 	});
+
 
 	marker.addListener('click', function() {
 		openWindow(place, marker);
@@ -425,18 +427,18 @@ function openWindow(place, marker) {
  * @returns [string] content stringified
  */
 function getContentString(place) {
+	var eventLocation = $('span.eventLocation').text();
 	if (place.closed === false) {
 		place.closed = 'Open';
 	} else {
 		place.closed = 'Closed';
 	}
 	let contentString =
-		'<h4>' +
-		place.name +
-		'</h4><p>' +
-		place.distance.toFixed(2) +
-		' miles away from venue</p><p>' +
-		place.closed;
+		`<a href=${place.url} target="_blank">
+			<h4>${place.name}</h4>
+		</a>
+		<p>${place.distance.toFixed(2)} miles away from ${eventLocation}</p>`
+
 	return contentString;
 }
 
@@ -497,10 +499,10 @@ function populateEventSideBar(eventLocation) {
 		class: 'map-event-name'
 	});
 	let venueName = $('<p>', {
-		text: 'Venue: ' + eventLocation.venueName
+		html: 'Venue: ' + `<span class="eventLocation">${eventLocation.venueName}</span>`
 	});
 	let time = $('<p>', {
-		text: 'Event Time: ' + eventLocation.startTime
+		text: 'Event Time: ' +  eventLocation.startTime
 	});
 	let tickets = $('<a>', {
 		href: eventLocation.ticketURL,
