@@ -239,21 +239,19 @@ body {
 	width: 100%;
 }
 .wrapper {
-  position: relative;
-  display: inline-block;
-  width: 74%;
+	position: relative;
+	display: inline-block;
+	width: 74%;
 }
 
 .informationOverlay {
-  z-index: 99;
-  height: 100%;
-  width: 26%;
-  padding: 2%;
-  background-color: #ffffff;
-  overflow: scroll;
-  float: left;
-  
-
+	z-index: 99;
+	height: 100%;
+	width: 26%;
+	padding: 2%;
+	background-color: #ffffff;
+	overflow: scroll;
+	float: left;
 }
 
 .informationOverlay h4 {
@@ -369,5 +367,18 @@ img.markerKey {
 	}
 	.collapsed {
 		background-color: white;
+	}
+}
+
+/* Google Map Media Query */
+
+@media all and (max-width: 780px) {
+	.informationOverlay {
+		float: none;
+		width: 100%;
+	}
+	.wrapper {
+		position: relative;
+		display: inline;
 	}
 }
