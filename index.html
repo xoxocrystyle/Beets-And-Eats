@@ -15,9 +15,10 @@
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
 </head>
 
-<body>
+<!-- <body>
     <!--Navigation Bar-->
-    <nav class="visible-md visible-lg navbar navbar-default navbar-fixed-top">
+<nav class="visible-md visible-lg navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#home-page">HOME</a>
         </div>
@@ -32,9 +33,12 @@
                 <a href="#map">MAP</a>
             </li>
         </ul>
-    </nav>
-    <!--Mobile Navigation Bar-->
-    <nav class="visible-sm visible-xs navbar navbar-default navbar-fixed-top">
+    </div>
+</nav>
+<!--Mobile Navigation Bar-->
+<nav class="visible-sm visible-xs navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+
         <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#mobile-nav-bar" aria-expanded="false">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -56,55 +60,48 @@
                 </li>
             </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <div class="container-fluid">
-        <!-- Landing Page-->
-        <section class="landing-page" id="home-page">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="start_title">Beets & Eats</div>
-                    <div class="start_button">
-                        <span>Lettuce Plan Your Night</span>
-                    </div>
-                </div>
+<div class="container-fluid">
+    <!-- Landing Page-->
+    <section class="landing-page row " id="home-page">
+        <div class="col-lg-12">
+            <div class="start_title">Beets & Eats</div>
+            <div class="start_button">
+                <span>Lettuce Plan Your Night</span>
             </div>
-        </section>
-        <!--Search Section-->
-        <section class="input-container row" id="search-page">
-            <div class="search-container">
-                <div class="search_tag_line">
-                    <span>Choose a Location and Date</span>
+        </div>
+    </section>
+    <!--Search Section-->
+    <section class="input-container row" id="search-page">
+        <div class="search-container">
+            <div class="search_tag_line row">
+                <span class='col-xs-12'>Choose a Location and Date</span>
+            </div>
+            <div class="search-fields row">
+                <div class="row">
+                    <div class="input-group-lg col-lg-7 col-xs-8">
+                        <input type="text" class="city-name form-control" placeholder="City">
+                    </div>
+                    <div class="input-group-lg col-lg-5 col-xs-4">
+                        <input type="text" class="state-code form-control" placeholder="State" maxlength="2">
+                    </div>
                 </div>
-                <div class="search-fields row">
-                    <div class="row">
-                        <div class="input-group-lg col-lg-7 col-xs-8">
-                            <input type="text" class="city-name form-control" placeholder="City">
-                        </div>
-                        <div class="input-group-lg col-lg-5 col-xs-4">
-                            <input type="text" class="state-code form-control" placeholder="State" maxlength="2">
-                        </div>
+                <div class="row">
+                    <div class="input-group-lg col-lg-3 col-xs-4">
+                        <input type="text" class="event-month form-control" placeholder="MM" maxlength="2">
                     </div>
-                    <div class="row">
-                        <div class="input-group-lg col-lg-3 col-xs-4">
-                            <input type="text" class="event-month form-control" placeholder="MM" maxlength="2">
-                        </div>
-                        <div class="input-group-lg col-lg-3 col-xs-3">
-                            <input type="text" class="event-day form-control" placeholder="DD" maxlength="2">
-                        </div>
-                        <div class="input-group-lg col-lg-6 col-xs-5">
-                            <input type="text" class="event-year form-control" placeholder="YYYY" maxlength="4">
-                        </div>
+                    <div class="input-group-lg col-lg-3 col-xs-3">
+                        <input type="text" class="event-day form-control" placeholder="DD" maxlength="2">
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <button type="button" class="submit-button btn btn-default btn-lg">SHOW THYME</button>
-                        </div>
+                    <div class="input-group-lg col-lg-6 col-xs-5">
+                        <input type="text" class="event-year form-control" placeholder="YYYY" maxlength="4">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <p class="error-message"></p>
+                        <button type="button" class="submit-button btn btn-default btn-lg">SHOW THYME</button>
                     </div>
                 </div>
             </div>
@@ -117,6 +114,7 @@
     <div class="wrapper">
         <div id="map"></div>
     </div>
+
     <div class="informationOverlay">
         <section class='eventInfo'>
             <div class='infoTitle'>
@@ -137,6 +135,7 @@
             </div>
         </section>
     </div>
+</div>
 </body>
 
 </html>
