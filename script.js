@@ -261,16 +261,21 @@ function handleConcertClick(eventObj) {
 	});
 	let marker = new google.maps.Marker({
 		position: latLng,
-		map: map
+		map: map,
+		//icon provided by freepik.com
+		icon: 'images/stage.png'
 	});
 
 	marker.addListener("click", function () {
 		openVenueWindow(eventObj, marker);
 	});
 
-	$(".foodInfo  .sectionInfo").remove();
-	getYelpData(latLng, "bar", "images/yellow-dot.png");
-	getYelpData(latLng, "food", "images/blue-dot.png");
+
+	$('.foodInfo  .sectionInfo').remove();
+	//icons provided by freepik.com
+	getYelpData(latLng, 'bar', 'images/drink.png');
+	getYelpData(latLng, 'food', 'images/food.png');
+
 }
 /***************************************************************************
  * openVenueWindow - opens marker window for venue marker
@@ -397,7 +402,7 @@ function renderMarker(place, color) {
 		icon: color
 	});
 
-	marker.addListener("click", function () {
+	marker.addListener('click', function() {
 		openWindow(place, marker);
 	});
 }
@@ -434,6 +439,7 @@ function getContentString(place) {
 	let contentString = `<a href=${place.url} target="_blank">
 			<h4>${place.name}</h4>
 		</a>
+
 		<p>${place.phoneNumber}</p>
 		<p>${place.distance.toFixed(2)} miles away from ${eventLocation}</p>
 		<p>${place.price}</p>`;
@@ -593,6 +599,7 @@ function scrollPage(element) {
 $(window).on("scroll", function () {
 	$(".navbar-collapse.collapse").removeClass("in");
 	$(".navbar-collapse.collapse").attr("aria-expanded", false);
+
 	return false;
 });
 
