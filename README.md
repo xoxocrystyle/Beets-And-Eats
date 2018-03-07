@@ -1,16 +1,45 @@
-# Learning Fuze Hackathon
+# Beets and Eats
 
-Hackathon project involving the combination of different data sources into an application or game
+An event planning application to help you plan the drinks and eats near an event of your choice! 
 
-### Requirements
-- Combine at least 3 **external** resources via AJAX requests and present their information in an application
-- Must be documented loosely on JSDOC standards
-- Must be issue-managed via meistertask 
+## Getting Started
 
-### Beets and Eats
-> - [Website](http://beetsandeats.andreawayte.com)
-> - 2 days to incoporate 3 APIs to create web application of choice
-> - Contribution to project: Google Maps API, render location, populate maps with locations of restaurants, bars, and venue location
+Begin by entering the location and date of the night you want to plan. Next, scroll through the list of events which you can purchase tickets through Ticketmaster. When you find the event you want, click it and you will be guided to the maps section. The map will be populated with both restaurants and bars located near the event venue. The markers are colored according to their type, drinks or eats. The user can click a marker to see basic information, or look to the sidebar to see a more detailed description. Enjoy your night!
 
+
+## Built With
+
+* Javascript
+* jQuery
+* AJAX
+* HTML5
+* CSS3
+* Bootstrap3
+* Google Maps API
+* Yelp API
+* Ticketmaster API
+
+## Tools Used
+
+* Git
+* Github
+* Meistertask
+* JSDocs
+
+## Authors
+
+* Andrea Wayte
+* Crystal Navarro
+* Kelcey Lorenzo
+* Khaleel Younis
+* Nick Quan
+
+## About the Project
+
+Beets and Eats is the result of a 2 day Hackathon project at Learning Fuze, web development program. The idea spawned from the need to find good restaurants and drinks near a venue location. The goal is for users to easily plan an evening without having to walk far!
+
+
+![Landing Page](images/landingpage.jpg) ![Search for Events](images/searchpage.jpg)
+![Listings Page](images/listings.jpg) ![Map Page](images/map.jpg)
 
 
