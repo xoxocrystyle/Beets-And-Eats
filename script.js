@@ -187,7 +187,7 @@ function getTicketMasterConcerts(obj) {
 		dataType: "json",
 		method: "get",
 		url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
-		success: function(response) {
+		success: function (response) {
 			if (!response._embedded) {
 				searchErrorAlert();
 				return;
@@ -230,14 +230,14 @@ function getYelpData(latLng, type, color) {
 			api_key:
 				"VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
 		},
-		success: function(data) {
+		success: function (data) {
 			for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
 				let newObj = createYelpObj(data, arrayIndex);
 				arrayOfPlaces.push(newObj);
 			}
 			createMarkers(arrayOfPlaces, color);
 		},
-		error: function() {
+		error: function () {
 			console.error("The server returned no information.");
 		}
 	};
@@ -264,7 +264,7 @@ function handleConcertClick(eventObj) {
 		map: map
 	});
 
-	marker.addListener("click", function() {
+	marker.addListener("click", function () {
 		openVenueWindow(eventObj, marker);
 	});
 
@@ -323,7 +323,7 @@ function createShowDOMElement(eventDetails) {
 	let listing = $("<div>", {
 		class: "show-listing col-lg-6 col-md-6 col-xs-12 col-sm-12",
 		on: {
-			click: function() {
+			click: function () {
 				handleConcertClick(eventDetails);
 				scrollPage("#map");
 				let info = populateEventSideBar(eventDetails);
@@ -379,7 +379,6 @@ function createMarkers(array, color) {
 	for (let location = 0; location < array.length; location++) {
 		let place = array[location];
 		renderMarker(place, color);
-		console.log(place);
 	}
 }
 
@@ -398,7 +397,7 @@ function renderMarker(place, color) {
 		icon: color
 	});
 
-	marker.addListener("click", function() {
+	marker.addListener("click", function () {
 		openWindow(place, marker);
 	});
 }
@@ -435,7 +434,9 @@ function getContentString(place) {
 	let contentString = `<a href=${place.url} target="_blank">
 			<h4>${place.name}</h4>
 		</a>
-		<p>${place.distance.toFixed(2)} miles away from ${eventLocation}</p>`;
+		<p>${place.phoneNumber}</p>
+		<p>${place.distance.toFixed(2)} miles away from ${eventLocation}</p>
+		<p>${place.price}</p>`;
 
 	return contentString;
 }
@@ -467,15 +468,23 @@ function populateFoodSideBar(place) {
 	let rating = $("<p>", {
 		text: "Rating: " + place.rating
 	});
+	let price = $("<p>", {
+		text: "Price: " + place.price
+	});
 	let distance = $("<p>", {
 		text: place.distance.toFixed(2) + " miles away from venue"
 	});
 	let yelp = $("<a>", {
 		href: place.url,
 		text: "WEBSITE",
-		target: "_blank"
+		target: "_blank",
+		css: {
+			"display": "block",
+			"text-align": "center",
+			"font-size": "18px"
+		}
 	});
-	container.append(image, name, distance, address, number, rating, yelp);
+	container.append(image, name, yelp, distance, address, number, rating, price);
 	return container;
 }
 
@@ -521,6 +530,7 @@ function createYelpObj(data, arrayIndex) {
 	newObj.name = data.businesses[arrayIndex].name;
 	newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
 	newObj.closed = data.businesses[arrayIndex].is_closed;
+	newObj.price = data.businesses[arrayIndex].price;
 	newObj.rating = data.businesses[arrayIndex].rating;
 	newObj.url = data.businesses[arrayIndex].url;
 	newObj.image = data.businesses[arrayIndex].image_url;
@@ -580,7 +590,7 @@ function scrollPage(element) {
 /***************************************************************************
  * Listens for window scroll and collpase menu
  */
-$(window).on("scroll", function() {
+$(window).on("scroll", function () {
 	$(".navbar-collapse.collapse").removeClass("in");
 	$(".navbar-collapse.collapse").attr("aria-expanded", false);
 	return false;
@@ -592,8 +602,8 @@ $(window).on("scroll", function() {
  * @returns: {undefined}
  * @calls: none
  */
-$(function() {
-	$(document).scroll(function() {
+$(function () {
+	$(document).scroll(function () {
 		let $nav = $(".navbar-default");
 		$nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
 	});
