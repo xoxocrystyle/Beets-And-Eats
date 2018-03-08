@@ -2,6 +2,7 @@ $(document).ready(initializeApp);
 let map;
 let markers;
 let infoWindow;
+let geocoder;
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
  * @params {undefined}
@@ -13,6 +14,7 @@ function initializeApp() {
 	$(".event-month").on("click", removeDefaultSearch);
 	$(".event-day").on("click", removeDefaultSearch);
 	$(".event-year").on("click", removeDefaultSearch);
+	$(".geolocation-button").on("click", getUserLocation);
 	defaultDate();
 }
 
@@ -615,3 +617,24 @@ $(function () {
 		$nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
 	});
 });
+
+/***************************************************************************
+ *  getUserLocation - Gets user's city and state, and fills input form 
+ * @param {undefined} none
+ * @returns: {undefined}
+ * @calls: none
+ */
+function getUserLocation(){
+	navigator.geolocation.getCurrentPosition(function(position){
+		var geocoder = new google.maps.Geocoder();
+		var location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		geocoder.geocode({'latLng' : location}, function(results, status){
+			if (status == google.maps.GeocoderStatus.OK){
+				var city = results[0].address_components[3].long_name;
+				var state = results[0].address_components[5].short_name;
+				$(".city-name").val(city);
+				$(".state-code").val(state);
+			}
+		});
+	});
+}
