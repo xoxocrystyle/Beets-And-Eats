@@ -13,6 +13,7 @@ function initializeApp() {
 	$(".event-month").on("click", removeDefaultSearch);
 	$(".event-day").on("click", removeDefaultSearch);
 	$(".event-year").on("click", removeDefaultSearch);
+	$(".geolocation-button").on("click", getUserLocation);
 	defaultDate();
 }
 
@@ -615,3 +616,22 @@ $(function () {
 		$nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
 	});
 });
+
+/***************************************************************************
+ *  getUserLocation - get user's current location 
+ * @param {undefined} none
+ * @returns: {undefined}
+ * @calls: none
+ */
+function getUserLocation(position){
+	navigator.geolocation.getCurrentPosition(function(position){
+		var geocoder = new google.maps.Geocoder();
+		var location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		geocoder.geocode({'latLng' : location}, function(results, status){
+			if (status == google.maps.GeocoderStatus.OK){
+			var address=results[0].formatted_address;
+			console.log(address);
+			}
+		});
+	});
+}
