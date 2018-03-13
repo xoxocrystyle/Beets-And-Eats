@@ -325,12 +325,12 @@ function openVenueWindow(place, marker) {
 
 function renderShowsOnDOM(eventDetailsArray) {
 	let row;
+	let allRows = [];
 	let title = $("<div>", {
 		class: "show_tag_line"
 	});
 	let titleText = $("<span>").text("Choose Your Event");
 	title.append(titleText);
-	$(".show-container").append(title);
 
 	for (let index = 0; index < eventDetailsArray.length; index++) {
 		if (index % 2 === 0) {
@@ -338,8 +338,11 @@ function renderShowsOnDOM(eventDetailsArray) {
 			row.append(createShowDOMElement(eventDetailsArray[index]));
 		} else {
 			row.append(createShowDOMElement(eventDetailsArray[index]));
+			allRows.push(row);
 		}
 	}
+	$(".show-container").append(title, allRows);
+
 }
 /***************************************************************************
  * createShowDOMElement - create DOM elements for each show in list, update the on-page list of shows
@@ -348,6 +351,7 @@ function renderShowsOnDOM(eventDetailsArray) {
  */
 
 function createShowDOMElement(eventDetails) {
+	console.log(eventDetails)
 	
 	//Main container for listing
 	let listing = $("<div>", {
@@ -363,17 +367,17 @@ function createShowDOMElement(eventDetails) {
 		}
 	});
 
-	//Bootstrap Column
-	let listingColumn = $("<div>").addClass("listing col-lg-6 col-md-6 col-xs-6 col-sm-6");
+	//Bootstrap Row
+	let listingRow = $("<div>").addClass("listing row");
 
-	//Event Image
-	let artistImage = $("<div>").addClass("artist");
+	//Event Image Column
+	let artistImage = $("<div>").addClass("artist col-lg-6 col-md-6 col-xs-6 col-sm-6");
 	let imageDiv = $("<div>").addClass("image-div");
 	let image = $("<img>")
 		.attr("src", eventDetails.eventImage.url)
 		.addClass("show-image");
 
-	//Bootstrap Column
+	//Event Info Column
 	let showInfo = $("<div>").addClass("show-info col-lg-6 col-md-6 col-xs-6 col-sm-6");
 
 	//Event Details
@@ -382,19 +386,24 @@ function createShowDOMElement(eventDetails) {
 		.addClass("show-name");
 	let showDetails = $("<p>").addClass("show-details hidden-xs hidden-sm");
 	let showDate = `${eventDetails.eventDate.slice(5)}-${eventDetails.eventDate.slice(0, 4)}`;
-	let showTime = parseInt(eventDetails.startTime.slice(0, 2));
 	let showVenue = $("<p>")
 		.text(`Venue: ${eventDetails.venueName}`)
 		.addClass("show-venue hidden-xs hidden-sm");
 	let mobileDetails = $("<p>").addClass("mobile-details hidden-md hidden-lg");
 
+	let showTime = 'TBA';
+
 	//Edit Time of Event
-	if (showTime > 12) {
-		let showHour = showTime - 12;
-		showTime = `${showHour}:${eventDetails.startTime.slice(3, 5)} PM`;
-	} else {
-		showTime = `${eventDetails.startTime.slice(0, 5)} AM`;
+	if(eventDetails.startTime){
+		showTime = parseInt(eventDetails.startTime.slice(0, 2));
+		if (showTime > 12) {
+			let showHour = showTime - 12;
+			showTime = `${showHour}:${eventDetails.startTime.slice(3, 5)} PM`;
+		} else {
+			showTime = `${eventDetails.startTime.slice(0, 5)} AM`;
+		}
 	}
+	
 	showDetails.text(`Date & Time: ${showDate}, ${showTime}`);
 	mobileDetails.text(`${eventDetails.venueName} - ${showDate}, ${showTime}`);
 
@@ -402,9 +411,10 @@ function createShowDOMElement(eventDetails) {
 	imageDiv.append(image);
 	artistImage.append(imageDiv);
 	showInfo.append(showName, mobileDetails, showDetails, showVenue);
-	listingColumn.append(artistImage, showInfo);
+	listingRow.append(artistImage, showInfo);
+	listing.append(listingRow);
 
-	return listingColumn;
+	return listing;
 }
 
 /***************************************************************************
@@ -642,10 +652,9 @@ $(window).on("scroll", function () {
  * @returns: {undefined}
  * @calls: none
  */
-$(function () {
-	$(document).scroll(function () {
-		let $nav = $(".navbar-default");
-		$nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
-	});
+$(document).scroll(function () {
+	let $nav = $(".navbar-default");
+	$nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
 });
+
 
