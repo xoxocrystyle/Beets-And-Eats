@@ -575,18 +575,19 @@ function populateEventSideBar(eventLocation) {
  * @return{object} per location
  */
 function createYelpObj(data, arrayIndex) {
+	var locationObject = data.businesses[arrayIndex]
 	let newObj = {};
-	newObj.name = data.businesses[arrayIndex].name;
-	newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
-	newObj.closed = data.businesses[arrayIndex].is_closed;
-	newObj.price = data.businesses[arrayIndex].price;
-	newObj.rating = data.businesses[arrayIndex].rating;
-	newObj.url = data.businesses[arrayIndex].url;
-	newObj.image = data.businesses[arrayIndex].image_url;
-	newObj.distance = data.businesses[arrayIndex].distance * 0.00062137;
-	newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-	newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-	newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
+	newObj.name = locationObject.name;
+	newObj.address = locationObject.location.display_address.join("\n");
+	newObj.closed = locationObject.is_closed;
+	newObj.price = locationObject.price;
+	newObj.rating = locationObject.rating;
+	newObj.url = locationObject.url;
+	newObj.image = locationObject.image_url;
+	newObj.distance = locationObject.distance * 0.00062137;
+	newObj.phoneNumber = locationObject.display_phone;
+	newObj.latitude = locationObject.coordinates.latitude;
+	newObj.longitude = locationObject.coordinates.longitude;
 	return newObj;
 }
 
@@ -596,18 +597,19 @@ function createYelpObj(data, arrayIndex) {
  * @return{object} per location
  */
 function createEventObject(event, index) {
+	var eventObject = event[index];
 	let object = {};
-	object.eventName = event[index].name;
-	object.startTime = event[index].dates.start.localTime;
-	object.latitude = event[index]._embedded.venues[0].location.latitude;
-	object.longitude = event[index]._embedded.venues[0].location.longitude;
-	object.zipCode = event[index]._embedded.venues[0].postalCode;
-	object.venueName = event[index]._embedded.venues[0].name;
-	object.ticketURL = event[index].url;
-	object.venueUrl = event[index]._embedded.venues[0].url;
-	object.eventImage = event[index].images[0];
-	object.eventDate = event[index].dates.start.localDate;
-	object.note = event[index].pleaseNote;
+	object.eventName = eventObject.name;
+	object.startTime = eventObject.dates.start.localTime;
+	object.latitude = eventObject._embedded.venues[0].location.latitude;
+	object.longitude = eventObject._embedded.venues[0].location.longitude;
+	object.zipCode = eventObject._embedded.venues[0].postalCode;
+	object.venueName = eventObject._embedded.venues[0].name;
+	object.ticketURL = eventObject.url;
+	object.venueUrl = eventObject._embedded.venues[0].url;
+	object.eventImage = eventObject.images[0];
+	object.eventDate = eventObject.dates.start.localDate;
+	object.note = eventObject.pleaseNote;
 	return object;
 }
 
