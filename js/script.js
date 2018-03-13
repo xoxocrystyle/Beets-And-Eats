@@ -2,7 +2,8 @@ $(document).ready(initializeApp);
 let map;
 let markers;
 let infoWindow;
-let geocoder;
+// let geocoder;
+
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
  * @params {undefined}
@@ -14,7 +15,7 @@ function initializeApp() {
 	$(".event-month").on("click", removeDefaultSearch);
 	$(".event-day").on("click", removeDefaultSearch);
 	$(".event-year").on("click", removeDefaultSearch);
-	$(".geolocation-button").on("click", getUserLocation);
+	// $(".geolocation-button").on("click", getUserLocation);
 	defaultDate();
 }
 
@@ -324,12 +325,12 @@ function openVenueWindow(place, marker) {
 
 function renderShowsOnDOM(eventDetailsArray) {
 	let row;
+	let allRows = [];
 	let title = $("<div>", {
 		class: "show_tag_line"
 	});
 	let titleText = $("<span>").text("Choose Your Event");
 	title.append(titleText);
-	$(".show-container").append(title);
 
 	for (let index = 0; index < eventDetailsArray.length; index++) {
 		if (index % 2 === 0) {
@@ -337,9 +338,11 @@ function renderShowsOnDOM(eventDetailsArray) {
 			row.append(createShowDOMElement(eventDetailsArray[index]));
 		} else {
 			row.append(createShowDOMElement(eventDetailsArray[index]));
-			$(".show-container").append(row);
+			allRows.push(row);
 		}
 	}
+	$(".show-container").append(title, allRows);
+
 }
 /***************************************************************************
  * createShowDOMElement - create DOM elements for each show in list, update the on-page list of shows
@@ -348,6 +351,9 @@ function renderShowsOnDOM(eventDetailsArray) {
  */
 
 function createShowDOMElement(eventDetails) {
+	console.log(eventDetails)
+	
+	//Main container for listing
 	let listing = $("<div>", {
 		class: "show-listing col-lg-6 col-md-6 col-xs-12 col-sm-12",
 		on: {
@@ -360,34 +366,48 @@ function createShowDOMElement(eventDetails) {
 			}
 		}
 	});
+
+	//Bootstrap Row
 	let listingRow = $("<div>").addClass("listing row");
+
+	//Event Image Column
 	let artistImage = $("<div>").addClass("artist col-lg-6 col-md-6 col-xs-6 col-sm-6");
 	let imageDiv = $("<div>").addClass("image-div");
 	let image = $("<img>")
 		.attr("src", eventDetails.eventImage.url)
 		.addClass("show-image");
+
+	//Event Info Column
 	let showInfo = $("<div>").addClass("show-info col-lg-6 col-md-6 col-xs-6 col-sm-6");
+
+	//Event Details
 	let showName = $("<p>")
 		.text(eventDetails.eventName)
 		.addClass("show-name");
 	let showDetails = $("<p>").addClass("show-details hidden-xs hidden-sm");
 	let showDate = `${eventDetails.eventDate.slice(5)}-${eventDetails.eventDate.slice(0, 4)}`;
-	let showTime = parseInt(eventDetails.startTime.slice(0, 2));
 	let showVenue = $("<p>")
 		.text(`Venue: ${eventDetails.venueName}`)
 		.addClass("show-venue hidden-xs hidden-sm");
 	let mobileDetails = $("<p>").addClass("mobile-details hidden-md hidden-lg");
 
-	if (showTime > 12) {
-		let showHour = showTime - 12;
-		showTime = `${showHour}:${eventDetails.startTime.slice(3, 5)} PM`;
-	} else {
-		showTime = `${eventDetails.startTime.slice(0, 5)} AM`;
-	}
+	let showTime = 'TBA';
 
+	//Edit Time of Event
+	if(eventDetails.startTime){
+		showTime = parseInt(eventDetails.startTime.slice(0, 2));
+		if (showTime > 12) {
+			let showHour = showTime - 12;
+			showTime = `${showHour}:${eventDetails.startTime.slice(3, 5)} PM`;
+		} else {
+			showTime = `${eventDetails.startTime.slice(0, 5)} AM`;
+		}
+	}
+	
 	showDetails.text(`Date & Time: ${showDate}, ${showTime}`);
 	mobileDetails.text(`${eventDetails.venueName} - ${showDate}, ${showTime}`);
 
+	//Append Dom Elements to Main Container for listing
 	imageDiv.append(image);
 	artistImage.append(imageDiv);
 	showInfo.append(showName, mobileDetails, showDetails, showVenue);
@@ -555,18 +575,19 @@ function populateEventSideBar(eventLocation) {
  * @return{object} per location
  */
 function createYelpObj(data, arrayIndex) {
+	var locationObject = data.businesses[arrayIndex]
 	let newObj = {};
-	newObj.name = data.businesses[arrayIndex].name;
-	newObj.address = data.businesses[arrayIndex].location.display_address.join("\n");
-	newObj.closed = data.businesses[arrayIndex].is_closed;
-	newObj.price = data.businesses[arrayIndex].price;
-	newObj.rating = data.businesses[arrayIndex].rating;
-	newObj.url = data.businesses[arrayIndex].url;
-	newObj.image = data.businesses[arrayIndex].image_url;
-	newObj.distance = data.businesses[arrayIndex].distance * 0.00062137;
-	newObj.phoneNumber = data.businesses[arrayIndex].display_phone;
-	newObj.latitude = data.businesses[arrayIndex].coordinates.latitude;
-	newObj.longitude = data.businesses[arrayIndex].coordinates.longitude;
+	newObj.name = locationObject.name;
+	newObj.address = locationObject.location.display_address.join("\n");
+	newObj.closed = locationObject.is_closed;
+	newObj.price = locationObject.price;
+	newObj.rating = locationObject.rating;
+	newObj.url = locationObject.url;
+	newObj.image = locationObject.image_url;
+	newObj.distance = locationObject.distance * 0.00062137;
+	newObj.phoneNumber = locationObject.display_phone;
+	newObj.latitude = locationObject.coordinates.latitude;
+	newObj.longitude = locationObject.coordinates.longitude;
 	return newObj;
 }
 
@@ -576,18 +597,19 @@ function createYelpObj(data, arrayIndex) {
  * @return{object} per location
  */
 function createEventObject(event, index) {
+	var eventObject = event[index];
 	let object = {};
-	object.eventName = event[index].name;
-	object.startTime = event[index].dates.start.localTime;
-	object.latitude = event[index]._embedded.venues[0].location.latitude;
-	object.longitude = event[index]._embedded.venues[0].location.longitude;
-	object.zipCode = event[index]._embedded.venues[0].postalCode;
-	object.venueName = event[index]._embedded.venues[0].name;
-	object.ticketURL = event[index].url;
-	object.venueUrl = event[index]._embedded.venues[0].url;
-	object.eventImage = event[index].images[0];
-	object.eventDate = event[index].dates.start.localDate;
-	object.note = event[index].pleaseNote;
+	object.eventName = eventObject.name;
+	object.startTime = eventObject.dates.start.localTime;
+	object.latitude = eventObject._embedded.venues[0].location.latitude;
+	object.longitude = eventObject._embedded.venues[0].location.longitude;
+	object.zipCode = eventObject._embedded.venues[0].postalCode;
+	object.venueName = eventObject._embedded.venues[0].name;
+	object.ticketURL = eventObject.url;
+	object.venueUrl = eventObject._embedded.venues[0].url;
+	object.eventImage = eventObject.images[0];
+	object.eventDate = eventObject.dates.start.localDate;
+	object.note = eventObject.pleaseNote;
 	return object;
 }
 
@@ -632,10 +654,9 @@ $(window).on("scroll", function () {
  * @returns: {undefined}
  * @calls: none
  */
-$(function () {
-	$(document).scroll(function () {
-		let $nav = $(".navbar-default");
-		$nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
-	});
+$(document).scroll(function () {
+	let $nav = $(".navbar-default");
+	$nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
 });
+
 
