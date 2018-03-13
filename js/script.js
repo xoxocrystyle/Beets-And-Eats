@@ -2,7 +2,8 @@ $(document).ready(initializeApp);
 let map;
 let markers;
 let infoWindow;
-let geocoder;
+// let geocoder;
+
 /***************************************************************************
  * initializeApp - add click handler to search button, render landing page
  * @params {undefined}
@@ -14,7 +15,7 @@ function initializeApp() {
 	$(".event-month").on("click", removeDefaultSearch);
 	$(".event-day").on("click", removeDefaultSearch);
 	$(".event-year").on("click", removeDefaultSearch);
-	$(".geolocation-button").on("click", getUserLocation);
+	// $(".geolocation-button").on("click", getUserLocation);
 	defaultDate();
 }
 
@@ -337,7 +338,6 @@ function renderShowsOnDOM(eventDetailsArray) {
 			row.append(createShowDOMElement(eventDetailsArray[index]));
 		} else {
 			row.append(createShowDOMElement(eventDetailsArray[index]));
-			$(".show-container").append(row);
 		}
 	}
 }
@@ -348,6 +348,8 @@ function renderShowsOnDOM(eventDetailsArray) {
  */
 
 function createShowDOMElement(eventDetails) {
+	
+	//Main container for listing
 	let listing = $("<div>", {
 		class: "show-listing col-lg-6 col-md-6 col-xs-12 col-sm-12",
 		on: {
@@ -360,13 +362,21 @@ function createShowDOMElement(eventDetails) {
 			}
 		}
 	});
-	let listingRow = $("<div>").addClass("listing row");
-	let artistImage = $("<div>").addClass("artist col-lg-6 col-md-6 col-xs-6 col-sm-6");
+
+	//Bootstrap Column
+	let listingColumn = $("<div>").addClass("listing col-lg-6 col-md-6 col-xs-6 col-sm-6");
+
+	//Event Image
+	let artistImage = $("<div>").addClass("artist");
 	let imageDiv = $("<div>").addClass("image-div");
 	let image = $("<img>")
 		.attr("src", eventDetails.eventImage.url)
 		.addClass("show-image");
+
+	//Bootstrap Column
 	let showInfo = $("<div>").addClass("show-info col-lg-6 col-md-6 col-xs-6 col-sm-6");
+
+	//Event Details
 	let showName = $("<p>")
 		.text(eventDetails.eventName)
 		.addClass("show-name");
@@ -378,23 +388,23 @@ function createShowDOMElement(eventDetails) {
 		.addClass("show-venue hidden-xs hidden-sm");
 	let mobileDetails = $("<p>").addClass("mobile-details hidden-md hidden-lg");
 
+	//Edit Time of Event
 	if (showTime > 12) {
 		let showHour = showTime - 12;
 		showTime = `${showHour}:${eventDetails.startTime.slice(3, 5)} PM`;
 	} else {
 		showTime = `${eventDetails.startTime.slice(0, 5)} AM`;
 	}
-
 	showDetails.text(`Date & Time: ${showDate}, ${showTime}`);
 	mobileDetails.text(`${eventDetails.venueName} - ${showDate}, ${showTime}`);
 
+	//Append Dom Elements to Main Container for listing
 	imageDiv.append(image);
 	artistImage.append(imageDiv);
 	showInfo.append(showName, mobileDetails, showDetails, showVenue);
-	listingRow.append(artistImage, showInfo);
-	listing.append(listingRow);
+	listingColumn.append(artistImage, showInfo);
 
-	return listing;
+	return listingColumn;
 }
 
 /***************************************************************************
