@@ -481,8 +481,7 @@ function getContentString(place) {
 		<p>${place.phoneNumber}</p>
 		<p>${place.distance.toFixed(2)} miles away from ${eventLocation}</p>
 		<p>${place.price}</p>`;
-	contentString = contentString.replace(/\w+/g, " ");
-
+	// contentString = contentString.replace(/\w+/g, "");
 	return contentString;
 }
 
@@ -566,7 +565,7 @@ function populateEventSideBar(eventLocation) {
 }
 
 /***************************************************************************
- * createYelpObj - creates an object for each iteration of the yelp ajax call
+ * createYelpObj - creates an object for each iteration of the Yelp ajax call
  * @param{object, arrayIndex} event object and current Index
  * @return{object} per location
  */
