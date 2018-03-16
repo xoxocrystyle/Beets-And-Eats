@@ -47,13 +47,11 @@ body {
 .navbar-default .navbar-brand {
 	color: #fff;
 	text-shadow: 0px 0px 2px black;
-	padding-left: 64%;
 }
 
 .navbar-brand:hover {
 	color: black;
 	text-shadow: 0px 0px 15px white;
-	padding-left: 64%;
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -127,6 +125,7 @@ body {
 	font-size: 3vmin;
 	height: 3vmax;
 	width: 50%;
+	height: 10%;
 	border-radius: 5px;
 	background-color: rgba(255, 255, 255, 0.3);
 	margin: auto;
@@ -148,6 +147,10 @@ body {
 	font-family: Abril;
 	color: cadetblue;
 	cursor: default;
+}
+
+.state-code {
+	text-transform: uppercase
 }
 .submit-button {
 	width: 100%;
