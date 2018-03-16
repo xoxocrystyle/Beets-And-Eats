@@ -150,7 +150,7 @@ body {
 }
 
 .state-code {
-	text-transform: uppercase
+	text-transform: uppercase;
 }
 .submit-button {
 	width: 100%;
@@ -413,5 +413,25 @@ img.markerKey {
 	#map {
 		height: 50%;
 		width: 100%;
+	}
+}
+
+/* Print Media Query */
+
+@media print {
+	#home-page,
+	#search-page,
+	#event-page {
+		display: none !important;
+	}
+
+	#map {
+		transform: rotate(90deg);
+		page-break-after: always;
+	}
+
+	.informationOverlay {
+		transform: rotate(90deg);
+		height: 100%;
 	}
 }
