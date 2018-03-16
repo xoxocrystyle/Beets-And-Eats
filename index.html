@@ -14,116 +14,116 @@
     <script src="js/script.js"></script>
 </head>
 
-<body> 
-<!--Navigation Bar-->
-<nav class="navbar navbar-default navbar-fixed-top">
+<body>
+    <!--Navigation Bar-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand visible-sm visible-xs" href="#home-page">BEETS&EATS</a>
+                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#mobile-nav-bar" aria-expanded="false">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="navbar-collapse collapse" id="mobile-nav-bar">
+
+                <ul class="navbar-nav nav navbar-right">
+                    <li class="nav-item">
+                        <a href="#home-page">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#search-page">SEARCH</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#event-page">EVENTS</a>
+                    </li>
+                    <li class="navs-item">
+                        <a href="#map">MAP</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand visible-sm visible-xs" href="#home-page">BEETS&EATS</a>
-            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#mobile-nav-bar" aria-expanded="false">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-
-        </div>
-
-        <div class="navbar-collapse collapse" id="mobile-nav-bar">
-
-            <ul class="navbar-nav nav navbar-right">
-                <li class="nav-item">
-                    <a href="#home-page">HOME</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#search-page">SEARCH</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#event-page">EVENTS</a>
-                </li>
-                <li class="navs-item">
-                    <a href="#map">MAP</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<div class="container-fluid">
-    <!-- Landing Page-->
-    <section class="landing-page row " id="home-page">
-        <div class="col-lg-12">
-            <div class="start_title">Beets & Eats</div>
-            <div class="start_button">
-                <span>Lettuce Plan Your Night</span>
+        <!-- Landing Page-->
+        <section class="landing-page row " id="home-page">
+            <div class="col-lg-12">
+                <div class="start_title">Beets & Eats</div>
+                <div class="start_button">
+                    <span>Lettuce Plan Your Night</span>
+                </div>
             </div>
-        </div>
-    </section>
-    <!--Search Section-->
-    <section class="input-container row" id="search-page">
-        <div class="search-container">
-            <div class="search_tag_line row">
-                <span class='col-xs-12'>Choose a Location and Date</span>
-            </div>
-            <div class="search-fields row">
-                <div class="row">
-                    <div class="input-group-lg col-xs-8">
-                        <input type="text" class="city-name form-control" placeholder="CITY">
-                    </div>
-                    <div class="input-group-lg col-xs-4">
-                        <input type="text" class="state-code form-control" placeholder="STATE" maxlength="2">
-                    </div>
-                    <!-- <div class="col-lg-3 col-xs-3">
+        </section>
+        <!--Search Section-->
+        <section class="input-container row" id="search-page">
+            <div class="search-container">
+                <div class="search_tag_line row">
+                    <span class='col-xs-12'>Choose a Location and Date</span>
+                </div>
+                <div class="search-fields row">
+                    <div class="row">
+                        <div class="input-group-lg col-xs-8">
+                            <input type="text" class="city-name form-control" placeholder="CITY">
+                        </div>
+                        <div class="input-group-lg col-xs-4">
+                            <input type="text" class="state-code form-control" placeholder="STATE" maxlength="2">
+                        </div>
+                        <!-- <div class="col-lg-3 col-xs-3">
                         <button type="button" class="geolocation-button btn btn-default btn-block btn-lg"><span class="glyphicon glyphicon-screenshot"></span></button>
                     </div> -->
+                    </div>
+                    <div class="row">
+                        <div class="input-group-lg col-lg-3 col-xs-4">
+                            <input type="text" class="event-month form-control" placeholder="MM" maxlength="2" min="1" max="12">
+                        </div>
+                        <div class="input-group-lg col-lg-3 col-xs-3">
+                            <input type="text" class="event-day form-control" placeholder="DD" maxlength="2" max="31">
+                        </div>
+                        <div class="input-group-lg col-lg-6 col-xs-5">
+                            <input type="text" class="event-year form-control" placeholder="YYYY" maxlength="4">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button type="button" class="submit-button btn btn-default btn-lg">SHOW THYME</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="input-group-lg col-lg-3 col-xs-4">
-                        <input type="text" class="event-month form-control" placeholder="MM" maxlength="2">
-                    </div>
-                    <div class="input-group-lg col-lg-3 col-xs-3">
-                        <input type="text" class="event-day form-control" placeholder="DD" maxlength="2">
-                    </div>
-                    <div class="input-group-lg col-lg-6 col-xs-5">
-                        <input type="text" class="event-year form-control" placeholder="YYYY" maxlength="4">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <button type="button" class="submit-button btn btn-default btn-lg">SHOW THYME</button>
-                    </div>
-                </div>
-            </div>
-    </section>
-    <!--Event Section-->
-    <section class="show-container" id="event-page">
-    </section>
-    </div>
-    <!-- Map Section -->
-    <div class="wrapper">
-        <div id="map"></div>
-    </div>
+        </section>
+        <!--Event Section-->
+        <section class="show-container" id="event-page">
+        </section>
+        </div>
+        <!-- Map Section -->
+        <div class="wrapper">
+            <div id="map"></div>
+        </div>
 
-    <div class="informationOverlay">
-        <section class='eventInfo'>
-            <div class='infoTitle'>
-                <hr>
-                <img class='markerKey' src="images/stage-32.png" alt="event marker">
-                <h4>Event</h4>
-                <hr>
-            </div>
-        </section>
-        <section class='foodInfo'>
-            <div class="infoTitle">
-                <hr>
-                <img class='markerKey' src="images/food.png" alt="event marker">
-                <h4>Food</h4>
-                <img class='markerKey' src="images/drink.png" alt="event marker">
-                <h4>Drink</h4>
-                <hr>
-            </div>
-        </section>
+        <div class="informationOverlay">
+            <section class='eventInfo'>
+                <div class='infoTitle'>
+                    <hr>
+                    <img class='markerKey' src="images/stage-32.png" alt="event marker">
+                    <h4>Event</h4>
+                    <hr>
+                </div>
+            </section>
+            <section class='foodInfo'>
+                <div class="infoTitle">
+                    <hr>
+                    <img class='markerKey' src="images/food.png" alt="event marker">
+                    <h4>Food</h4>
+                    <img class='markerKey' src="images/drink.png" alt="event marker">
+                    <h4>Drink</h4>
+                    <hr>
+                </div>
+            </section>
+        </div>
     </div>
-</div>
 </body>
 
 </html>

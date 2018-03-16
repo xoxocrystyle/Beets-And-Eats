@@ -12,8 +12,12 @@ let infoWindow;
 function initializeApp() {
 	$(".submit-button").on("click", handleSearchButtonClick);
 	$(".start_button").on("click", handleStartButtonClick);
-	$(".event-month").on("click", removeDefaultSearch);
-	$(".event-day").on("click", removeDefaultSearch);
+	$(".event-month")
+		.on("click", removeDefaultSearch)
+		.on("keypress", checkMonthInput);
+	$(".event-day")
+		.on("click", removeDefaultSearch)
+		.on("keypress", checkDayInput);
 	$(".event-year").on("click", removeDefaultSearch);
 	// $(".geolocation-button").on("click", getUserLocation);
 	defaultDate();
@@ -56,6 +60,31 @@ function defaultDate() {
  */
 function removeDefaultSearch() {
 	$(this).val("");
+}
+/***************************************************************************
+ * checkMonthInput - event listener that checks input to ensure valid month input is less than 12
+ * @param {event} object
+ * @return{object}
+ */
+
+function checkMonthInput(event) {
+	let currentMonthValue = String.fromCharCode(event.which);
+	let finalMonthValue = $(this).val() + currentMonthValue;
+	if (finalMonthValue > 12) {
+		event.preventDefault();
+	}
+}
+/***************************************************************************
+ * checkDayInput - event listener that checks input to ensure valid day input is less than 31
+ * @param {event} object
+ * @return{object}
+ */
+function checkDayInput(event) {
+	let currentDayValue = String.fromCharCode(event.which);
+	let finalDayValue = $(this).val() + currentDayValue;
+	if (finalDayValue > 31) {
+		event.preventDefault();
+	}
 }
 
 /***************************************************************************
@@ -634,7 +663,7 @@ function scrollPage(element) {
 }
 
 /***************************************************************************
- * Listens for window scroll and collpase menu
+ * Event listener for window scroll and collapses menu
  */
 $(window).on("scroll", function() {
 	$(".navbar-collapse.collapse").removeClass("in");
