@@ -260,14 +260,6 @@ function getYelpData(latLng, type, color) {
 				arrayOfPlaces.push(newPlace);
 			}
 			createMarkers(arrayOfPlaces, color);
-			$(".informationOverlay").css({
-				animation:"expand 1s linear", 
-				display: "inline-block"
-			});
-			$(".wrapper").css({width:"74%"});
-			$('.eventInfo').fadeIn();
-			$('.foodInfo').fadeIn();
-
 		},
 		error: function() {
 			console.error("The server returned no information.");
@@ -316,8 +308,12 @@ function handleConcertClick(eventObj) {
 
 function openVenueWindow(place, marker) {
 	infoWindow.close();
+	console.log(place)
 	infoWindow = new google.maps.InfoWindow({
-		content: "<h4>" + place.venueName + "</h4>"
+		content: `<a href=${place.venueUrl} target="_blank">
+		<h4>${place.venueName}</h4></a>
+		<p>${place.eventName}</p>
+		<p>${place.startTime}</p>`
 	});
 	infoWindow.open(map, marker);
 }
@@ -394,18 +390,7 @@ function createShowDOMElement(eventDetails) {
 		.addClass("show-venue hidden-xs hidden-sm");
 	let mobileDetails = $("<p>").addClass("mobile-details hidden-md hidden-lg");
 
-	let showTime = "TBA";
-
-	//Edit Time of Event
-	if (eventDetails.startTime) {
-		showTime = parseInt(eventDetails.startTime.slice(0, 2));
-		if (showTime > 12) {
-			let showHour = showTime - 12;
-			showTime = `${showHour}:${eventDetails.startTime.slice(3, 5)} PM`;
-		} else {
-			showTime = `${eventDetails.startTime.slice(0, 5)} AM`;
-		}
-	}
+	let showTime = eventDetails.startTime || "TBA";
 
 	showDetails.text(`Date & Time: ${showDate}, ${showTime}`);
 	mobileDetails.text(`${eventDetails.venueName} - ${showDate}, ${showTime}`);
@@ -489,7 +474,6 @@ function getContentString(place) {
 		<p>${place.phoneNumber}</p>
 		<p>${place.distance.toFixed(2)} miles away from ${eventLocation}</p>
 		<p>${place.price}</p>`;
-	// contentString = contentString.replace(/\w+/g, "");
 	return contentString;
 }
 
@@ -603,7 +587,7 @@ function createTicketmasterEvent(events, ticketmasterDataIndex) {
 	var eventObject = events[ticketmasterDataIndex];
 	let venueObject = {};
 	venueObject.eventName = eventObject.name;
-	venueObject.startTime = eventObject.dates.start.localTime;
+	venueObject.startTime = convertMilitaryTime(eventObject.dates.start.localTime);
 	venueObject.latitude = eventObject._embedded.venues[0].location.latitude;
 	venueObject.longitude = eventObject._embedded.venues[0].location.longitude;
 	venueObject.zipCode = eventObject._embedded.venues[0].postalCode;
@@ -614,6 +598,28 @@ function createTicketmasterEvent(events, ticketmasterDataIndex) {
 	venueObject.eventDate = eventObject.dates.start.localDate;
 	venueObject.note = eventObject.pleaseNote;
 	return venueObject;
+}
+
+/***************************************************************************
+ * Converts to standard time
+ * @param {string} time military time
+ * @return {string} time
+ */
+function convertMilitaryTime(time){
+	var showTime = "TBA";
+
+	if(time){
+		showTime = parseInt(time.slice(0, 2));
+		if (showTime > 12) {
+			let showHour = showTime - 12;
+			showTime = `${showHour}:${time.slice(3, 5)} PM`;
+		} else {
+			showTime = `${time.slice(0, 5)} AM`;
+		}
+	}
+
+	return showTime; 
+
 }
 
 /***************************************************************************
