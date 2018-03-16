@@ -339,19 +339,6 @@ img.markerKey {
 	font-weight: 700;
 }
 
-@-webkit-keyframes expand {
-	0%   {width: 0%;}
-	50%  {width: 16%;}
-	100% {width: 26%;}
-}
-
-/* Standard syntax */
-@keyframes expand {
-	0%   {width: 0%;}
-	50%  {width: 16%;}
-	100% {width: 26%;}
-}
-
 /* Media Queries */
 
 /* iPhone 6,7,8 */
