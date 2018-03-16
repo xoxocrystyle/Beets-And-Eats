@@ -310,9 +310,8 @@ function openVenueWindow(place, marker) {
 	infoWindow.close();
 	console.log(place)
 	infoWindow = new google.maps.InfoWindow({
-		content: `<a href=${place.venueUrl} target="_blank">
-		<h4>${place.venueName}</h4></a>
-		<p>${place.eventName}</p>
+		content: `<h4>${place.eventName}</h4>
+		<a href=${place.venueUrl} target="_blank"><h5>${place.venueName}<h5></a>
 		<p>${place.startTime}</p>`
 	});
 	infoWindow.open(map, marker);
@@ -529,30 +528,36 @@ function populateFoodSideBar(place) {
  * @param{object} object of event information
  * @returns [object] createddom element
  */
-function populateEventSideBar(eventLocation) {
+function populateEventSideBar(eventInfo) {
+	eventInfo.note = eventInfo.note || "No added information"
 	let container = $("<div>").addClass("sectionInfo");
 	let image = $("<div>", {
 		class: "eventImage",
 		css: {
-			"background-image": 'url("' + eventLocation.eventImage.url + '")'
+			"background-image": 'url("' + eventInfo.eventImage.url + '")'
 		}
 	});
 	let eventName = $("<h3>", {
-		text: eventLocation.eventName,
+		text: eventInfo.eventName,
 		class: "map-event-name"
 	});
 	let venueName = $("<p>", {
-		html: "Venue: " + `<span class="eventLocation">${eventLocation.venueName}</span>`
+		html: "Venue: " + `<span class="eventInfo">${eventInfo.venueName}</span>`
 	});
+	let information = $("<p>", {
+		class: "extra-event-info",
+		text: eventInfo.note
+
+	})
 	let time = $("<p>", {
-		text: "Event Time: " + eventLocation.startTime
+		text: "Event Time: " + eventInfo.startTime
 	});
 	let tickets = $("<a>", {
-		href: eventLocation.ticketURL,
+		href: eventInfo.ticketURL,
 		text: "BUY TICKETS",
 		target: "_blank"
 	});
-	container.append(image, eventName, venueName, time, tickets);
+	container.append(image, eventName, venueName, time, tickets, information);
 	return container;
 }
 
