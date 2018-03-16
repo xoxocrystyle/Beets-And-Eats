@@ -244,7 +244,7 @@ function getTicketMasterConcerts(obj) {
 		success: function(response) {
 			if (!response.page.totalElements) {
 				searchErrorAlert();
-				$("#mobile-nav-bar li:nth-child(3)").fadeOut();
+				checkForChildElements();				
 				return;
 			}
 			$(".error-message").hide();
@@ -265,9 +265,18 @@ function getTicketMasterConcerts(obj) {
 		},
 		error: function(error){
 			searchErrorAlert();
-			$("#mobile-nav-bar li:nth-child(3)").fadeOut();
+			checkForChildElements();
 		}
 	});
+}
+
+/***************************************************************************
+ * checks if Events had child elements to hide Search Link
+ */
+function checkForChildElements(){
+	if ($(".show-container").children().length === 0 ) {
+		$("#mobile-nav-bar li:nth-child(3)").fadeOut();
+	 }
 }
 
 /***************************************************************************
