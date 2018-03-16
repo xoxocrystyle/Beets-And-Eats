@@ -279,6 +279,26 @@ body {
 	font-size: 2vmin;
 }
 
+.backToEventsDiv {
+	text-decoration: none;
+	color: black;
+}
+.backToEventsDiv:hover {
+	cursor: pointer;
+	color: lightblue;
+	text-decoration:none;
+}
+
+.backToEventsIcon {
+	display: inline-block;
+	position: relative;
+	font-size: 3vmin;
+}
+
+.backToEventsText {
+	display: inline-block;
+}
+
 .infoTitle {
 	text-align: center;
 }
