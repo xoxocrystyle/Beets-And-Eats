@@ -251,7 +251,7 @@ body {
 .wrapper {
 	position: relative;
 	display: inline-block;
-	width: 74%;
+	width: 100%;
 }
 
 .informationOverlay {
@@ -262,6 +262,7 @@ body {
 	background-color: #ffffff;
 	overflow: scroll;
 	float: left;
+	display:none;
 }
 
 .informationOverlay h4 {
@@ -311,6 +312,10 @@ body {
 	background-position: center;
 }
 
+.eventInfo, .foodInfo {
+	display: none; 
+}
+
 .markerImg {
 	height: 100px;
 	width: 150px;
@@ -332,6 +337,19 @@ img.markerKey {
 .map-event-name,
 .map-food-name {
 	font-weight: 700;
+}
+
+@-webkit-keyframes expand {
+	0%   {width: 0%;}
+	50%  {width: 16%;}
+	100% {width: 26%;}
+}
+
+/* Standard syntax */
+@keyframes expand {
+	0%   {width: 0%;}
+	50%  {width: 16%;}
+	100% {width: 26%;}
 }
 
 /* Media Queries */
@@ -390,5 +408,10 @@ img.markerKey {
 	.wrapper {
 		position: relative;
 		display: inline;
+	}
+	.wrapper,
+	#map {
+		height: 50%;
+		width: 100%;
 	}
 }

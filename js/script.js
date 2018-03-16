@@ -260,6 +260,14 @@ function getYelpData(latLng, type, color) {
 				arrayOfPlaces.push(newPlace);
 			}
 			createMarkers(arrayOfPlaces, color);
+			$(".informationOverlay").css({
+				animation:"expand 1s linear", 
+				display: "inline-block"
+			});
+			$(".wrapper").css({width:"74%"});
+			$('.eventInfo').fadeIn();
+			$('.foodInfo').fadeIn();
+
 		},
 		error: function() {
 			console.error("The server returned no information.");
