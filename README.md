@@ -12,9 +12,9 @@ Begin by entering the location and date of the night you want to plan. Next, scr
 ![Listings Page](images/listings.jpg) | ![Map Page](images/map.jpg)
 :-------------------------:|:-------------------------:
 
-## Built With
+## Technologies Used
 
-* Javascript
+* JavaScript
 * jQuery
 * AJAX
 * HTML5
@@ -27,9 +27,9 @@ Begin by entering the location and date of the night you want to plan. Next, scr
 ## Tools Used
 
 * Git
-* Github
-* Meistertask
-* JSDocs
+* GitHub
+* MeisterTask
+* JSDoc
 
 ## Authors
 
