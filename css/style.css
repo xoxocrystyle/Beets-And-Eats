@@ -33,7 +33,6 @@ body {
 	text-shadow: 0px 0px 15px white;
 }
 
-
 .navbar-default {
 	background: transparent;
 	border-style: none;
@@ -151,7 +150,7 @@ body {
 }
 
 .state-code {
-	text-transform: uppercase
+	text-transform: uppercase;
 }
 .submit-button {
 	width: 100%;
@@ -324,6 +323,11 @@ body {
 	width: 100%;
 }
 
+.informationOverlay .extra-event-info {
+	font-size: .7em;
+	margin-top: 4%; 
+ }
+
 .foodInfo .foodImage,
 .eventInfo .eventImage {
 	height: 100px;
@@ -411,5 +415,30 @@ img.markerKey {
 	.wrapper {
 		position: relative;
 		display: inline;
+	}
+	.wrapper,
+	#map {
+		height: 50%;
+		width: 100%;
+	}
+}
+
+/* Print Media Query */
+
+@media print {
+	#home-page,
+	#search-page,
+	#event-page {
+		display: none !important;
+	}
+
+	#map {
+		transform: rotate(90deg);
+		page-break-after: always;
+	}
+
+	.informationOverlay {
+		transform: rotate(90deg);
+		height: 100%;
 	}
 }
