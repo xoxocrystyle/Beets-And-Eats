@@ -231,7 +231,7 @@ function getTicketMasterConcerts(obj) {
 				}
 				let eventObj = createTicketmasterEvent(allEventsObj, tmData_i);
 				ticketmasterData.push(eventObj);
-			}
+			} 
 			renderShowsOnDOM(ticketmasterData);
 		},
 		error: function(error){
