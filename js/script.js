@@ -15,6 +15,7 @@ function initializeApp() {
 	$(".event-month").on("click", removeDefaultSearch);
 	$(".event-day").on("click", removeDefaultSearch);
 	$(".event-year").on("click", removeDefaultSearch);
+	$("#mobile-nav-bar li:nth-child(3)").hide();
 	// $(".geolocation-button").on("click", getUserLocation);
 	defaultDate();
 }
@@ -212,10 +213,13 @@ function getTicketMasterConcerts(obj) {
 		method: "get",
 		url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
 		success: function(response) {
-			if (!response._embedded) {
+			if (!response.page.totalElements) {
 				searchErrorAlert();
+				$("#mobile-nav-bar li:nth-child(3)").fadeOut();
 				return;
 			}
+			$(".error-message").hide();
+			$("#mobile-nav-bar li:nth-child(3)").fadeIn();
 			scrollPage("#event-page");
 			setTimeout(resetInputs, 1500);
 			let ticketmasterData = [];
@@ -229,6 +233,10 @@ function getTicketMasterConcerts(obj) {
 				ticketmasterData.push(eventObj);
 			}
 			renderShowsOnDOM(ticketmasterData);
+		},
+		error: function(error){
+			searchErrorAlert();
+			$("#mobile-nav-bar li:nth-child(3)").fadeOut();
 		}
 	});
 }
