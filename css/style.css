@@ -303,6 +303,11 @@ body {
 	width: 100%;
 }
 
+.informationOverlay .extra-event-info {
+	font-size: .7em;
+	margin-top: 4%; 
+ }
+
 .foodInfo .foodImage,
 .eventInfo .eventImage {
 	height: 100px;
@@ -390,6 +395,11 @@ img.markerKey {
 	.wrapper {
 		position: relative;
 		display: inline;
+	}
+	.wrapper,
+	#map {
+		height: 50%;
+		width: 100%;
 	}
 }
 

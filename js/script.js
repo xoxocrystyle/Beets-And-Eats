@@ -19,6 +19,7 @@ function initializeApp() {
 		.on("click", removeDefaultSearch)
 		.on("keypress", checkDayInput);
 	$(".event-year").on("click", removeDefaultSearch);
+	$("#mobile-nav-bar li:nth-child(3)").hide();
 	// $(".geolocation-button").on("click", getUserLocation);
 	defaultDate();
 }
@@ -241,10 +242,13 @@ function getTicketMasterConcerts(obj) {
 		method: "get",
 		url: "https://app.ticketmaster.com/discovery/v2/events.json?&apikey=2uJN7TQdB59TfTrrXsnGAJgrtKLrCdTi",
 		success: function(response) {
-			if (!response._embedded) {
+			if (!response.page.totalElements) {
 				searchErrorAlert();
+				$("#mobile-nav-bar li:nth-child(3)").fadeOut();
 				return;
 			}
+			$(".error-message").hide();
+			$("#mobile-nav-bar li:nth-child(3)").fadeIn();
 			scrollPage("#event-page");
 			setTimeout(resetInputs, 1500);
 			let ticketmasterData = [];
@@ -256,8 +260,12 @@ function getTicketMasterConcerts(obj) {
 				}
 				let eventObj = createTicketmasterEvent(allEventsObj, tmData_i);
 				ticketmasterData.push(eventObj);
-			}
+			} 
 			renderShowsOnDOM(ticketmasterData);
+		},
+		error: function(error){
+			searchErrorAlert();
+			$("#mobile-nav-bar li:nth-child(3)").fadeOut();
 		}
 	});
 }
@@ -337,8 +345,11 @@ function handleConcertClick(eventObj) {
 
 function openVenueWindow(place, marker) {
 	infoWindow.close();
+	console.log(place)
 	infoWindow = new google.maps.InfoWindow({
-		content: "<h4>" + place.venueName + "</h4>"
+		content: `<h4>${place.eventName}</h4>
+		<a href=${place.venueUrl} target="_blank"><h5>${place.venueName}<h5></a>
+		<p>${place.startTime}</p>`
 	});
 	infoWindow.open(map, marker);
 }
@@ -415,18 +426,7 @@ function createShowDOMElement(eventDetails) {
 		.addClass("show-venue hidden-xs hidden-sm");
 	let mobileDetails = $("<p>").addClass("mobile-details hidden-md hidden-lg");
 
-	let showTime = "TBA";
-
-	//Edit Time of Event
-	if (eventDetails.startTime) {
-		showTime = parseInt(eventDetails.startTime.slice(0, 2));
-		if (showTime > 12) {
-			let showHour = showTime - 12;
-			showTime = `${showHour}:${eventDetails.startTime.slice(3, 5)} PM`;
-		} else {
-			showTime = `${eventDetails.startTime.slice(0, 5)} AM`;
-		}
-	}
+	let showTime = eventDetails.startTime || "TBA";
 
 	showDetails.text(`Date & Time: ${showDate}, ${showTime}`);
 	mobileDetails.text(`${eventDetails.venueName} - ${showDate}, ${showTime}`);
@@ -510,7 +510,6 @@ function getContentString(place) {
 		<p>${place.phoneNumber}</p>
 		<p>${place.distance.toFixed(2)} miles away from ${eventLocation}</p>
 		<p>${place.price}</p>`;
-	// contentString = contentString.replace(/\w+/g, "");
 	return contentString;
 }
 
@@ -566,30 +565,36 @@ function populateFoodSideBar(place) {
  * @param{object} object of event information
  * @returns [object] createddom element
  */
-function populateEventSideBar(eventLocation) {
+function populateEventSideBar(eventInfo) {
+	eventInfo.note = eventInfo.note || "No added information"
 	let container = $("<div>").addClass("sectionInfo");
 	let image = $("<div>", {
 		class: "eventImage",
 		css: {
-			"background-image": 'url("' + eventLocation.eventImage.url + '")'
+			"background-image": 'url("' + eventInfo.eventImage.url + '")'
 		}
 	});
 	let eventName = $("<h3>", {
-		text: eventLocation.eventName,
+		text: eventInfo.eventName,
 		class: "map-event-name"
 	});
 	let venueName = $("<p>", {
-		html: "Venue: " + `<span class="eventLocation">${eventLocation.venueName}</span>`
+		html: "Venue: " + `<span class="eventInfo">${eventInfo.venueName}</span>`
 	});
+	let information = $("<p>", {
+		class: "extra-event-info",
+		text: eventInfo.note
+
+	})
 	let time = $("<p>", {
-		text: "Event Time: " + eventLocation.startTime
+		text: "Event Time: " + eventInfo.startTime
 	});
 	let tickets = $("<a>", {
-		href: eventLocation.ticketURL,
+		href: eventInfo.ticketURL,
 		text: "BUY TICKETS",
 		target: "_blank"
 	});
-	container.append(image, eventName, venueName, time, tickets);
+	container.append(image, eventName, venueName, time, tickets, information);
 	return container;
 }
 
@@ -624,7 +629,7 @@ function createTicketmasterEvent(events, ticketmasterDataIndex) {
 	var eventObject = events[ticketmasterDataIndex];
 	let venueObject = {};
 	venueObject.eventName = eventObject.name;
-	venueObject.startTime = eventObject.dates.start.localTime;
+	venueObject.startTime = convertMilitaryTime(eventObject.dates.start.localTime);
 	venueObject.latitude = eventObject._embedded.venues[0].location.latitude;
 	venueObject.longitude = eventObject._embedded.venues[0].location.longitude;
 	venueObject.zipCode = eventObject._embedded.venues[0].postalCode;
@@ -635,6 +640,28 @@ function createTicketmasterEvent(events, ticketmasterDataIndex) {
 	venueObject.eventDate = eventObject.dates.start.localDate;
 	venueObject.note = eventObject.pleaseNote;
 	return venueObject;
+}
+
+/***************************************************************************
+ * Converts to standard time
+ * @param {string} time military time
+ * @return {string} time
+ */
+function convertMilitaryTime(time){
+	var showTime = "TBA";
+
+	if(time){
+		showTime = parseInt(time.slice(0, 2));
+		if (showTime > 12) {
+			let showHour = showTime - 12;
+			showTime = `${showHour}:${time.slice(3, 5)} PM`;
+		} else {
+			showTime = `${time.slice(0, 5)} AM`;
+		}
+	}
+
+	return showTime; 
+
 }
 
 /***************************************************************************
