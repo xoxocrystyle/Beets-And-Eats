@@ -218,17 +218,17 @@ function getTicketMasterConcerts(obj) {
 			}
 			scrollPage("#event-page");
 			setTimeout(resetInputs, 1500);
-			let data = [];
+			let ticketmasterData = [];
 			$(".show-container").empty();
 			let allEventsObj = response._embedded.events;
 			for (let tmData_i = 0; tmData_i < allEventsObj.length; tmData_i++) {
 				if (!allEventsObj[tmData_i]._embedded.venues[0].location) {
 					continue;
 				}
-				let eventObj = createEventObject(allEventsObj, tmData_i);
-				data.push(eventObj);
+				let eventObj = createTicketmasterEvent(allEventsObj, tmData_i);
+				ticketmasterData.push(eventObj);
 			}
-			renderShowsOnDOM(data);
+			renderShowsOnDOM(ticketmasterData);
 		}
 	});
 }
@@ -254,10 +254,10 @@ function getYelpData(latLng, type, color) {
 			api_key:
 				"VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
 		},
-		success: function(data) {
-			for (let arrayIndex = 0; arrayIndex < data.businesses.length; arrayIndex++) {
-				let newObj = createYelpObj(data, arrayIndex);
-				arrayOfPlaces.push(newObj);
+		success: function(response) {
+			for (let businessIndex = 0; businessIndex < response.businesses.length; businessIndex++) {
+				let newPlace = createYelpRestaurant(response, businessIndex);
+				arrayOfPlaces.push(newPlace);
 			}
 			createMarkers(arrayOfPlaces, color);
 		},
@@ -569,7 +569,7 @@ function populateEventSideBar(eventLocation) {
  * @param{object, arrayIndex} event object and current Index
  * @return{object} per location
  */
-function createYelpObj(data, yelpDataIndex) {
+function createYelpRestaurant(data, yelpDataIndex) {
 	var locationObject = data.businesses[yelpDataIndex];
 	let yelpBusiness = {};
 	yelpBusiness.name = locationObject.name;
@@ -591,7 +591,7 @@ function createYelpObj(data, yelpDataIndex) {
  * @param{array of object} total info received
  * @return{object} per location
  */
-function createEventObject(events, ticketmasterDataIndex) {
+function createTicketmasterEvent(events, ticketmasterDataIndex) {
 	var eventObject = events[ticketmasterDataIndex];
 	let venueObject = {};
 	venueObject.eventName = eventObject.name;
