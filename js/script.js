@@ -129,10 +129,10 @@ function getEventInfo() {
  * @calls: none
  */
 function getUserLocation() {
-	navigator.geolocation.getCurrentPosition(function(position) {
+	navigator.geolocation.getCurrentPosition(function (position) {
 		var geocoder = new google.maps.Geocoder();
 		var location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-		geocoder.geocode({ latLng: location }, function(results, status) {
+		geocoder.geocode({ latLng: location }, function (results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
 				var city = results[0].address_components[3].long_name;
 				var state = results[0].address_components[5].short_name;
@@ -291,14 +291,14 @@ function getYelpData(latLng, type, color) {
 			api_key:
 				"VFceJml03WRISuHBxTrIgwqvexzRGDKstoC48q7UrkABGVECg3W0k_EILnHPuHOpSoxrsX07TkDH3Sl9HtkHQH8AwZEmj6qatqtCYS0OS9Ul_A02RStw_TY7TpteWnYx"
 		},
-		success: function(response) {
+		success: function (response) {
 			for (let businessIndex = 0; businessIndex < response.businesses.length; businessIndex++) {
 				let newPlace = createYelpRestaurant(response, businessIndex);
 				arrayOfPlaces.push(newPlace);
 			}
 			createMarkers(arrayOfPlaces, color);
 		},
-		error: function() {
+		error: function () {
 			console.error("The server returned no information.");
 		}
 	};
@@ -327,7 +327,7 @@ function handleConcertClick(eventObj) {
 		icon: "images/stage.png"
 	});
 
-	marker.addListener("click", function() {
+	marker.addListener("click", function () {
 		openVenueWindow(eventObj, marker);
 	});
 
@@ -392,7 +392,7 @@ function createShowDOMElement(eventDetails) {
 	let listing = $("<div>", {
 		class: "show-listing col-lg-6 col-md-6 col-xs-12 col-sm-12",
 		on: {
-			click: function() {
+			click: function () {
 				handleConcertClick(eventDetails);
 				scrollPage("#map");
 				let showInfo = populateEventSideBar(eventDetails);
@@ -469,7 +469,7 @@ function renderMarker(place, color) {
 		icon: color
 	});
 
-	marker.addListener("click", function() {
+	marker.addListener("click", function () {
 		openWindow(place, marker);
 	});
 }
@@ -692,7 +692,7 @@ function scrollPage(element) {
 /***************************************************************************
  * Event listener for window scroll and collapses menu
  */
-$(window).on("scroll", function() {
+$(window).on("scroll", function () {
 	$(".navbar-collapse.collapse").removeClass("in");
 	$(".navbar-collapse.collapse").attr("aria-expanded", false);
 
@@ -705,7 +705,7 @@ $(window).on("scroll", function() {
  * @returns: {undefined}
  * @calls: none
  */
-$(document).scroll(function() {
+$(document).scroll(function () {
 	let $nav = $(".navbar-default");
 	$nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
 });
