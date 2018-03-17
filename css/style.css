@@ -96,7 +96,7 @@ body {
 	align-items: center;
 	flex-flow: column;
 	height: 100vh;
-	background: url("../images/brewsky.png") no-repeat center center fixed;
+	background: url('../images/brewsky.png') no-repeat center center fixed;
 	background-size: cover;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -285,7 +285,7 @@ body {
 .backToEventsDiv:hover {
 	cursor: pointer;
 	color: lightblue;
-	text-decoration:none;
+	text-decoration: none;
 }
 
 .backToEventsIcon {
@@ -324,9 +324,9 @@ body {
 }
 
 .informationOverlay .extra-event-info {
-	font-size: .7em;
-	margin-top: 4%; 
- }
+	font-size: 0.7em;
+	margin-top: 4%;
+}
 
 .foodInfo .foodImage,
 .eventInfo .eventImage {
@@ -411,6 +411,10 @@ img.markerKey {
 	.informationOverlay {
 		float: none;
 		width: 100%;
+		position: relative;
+		display: block;
+		overflow: visible;
+		height: auto;
 	}
 	.wrapper {
 		position: relative;
