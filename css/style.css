@@ -47,13 +47,11 @@ body {
 .navbar-default .navbar-brand {
 	color: #fff;
 	text-shadow: 0px 0px 2px black;
-	padding-left: 64%;
 }
 
 .navbar-brand:hover {
 	color: black;
 	text-shadow: 0px 0px 15px white;
-	padding-left: 64%;
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -98,7 +96,7 @@ body {
 	align-items: center;
 	flex-flow: column;
 	height: 100vh;
-	background: url("../images/brewsky.png") no-repeat center center fixed;
+	background: url('../images/brewsky.png') no-repeat center center fixed;
 	background-size: cover;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -127,6 +125,7 @@ body {
 	font-size: 3vmin;
 	height: 3vmax;
 	width: 50%;
+	height: 10%;
 	border-radius: 5px;
 	background-color: rgba(255, 255, 255, 0.3);
 	margin: auto;
@@ -148,6 +147,10 @@ body {
 	font-family: Abril;
 	color: cadetblue;
 	cursor: default;
+}
+
+.state-code {
+	text-transform: uppercase;
 }
 .submit-button {
 	width: 100%;
@@ -252,7 +255,7 @@ body {
 }
 
 .informationOverlay {
-	z-index: 99;
+	z-index: 5;
 	height: 100%;
 	width: 26%;
 	padding: 2%;
@@ -275,6 +278,26 @@ body {
 	font-size: 2vmin;
 }
 
+.backToEventsDiv {
+	text-decoration: none;
+	color: black;
+}
+.backToEventsDiv:hover {
+	cursor: pointer;
+	color: lightblue;
+	text-decoration: none;
+}
+
+.backToEventsIcon {
+	display: inline-block;
+	position: relative;
+	font-size: 3vmin;
+}
+
+.backToEventsText {
+	display: inline-block;
+}
+
 .infoTitle {
 	text-align: center;
 }
@@ -283,7 +306,7 @@ body {
 	position: absolute;
 	right: 3%;
 	top: 0%;
-	z-index: 99;
+	z-index: 5;
 	height: 5%;
 	width: 20%;
 	background-color: #ffffff;
@@ -298,6 +321,11 @@ body {
 .eventInfo > .sectionInfo,
 .foodInfo > .sectionInfo {
 	width: 100%;
+}
+
+.informationOverlay .extra-event-info {
+	font-size: 0.7em;
+	margin-top: 4%;
 }
 
 .foodInfo .foodImage,
@@ -383,9 +411,38 @@ img.markerKey {
 	.informationOverlay {
 		float: none;
 		width: 100%;
+		position: relative;
+		display: block;
+		overflow: visible;
+		height: auto;
 	}
 	.wrapper {
 		position: relative;
 		display: inline;
+	}
+	.wrapper,
+	#map {
+		height: 50%;
+		width: 100%;
+	}
+}
+
+/* Print Media Query */
+
+@media print {
+	#home-page,
+	#search-page,
+	#event-page {
+		display: none !important;
+	}
+
+	#map {
+		transform: rotate(90deg);
+		page-break-after: always;
+	}
+
+	.informationOverlay {
+		transform: rotate(90deg);
+		height: 100%;
 	}
 }
