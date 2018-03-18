@@ -285,7 +285,7 @@ body {
 .backToEventsDiv:hover {
 	cursor: pointer;
 	color: lightblue;
-	text-decoration:none;
+	text-decoration: none;
 }
 
 .backToEventsIcon {
@@ -324,9 +324,9 @@ body {
 }
 
 .informationOverlay .extra-event-info {
-	font-size: .7em;
-	margin-top: 4%; 
- }
+	font-size: 0.7em;
+	margin-top: 4%;
+}
 
 .foodInfo .foodImage,
 .eventInfo .eventImage {
@@ -370,6 +370,21 @@ img.markerKey {
 	.collapsed {
 		background-color: white;
 	}
+
+	.informationOverlay p {
+		font-size: 3.5vmin;
+	}
+	.sectionInfo {
+		display: flex;
+	}
+
+	.event-header,
+	.event-body,
+	.restaurant-header,
+	.restaurant-body {
+		width: 48%;
+		margin: auto;
+	}
 }
 
 /* iPhone 6+,7+,8+ */
@@ -411,6 +426,10 @@ img.markerKey {
 	.informationOverlay {
 		float: none;
 		width: 100%;
+		position: relative;
+		display: block;
+		overflow: visible;
+		height: auto;
 	}
 	.wrapper {
 		position: relative;
