@@ -523,7 +523,7 @@ function getContentString(place) {
 }
 
 /***************************************************************************
- * populateSideBar - populate side bar with location information
+ * populateFoodSideBar - populate side bar with location information
  * @param{object} object of location information
  * @returns [object] createddom element
  */
