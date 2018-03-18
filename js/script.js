@@ -537,6 +537,7 @@ function populateFoodSideBar(place) {
 		}
 	});
 	let restaurantHeader = $("<div>").addClass("restaurant-header");
+	let restaurantBody = $("<div>").addClass("restaurant-body");
 	let name = $("<h3>", {
 		text: place.name,
 		class: "map-food-name"
@@ -551,8 +552,6 @@ function populateFoodSideBar(place) {
 			"font-size": "18px"
 		}
 	});
-	let restaurantInfo = $("<div>").addClass("restaurant-body");
-
 	let distance = $("<p>", {
 		text: place.distance.toFixed(2) + " miles away from venue"
 	});
@@ -563,15 +562,15 @@ function populateFoodSideBar(place) {
 		text: place.phoneNumber
 	});
 	let rating = $("<p>", {
-		text: "Rating: " + place.rating
+		text: "Rating: " + place.rating + "/5"
 	});
 	let price = $("<p>", {
 		text: "Price: " + place.price
 	});
 
 	restaurantHeader.append(image, name, yelp);
-	restaurantInfo.append(distance, address, number, rating, price);
-	container.append(restaurantHeader, restaurantInfo);
+	restaurantBody.append(distance, address, number, rating, price);
+	container.append(restaurantHeader, restaurantBody);
 	return container;
 }
 
@@ -583,6 +582,8 @@ function populateFoodSideBar(place) {
 function populateEventSideBar(eventInfo) {
 	eventInfo.note = eventInfo.note || "No added information";
 	let container = $("<div>").addClass("sectionInfo");
+	let eventHeader = $("<div>").addClass("event-header");
+	let eventBody = $("<div>").addClass("event-body");
 	let image = $("<div>", {
 		class: "eventImage",
 		css: {
@@ -608,7 +609,9 @@ function populateEventSideBar(eventInfo) {
 		text: "BUY TICKETS",
 		target: "_blank"
 	});
-	container.append(image, eventName, venueName, time, tickets, information);
+	eventHeader.append(image, eventName);
+	eventBody.append(venueName, time, tickets, information);
+	container.append(eventHeader, eventBody);
 	return container;
 }
 
