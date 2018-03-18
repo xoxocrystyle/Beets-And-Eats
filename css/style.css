@@ -96,7 +96,7 @@ body {
 	align-items: center;
 	flex-flow: column;
 	height: 100vh;
-	background: url('../images/brewsky.png') no-repeat center center fixed;
+	background: url("../images/brewsky.png") no-repeat center center fixed;
 	background-size: cover;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -369,6 +369,21 @@ img.markerKey {
 	}
 	.collapsed {
 		background-color: white;
+	}
+
+	.informationOverlay p {
+		font-size: 3.5vmin;
+	}
+	.sectionInfo {
+		display: flex;
+	}
+
+	.event-header,
+	.event-body,
+	.restaurant-header,
+	.restaurant-body {
+		width: 48%;
+		margin: auto;
 	}
 }
 
