@@ -105,8 +105,9 @@ body {
 .start_title {
 	display: flex;
 	justify-content: center;
+	text-align: center;
 	font-family: Abril;
-	font-size: 15vmin;
+	font-size: 100px;
 	color: seashell;
 	text-shadow: 0 0 30px black;
 }
@@ -123,7 +124,6 @@ body {
 	border: 3px solid white;
 	font-family: Montserrat;
 	font-size: 3vmin;
-	height: 3vmax;
 	width: 50%;
 	height: 10%;
 	border-radius: 5px;
