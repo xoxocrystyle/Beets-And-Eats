@@ -124,8 +124,8 @@ body {
 	border: 3px solid white;
 	font-family: Montserrat;
 	font-size: 3vmin;
-	width: 50%;
-	height: 10%;
+	width: 30%;
+	height: 25%;
 	border-radius: 5px;
 	background-color: rgba(255, 255, 255, 0.3);
 	margin: auto;
@@ -361,7 +361,26 @@ img.markerKey {
 
 /* Media Queries */
 
+/* iPad Pro media query */
+@media only screen 
+  and (min-width: 1024px) 
+  and (max-height: 1366px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 1.5) {
+	  .start_button{
+		width: 80%;
+	  }
+
+}
+
+/*mobile media queries*/
 @media (max-width: 780px) {
+	.start_button {
+		/* height: 40px; */
+		font-size: 4vmin;
+    	width: 70%;
+	}
+
 	.informationOverlay p {
 		font-size: 3.5vmin;
 	}
@@ -376,6 +395,18 @@ img.markerKey {
 		width: 48%;
 		margin: auto;
 	}
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px)
+and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71) and (orientation:portrait)
+{
+	.start_title {
+		font-size: 97px;
+   }
+
+   .start_button{
+	   height: 14%;
+   }
 }
 
 /* iPhone 6,7,8 */
